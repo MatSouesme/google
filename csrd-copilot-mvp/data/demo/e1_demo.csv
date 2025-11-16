@@ -1,0 +1,4 @@
+year,scope1_emissions_tCO2,scope2_emissions_tCO2,scope3_emissions_tCO2,energy_consumption_MWh,renewable_share_pct
+2022,180,95,410,5200,18
+2023,150,80,420,5000,22
+2024,140,75,405,4980,28
