@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+google-cloud-storage
+google-cloud-bigquery
+pydantic
+python-multipart
+google-cloud-discoveryengine
+google-generativeai

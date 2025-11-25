@@ -1,28 +1,37 @@
-# CSRD Copilot MVP
+# Ecoply (CSRD Copilot MVP)
 
-This project is an MVP for a CSRD (Corporate Sustainability Reporting Directive) Copilot. It helps companies manage their sustainability data (ESRS E1, G1, etc.) and provides AI-powered insights using RAG (Retrieval-Augmented Generation).
+Ecoply is an AI-powered CSRD (Corporate Sustainability Reporting Directive) Copilot. It helps companies manage their sustainability data (ESRS E1, G1, etc.), validates it against legal standards, and provides AI-driven drafting assistance using a "Dual-Core RAG" approach.
 
 ## Architecture
 
 The project consists of three main pillars:
 
-1.  **Frontend (P1)**: User interface for data upload and interaction (to be integrated).
+1.  **Frontend (P4)**:
+    *   **React/Vite App**: A modern, dark-themed UI ("Ecoply" branding).
+    *   **Upload Wizard**: Guided interface for downloading templates and uploading CSV data.
 2.  **Backend/Data (P2)**:
+    *   **FastAPI (Cloud Run)**: Central API for data upload and AI generation.
     *   **Google Cloud Storage (GCS)**: Stores raw CSV uploads.
     *   **Cloud Functions**: Triggers on upload to parse and ingest data.
     *   **BigQuery**: Data warehouse for structured sustainability data.
     *   **Dataform**: Manages BigQuery schemas and data quality assertions.
 3.  **AI/ML (P3)**:
-    *   **Vertex AI Search**: RAG engine for querying legal texts (ESRS) and example reports.
-    *   **Data Curation**: Scripts to download and manage knowledge base documents.
+    *   **Dual-Core RAG**: Orchestrates queries to:
+        *   *Core 1 (Compliance)*: Vertex AI Search (Legal Texts).
+        *   *Core 2 (Strategist)*: Vertex AI Search (Best-in-class Reports).
+        *   *User Data*: BigQuery (Validated Company Data).
+    *   **Gemini**: Synthesizes inputs into professional drafts.
 
 ## Project Structure
 
 ```
 .
 ├── backend/
-│   ├── cloud_functions/    # Python Cloud Functions (e.g., ingest_csv)
+│   ├── api/                # FastAPI application (main.py)
+│   ├── ai/                 # RAG Engine logic (rag_engine.py)
+│   ├── cloud_functions/    # Python Cloud Functions (ingest_csv)
 │   └── dataform/           # SQLX definitions for BigQuery schemas
+├── frontend/               # React + Vite application
 ├── data/                   # Local data for testing and curation
 ├── scripts/                # Utility scripts for setup and maintenance
 └── docs/                   # Documentation
@@ -34,53 +43,44 @@ The project consists of three main pillars:
 - Google Cloud Platform (GCP) project.
 - `gcloud` CLI installed and authenticated.
 - Python 3.11+.
+- Node.js & npm.
 
 ### 1. Infrastructure Setup
-Initialize the GCS buckets and enable necessary services:
+Initialize GCS buckets:
 ```bash
 ./scripts/setup_gcs.sh
 ```
 
 ### 2. Backend Deployment
-Deploy the Cloud Function for CSV ingestion:
+Deploy the API to Cloud Run (or run locally):
 ```bash
-gcloud functions deploy ingest_csv \
-  --gen2 \
-  --runtime=python311 \
-  --region=europe-west1 \
-  --source=backend/cloud_functions/ingest_csv \
-  --entry-point=ingest_csv \
-  --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
-  --trigger-event-filters="bucket=YOUR_PROJECT_ID-csrd-raw-data"
+# Local Run
+python3 -m uvicorn backend.api.main:app --host 0.0.0.0 --port 8080
+
+# Cloud Deployment
+./scripts/deploy_api.sh
 ```
-*(Note: The setup script uses `csrd-copilot-csrd-raw-data` by default, adjust as needed)*
 
-Deploy Dataform (or manually create tables if Dataform is not set up remotely):
-The schemas are defined in `backend/dataform/definitions/`.
-
-### 3. AI/ML Setup
-Set up Vertex AI Search data stores:
+### 3. Frontend Setup
+Install dependencies and run the development server:
 ```bash
-export GOOGLE_CLOUD_PROJECT=your-project-id
-python3 scripts/setup_vertex_search.py
+cd frontend
+npm install
+npm run dev
 ```
 
 ## Usage
 
-### Ingesting Data
-Upload a CSV file to the raw data bucket. The filename must contain "e1" or "g1" to be routed correctly.
+### 1. Upload Data
+- Open the Frontend (http://localhost:5173).
+- Use the **Upload Wizard** to download an E1 or G1 template.
+- Fill it out and upload it via the UI.
+- The file is sent to the API -> GCS -> Cloud Function -> BigQuery.
 
-```bash
-gsutil cp data/test_e1.csv gs://YOUR_BUCKET_NAME/
-```
+### 2. Generate Drafts (AI)
+- The API exposes `POST /generate-draft`.
+- It queries the "Dual-Core" RAG engine to produce compliant and strategic text based on your uploaded data.
 
-Check BigQuery to see the ingested data:
-```sql
-SELECT * FROM `csrd_mvp.e1_raw` LIMIT 10;
-```
-
-### Data Curation
-Download relevant legal texts and reports:
-```bash
-python3 scripts/download_data.py
-```
+### 3. Validation
+- Dataform runs automatically (or on schedule) to validate raw data in BigQuery.
+- Validated data is available via `GET /get-validated-data/{standard}`.

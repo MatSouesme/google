@@ -1,0 +1,36 @@
+config {
+  type: "table",
+  schema: "csrd_mvp",
+  name: "e1_validated",
+  description: "Validated data for ESRS E1 (Climate Change)"
+}
+
+with raw_data as (
+  select
+    *
+  from
+    ${ref("e1_raw")}
+)
+
+select
+  source_file,
+  row_number,
+  upload_id,
+  metric_id,
+  metric_name,
+  unit,
+  -- Cast value to float, handling potential errors (safe_cast returns null on error)
+  safe_cast(value as float64) as value,
+  year,
+  scope,
+  ingestion_timestamp,
+  -- Validation Flags
+  case
+    when value is null then "Missing Value"
+    when safe_cast(value as float64) < 0 then "Negative Value (Potential Error)"
+    -- Simple outlier check: arbitrary threshold for MVP
+    when safe_cast(value as float64) > 1000000 then "High Outlier"
+    else "Valid"
+  end as validation_status
+from
+  raw_data

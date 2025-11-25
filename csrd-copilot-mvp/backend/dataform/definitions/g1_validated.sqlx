@@ -1,0 +1,31 @@
+config {
+  type: "table",
+  schema: "csrd_mvp",
+  name: "g1_validated",
+  description: "Validated data for ESRS G1 (Business Conduct)"
+}
+
+with raw_data as (
+  select
+    *
+  from
+    ${ref("g1_raw")}
+)
+
+select
+  source_file,
+  row_number,
+  upload_id,
+  policy_id,
+  policy_name,
+  description,
+  status,
+  ingestion_timestamp,
+  -- Validation Flags
+  case
+    when policy_id is null then "Missing Policy ID"
+    when status not in ("Active", "Inactive", "Draft") then "Invalid Status"
+    else "Valid"
+  end as validation_status
+from
+  raw_data
