@@ -1,0 +1,11 @@
+config {
+  type: "assertion"
+}
+
+select
+  *
+from
+  ${ref("e1_raw")}
+where
+  upload_id is null
+  or source_file is null

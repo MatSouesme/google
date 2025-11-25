@@ -1,0 +1,20 @@
+config {
+  type: "table",
+  schema: "csrd_mvp",
+  name: "e1_raw",
+  description: "Raw data for ESRS E1 (Climate Change) ingestion"
+}
+
+select
+  cast(null as string) as source_file,
+  cast(null as int64) as row_number,
+  cast(null as string) as upload_id,
+  -- Add specific E1 columns here as string for raw ingestion, to be casted later
+  cast(null as string) as metric_id,
+  cast(null as string) as metric_name,
+  cast(null as string) as unit,
+  cast(null as string) as value,
+  cast(null as string) as year,
+  cast(null as string) as scope,
+  cast(null as timestamp) as ingestion_timestamp
+limit 0

@@ -1,0 +1,18 @@
+config {
+  type: "table",
+  schema: "csrd_mvp",
+  name: "g1_raw",
+  description: "Raw data for ESRS G1 (Business Conduct) ingestion"
+}
+
+select
+  cast(null as string) as source_file,
+  cast(null as int64) as row_number,
+  cast(null as string) as upload_id,
+  -- Add specific G1 columns here
+  cast(null as string) as policy_id,
+  cast(null as string) as policy_name,
+  cast(null as string) as description,
+  cast(null as string) as status,
+  cast(null as timestamp) as ingestion_timestamp
+limit 0
