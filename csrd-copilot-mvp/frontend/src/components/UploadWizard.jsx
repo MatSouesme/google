@@ -21,7 +21,7 @@ const UploadWizard = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8080/upload-data', {
+      const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/upload-data', {
         method: 'POST',
         body: formData,
       });
@@ -39,6 +39,11 @@ const UploadWizard = () => {
     }
   };
 
+  const handleDownload = (standard) => {
+    // TODO: Use environment variable for API URL
+    window.location.href = `https://csrd-api-71795126030.europe-west1.run.app/download-template/${standard}`;
+  };
+
   return (
     <div className="upload-wizard">
       <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>Guided Data Upload</h2>
@@ -49,10 +54,10 @@ const UploadWizard = () => {
       <div style={{ marginBottom: '2rem', textAlign: 'left' }}>
         <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Step 1: Download Template</h3>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="secondary" onClick={() => alert("Downloading E1 Template...")} style={{ backgroundColor: '#333', border: '1px solid #555' }}>
+          <button className="secondary" onClick={() => handleDownload('e1')} style={{ backgroundColor: '#333', border: '1px solid #555' }}>
             Download E1 (Climate)
           </button>
-          <button className="secondary" onClick={() => alert("Downloading G1 Template...")} style={{ backgroundColor: '#333', border: '1px solid #555' }}>
+          <button className="secondary" onClick={() => handleDownload('g1')} style={{ backgroundColor: '#333', border: '1px solid #555' }}>
             Download G1 (Business Conduct)
           </button>
         </div>

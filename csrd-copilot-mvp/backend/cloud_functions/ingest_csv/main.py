@@ -1,6 +1,7 @@
 import csv
 import uuid
 import logging
+import os
 from google.cloud import bigquery
 from google.cloud import storage
 import datetime
@@ -22,11 +23,20 @@ def ingest_csv(event, context):
         
         logger.info(f"Processing file: {file_name} from bucket: {bucket_name}")
 
+        # Get Project ID from environment
+        project_id = os.environ.get("GCP_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT")
+        if not project_id:
+             # Fallback or error if needed, but Cloud Functions usually have this.
+             # For local testing, it might be missing.
+             logger.warning("GCP_PROJECT env var not found, assuming default client project.")
+        
+        dataset_id = "csrd_mvp"
+
         # Detect standard based on file name
         if "e1" in file_name.lower():
-            table_id = "csrd-copilot.csrd_mvp.e1_raw"
+            table_id = f"{project_id}.{dataset_id}.e1_raw" if project_id else f"{dataset_id}.e1_raw"
         elif "g1" in file_name.lower():
-            table_id = "csrd-copilot.csrd_mvp.g1_raw"
+            table_id = f"{project_id}.{dataset_id}.g1_raw" if project_id else f"{dataset_id}.g1_raw"
         else:
             logger.warning(f"File {file_name} does not match E1/G1 naming convention. Skipping.")
             return
@@ -65,7 +75,9 @@ def ingest_csv(event, context):
             return
 
         # Insert into BigQuery
-        errors = bq_client.insert_rows_json(table_id, rows_to_insert)
+        # ignore_unknown_values=True allows the upload to succeed even if the CSV has extra columns
+        # that are not in the BigQuery schema.
+        errors = bq_client.insert_rows_json(table_id, rows_to_insert, ignore_unknown_values=True)
 
         if errors:
             logger.error(f"BigQuery insertion errors: {errors}")

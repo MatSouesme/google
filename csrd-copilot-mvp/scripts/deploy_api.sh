@@ -12,7 +12,7 @@ gcloud run deploy ${SERVICE_NAME} \
     --source backend/api \
     --platform managed \
     --region ${REGION} \
-    --allow-unauthenticated \
+    --no-allow-unauthenticated \
     --set-env-vars GOOGLE_CLOUD_PROJECT=${PROJECT_ID}
 
 echo "API deployed successfully."

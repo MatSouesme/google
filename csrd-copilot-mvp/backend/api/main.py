@@ -4,11 +4,22 @@ import uuid
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import storage
 from google.cloud import bigquery
 from pydantic import BaseModel
 
 app = FastAPI(title="CSRD Copilot API")
+
+# Add CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (for development)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev
@@ -68,6 +79,21 @@ async def upload_data(file: UploadFile = File(...)):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+
+@app.get("/download-template/{standard}")
+def download_template(standard: str):
+    """
+    Downloads the CSV template for the given standard.
+    """
+    standard = standard.lower()
+    if standard not in ["e1", "g1"]:
+        raise HTTPException(status_code=400, detail="Standard must be 'e1' or 'g1'")
+    
+    file_path = f"templates/{standard}_template.csv"
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Template not found")
+        
+    return FileResponse(file_path, media_type='text/csv', filename=f"{standard}_template.csv")
 
 @app.get("/get-validated-data/{standard}")
 def get_validated_data(standard: str):
