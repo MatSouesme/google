@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const CopilotInterface = () => {
   const [topic, setTopic] = useState('');
   const [standard, setStandard] = useState('e1');
   const [draft, setDraft] = useState('');
+  const [sourceData, setSourceData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showSources, setShowSources] = useState(false);
 
   const handleGenerate = async () => {
     if (!topic) return;
@@ -13,6 +17,7 @@ const CopilotInterface = () => {
     setLoading(true);
     setError('');
     setDraft('');
+    setSourceData(null);
 
     try {
       // TODO: Use environment variable for API URL
@@ -30,6 +35,7 @@ const CopilotInterface = () => {
 
       const data = await response.json();
       setDraft(data.draft);
+      setSourceData(data.source_data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,11 +43,21 @@ const CopilotInterface = () => {
     }
   };
 
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([draft], {type: 'text/markdown'});
+    element.href = URL.createObjectURL(file);
+    element.download = `csrd_draft_${standard}_${topic.replace(/\s+/g, '_')}.md`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
     <div className="copilot-interface" style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid #333', borderRadius: '8px', backgroundColor: '#1e1e1e' }}>
       <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>AI Draft Generator</h2>
       <p style={{ color: 'var(--text-secondary)' }}>
-        Ask Ecoply to draft a section of your report based on your uploaded data.
+        Ask Ecoply to draft a section of your report based on your uploaded data and official ESRS standards.
       </p>
 
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
@@ -71,9 +87,9 @@ const CopilotInterface = () => {
       <button 
         onClick={handleGenerate} 
         disabled={loading || !topic}
-        style={{ width: '100%', marginBottom: '1.5rem' }}
+        style={{ width: '100%', marginBottom: '1.5rem', backgroundColor: loading ? '#555' : 'var(--primary-color)', cursor: loading ? 'not-allowed' : 'pointer' }}
       >
-        {loading ? 'Generating Draft...' : 'Generate Draft'}
+        {loading ? 'Generating Draft (Reading PDFs & Data)...' : 'Generate Draft'}
       </button>
 
       {error && (
@@ -83,18 +99,47 @@ const CopilotInterface = () => {
       )}
 
       {draft && (
-        <div className="draft-result">
-          <h3 style={{ fontSize: '1.1rem', color: '#81c784' }}>Generated Draft</h3>
+        <div className="draft-result" style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
+          
+          {/* Toolbar */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ fontSize: '1.1rem', color: '#81c784', margin: 0 }}>Generated Draft</h3>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+                <button onClick={() => setShowSources(!showSources)} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#333', color: 'white', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer' }}>
+                    {showSources ? 'Hide Sources' : 'Show Sources'}
+                </button>
+                <button onClick={handleDownload} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#4caf50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                    Download .MD
+                </button>
+            </div>
+          </div>
+
+          {/* Sources Panel */}
+          {showSources && sourceData && (
+            <div style={{ backgroundColor: '#2a2a2a', padding: '1rem', borderRadius: '4px', borderLeft: '4px solid #64b5f6' }}>
+                <h4 style={{ marginTop: 0, color: '#64b5f6' }}>Data Sources Used:</h4>
+                <pre style={{ fontSize: '0.8rem', overflowX: 'auto', color: '#ddd' }}>
+                    {sourceData}
+                </pre>
+                <p style={{ fontSize: '0.8rem', color: '#aaa', fontStyle: 'italic' }}>
+                    + Official ESRS {standard.toUpperCase()} PDF Text (Full Document)
+                </p>
+            </div>
+          )}
+
+          {/* Draft Content */}
           <div style={{ 
-            whiteSpace: 'pre-wrap', 
             backgroundColor: '#252525', 
-            padding: '1rem', 
+            padding: '2rem', 
             borderRadius: '4px', 
             border: '1px solid #444',
             lineHeight: '1.6',
-            textAlign: 'left'
+            textAlign: 'left',
+            minHeight: '300px'
           }}>
-            {draft}
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {draft}
+            </ReactMarkdown>
           </div>
         </div>
       )}
