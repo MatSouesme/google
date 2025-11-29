@@ -2,6 +2,7 @@ fastapi
 uvicorn
 google-cloud-storage
 google-cloud-bigquery
+google-cloud-aiplatform>=1.38.0
 pydantic
 python-multipart
 google-cloud-discoveryengine

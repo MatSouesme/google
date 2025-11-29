@@ -10,6 +10,12 @@ from google.cloud import storage
 from google.cloud import bigquery
 from pydantic import BaseModel
 
+# Fix import path for Docker environment
+try:
+    from backend.api.routes import generate_draft
+except ImportError:
+    from routes import generate_draft
+
 app = FastAPI(title="CSRD Copilot API")
 
 # Add CORS Middleware
@@ -20,6 +26,13 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
+@app.on_event("startup")
+async def startup_event():
+    print(">>> API STARTUP: VERSION 2.1 - WITH GEMINI FALLBACK <<<")
+
+# Include the new router
+app.include_router(generate_draft.router)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev
@@ -128,12 +141,14 @@ def get_validated_data(standard: str):
              raise HTTPException(status_code=404, detail=f"Validated data for {standard} not found (Table {table_id} missing)")
         raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
 
-class DraftRequest(BaseModel):
-    topic: str
-    standard: str
+# Removed old generate_draft endpoint to avoid conflict
+# class DraftRequest(BaseModel):
+#     topic: str
+#     standard: str
 
-@app.post("/generate-draft")
-def generate_draft(request: DraftRequest):
+# @app.post("/generate-draft")
+# def generate_draft(request: DraftRequest):
+# ...
     """
     Generates a draft using Dual-Core RAG.
     """

@@ -24,7 +24,7 @@ gcloud run deploy $SERVICE_NAME `
     --source $SOURCE `
     --platform managed `
     --region $REGION `
-    --no-allow-unauthenticated `
+    --un-allow-unauthenticated `
     --set-env-vars GOOGLE_CLOUD_PROJECT=$PROJECT_ID
 
 Write-Host "API deployed successfully." -ForegroundColor Green
