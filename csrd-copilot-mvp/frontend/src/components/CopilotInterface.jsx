@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { auth } from '../firebase-config';
 
 const CopilotInterface = () => {
   const [topic, setTopic] = useState('');
@@ -20,11 +21,18 @@ const CopilotInterface = () => {
     setSourceData(null);
 
     try {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error("You must be logged in to generate a draft.");
+      }
+      const token = await user.getIdToken();
+
       // TODO: Use environment variable for API URL
       const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/generate-draft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ topic, standard }),
       });

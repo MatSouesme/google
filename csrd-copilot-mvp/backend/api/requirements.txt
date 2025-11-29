@@ -5,6 +5,7 @@ google-cloud-bigquery
 google-cloud-aiplatform>=1.38.0
 pydantic
 pypdf
+firebase-admin
 python-multipart
 google-cloud-discoveryengine
 google-generativeai
