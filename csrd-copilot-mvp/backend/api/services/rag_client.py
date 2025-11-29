@@ -1,6 +1,7 @@
 import os
 import json
 import vertexai
+import pypdf
 from vertexai.generative_models import GenerativeModel, SafetySetting
 import vertexai.preview.generative_models as generative_models
 from google.cloud import bigquery
@@ -72,6 +73,42 @@ class RAGClient:
         # Fallback if file not found (should not happen in prod if built correctly)
         return ""
 
+    def _extract_text_from_pdf(self, pdf_path: str) -> str:
+        """Extracts text from a PDF file."""
+        try:
+            reader = pypdf.PdfReader(pdf_path)
+            text = ""
+            # Limit to first 50 pages for MVP to avoid token limits if PDF is huge
+            # or just read all if we trust Gemini 1.5 Flash context window (1M tokens)
+            # Let's read all for now, assuming standard documents are < 100 pages.
+            for page in reader.pages:
+                text += page.extract_text() + "\n"
+            return text
+        except Exception as e:
+            print(f"Error reading PDF {pdf_path}: {e}")
+            return ""
+
+    def _get_compliance_context(self, standard: str) -> str:
+        """Loads the official PDF text for the standard."""
+        standard = standard.upper()
+        # Try to find the PDF file
+        # We copied it to backend/api/rag_compliance/{standard}/esrs_{standard.lower()}_full_text.pdf
+        filename = f"esrs_{standard.lower()}_full_text.pdf"
+        
+        possible_paths = [
+            f"rag_compliance/{standard}/{filename}", # If running from backend/api (Docker)
+            f"../../ai/rag_compliance/{standard}/{filename}", # Local dev fallback
+            f"ai/rag_compliance/{standard}/{filename}" # Another fallback
+        ]
+        
+        for path in possible_paths:
+            if os.path.exists(path):
+                print(f"Loading compliance PDF from: {path}")
+                return self._extract_text_from_pdf(path)
+        
+        print(f"Warning: Compliance PDF for {standard} not found.")
+        return "(Official text not found. Relying on internal knowledge.)"
+
     def get_company_data(self, standard: str) -> str:
         """Fetches the latest company data for the standard from BigQuery."""
         table_id = f"{self.project_id}.csrd_mvp.{standard}_raw" # Using raw for MVP if validated is empty
@@ -109,6 +146,9 @@ class RAGClient:
         # 1. Fetch Context
         company_data = self.get_company_data(standard)
         
+        # 1b. Fetch Legal Context (PDF)
+        legal_context = self._get_compliance_context(standard)
+        
         # 2. Load Prompts
         system_prompt = self._load_prompt("base_system_prompt.txt")
         strategist_prompt = self._load_prompt("strategist_prompt.txt")
@@ -130,8 +170,8 @@ class RAGClient:
         COMPANY DATA (BigQuery):
         {company_data}
         
-        LEGAL CONTEXT (Placeholder for Vertex AI Search):
-        (For this MVP, assume standard requirements for {topic} under {standard})
+        LEGAL CONTEXT (Official ESRS {standard.upper()} Text):
+        {legal_context}
         
         Please generate the draft now.
         """
