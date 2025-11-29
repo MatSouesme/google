@@ -145,8 +145,47 @@ const CopilotInterface = () => {
             textAlign: 'left',
             minHeight: '300px'
           }}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {draft}
+            <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    a: ({node, ...props}) => {
+                        // Handle audit trail tooltips
+                        if (props.href && props.href.startsWith('#audit:')) {
+                            try {
+                                const sourceInfo = decodeURIComponent(props.href.replace('#audit:', ''));
+                                // Parse the source info for better formatting
+                                // Expected format from prompt: "e1_demo.csv, Row: 1, Field: energy_total"
+                                const parts = sourceInfo.split(',').map(p => p.trim());
+                                
+                                return (
+                                    <span className="audit-tooltip-container">
+                                        <span className="audit-icon">ℹ️</span>
+                                        <span className="audit-tooltip">
+                                            <div style={{ borderBottom: '1px solid #555', paddingBottom: '4px', marginBottom: '4px', fontWeight: 'bold', color: '#64b5f6' }}>
+                                                Verified Source
+                                            </div>
+                                            {parts.map((part, i) => (
+                                                <div key={i} style={{ marginBottom: '2px' }}>• {part}</div>
+                                            ))}
+                                        </span>
+                                    </span>
+                                );
+                            } catch (e) {
+                                console.error("Audit tooltip error:", e);
+                                return <span>ℹ️</span>;
+                            }
+                        }
+                        return <a {...props} style={{color: '#64b5f6'}} target="_blank" rel="noopener noreferrer" />;
+                    }
+                }}
+            >
+                {/* Regex explanation:
+                    \[\[           : Match literal [[
+                    \s*Source\s*:  : Match "Source" with optional spaces and colon
+                    ([\s\S]*?)     : Match any character (including newlines) non-greedily
+                    \]\]           : Match literal ]]
+                */}
+                {draft ? draft.replace(/\[\[\s*Source\s*:([\s\S]*?)\]\]/gi, (match, content) => ` [ℹ️](#audit:${encodeURIComponent(content.trim())})`) : ''}
             </ReactMarkdown>
           </div>
         </div>

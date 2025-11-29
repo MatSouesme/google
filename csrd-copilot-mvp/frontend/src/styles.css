@@ -1,0 +1,62 @@
+/* Tooltip Container */
+.audit-tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* The Icon */
+.audit-icon {
+  font-size: 0.9em;
+  color: #64b5f6;
+  font-weight: bold;
+}
+
+/* The Tooltip Text */
+.audit-tooltip {
+  visibility: hidden;
+  width: 300px;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 100;
+  bottom: 140%; /* Position above */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.2s, bottom 0.2s;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  border: 1px solid #444;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/* Tooltip Arrow */
+.audit-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #2a2a2a transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.audit-tooltip-container:hover .audit-tooltip {
+  visibility: visible;
+  opacity: 1;
+  bottom: 125%;
+}
+
+/* Highlight the source parts in the tooltip */
+.audit-tooltip strong {
+    color: #81c784;
+}
