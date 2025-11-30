@@ -152,8 +152,9 @@ class RAGClient:
         # 2. Load Prompts
         system_prompt = self._load_prompt("base_system_prompt.txt")
         strategist_prompt = self._load_prompt("strategist_prompt.txt")
+        auditor_prompt = self._load_prompt("auditor_prompt.txt")
         
-        # 3. Construct the Final Prompt
+        # 3. Construct the Final Prompt (Strategist)
         # We combine the system instructions with the specific task
         full_prompt = f"""
         {system_prompt}
@@ -176,6 +177,28 @@ class RAGClient:
         Please generate the draft now.
         """
 
+        # 3b. Construct the Auditor Prompt
+        full_auditor_prompt = f"""
+        {system_prompt}
+
+        ---
+        TASK:
+        {auditor_prompt}
+
+        ---
+        INPUT CONTEXT:
+        TOPIC: {topic}
+        STANDARD: {standard.upper()}
+        
+        COMPANY DATA (BigQuery):
+        {company_data}
+        
+        LEGAL CONTEXT (Official ESRS {standard.upper()} Text):
+        {legal_context}
+        
+        Please generate the audit report now.
+        """
+
         # 4. Call Gemini with Fallback
         models_to_try = ["gemini-2.0-flash-lite-001", "gemini-1.5-flash", "gemini-1.0-pro", "gemini-pro"]
         last_error = None
@@ -184,9 +207,18 @@ class RAGClient:
             try:
                 print(f"Attempting generation with model: {model_name}")
                 model = GenerativeModel(model_name)
-                response = model.generate_content(full_prompt)
+                
+                # Generate Draft (Strategist)
+                response_draft = model.generate_content(full_prompt)
+                
+                # Generate Audit (Auditor) - Sequential call
+                # We use the same model instance for consistency
+                print("Generating Audit Report...")
+                response_audit = model.generate_content(full_auditor_prompt)
+
                 return {
-                    "draft": response.text,
+                    "draft": response_draft.text,
+                    "audit_report": response_audit.text,
                     "source_data": company_data,
                     "model_used": model_name
                 }

@@ -7,6 +7,7 @@ const CopilotInterface = () => {
   const [topic, setTopic] = useState('');
   const [standard, setStandard] = useState('e1');
   const [draft, setDraft] = useState('');
+  const [auditReport, setAuditReport] = useState('');
   const [sourceData, setSourceData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -18,6 +19,7 @@ const CopilotInterface = () => {
     setLoading(true);
     setError('');
     setDraft('');
+    setAuditReport('');
     setSourceData(null);
 
     try {
@@ -43,6 +45,7 @@ const CopilotInterface = () => {
 
       const data = await response.json();
       setDraft(data.draft);
+      setAuditReport(data.audit_report);
       setSourceData(data.source_data);
     } catch (err) {
       setError(err.message);
@@ -125,13 +128,45 @@ const CopilotInterface = () => {
           {/* Sources Panel */}
           {showSources && sourceData && (
             <div style={{ backgroundColor: '#2a2a2a', padding: '1rem', borderRadius: '4px', borderLeft: '4px solid #64b5f6' }}>
-                <h4 style={{ marginTop: 0, color: '#64b5f6' }}>Data Sources Used:</h4>
-                <pre style={{ fontSize: '0.8rem', overflowX: 'auto', color: '#ddd' }}>
-                    {sourceData}
-                </pre>
-                <p style={{ fontSize: '0.8rem', color: '#aaa', fontStyle: 'italic' }}>
-                    + Official ESRS {standard.toUpperCase()} PDF Text (Full Document)
-                </p>
+                <h4 style={{ marginTop: 0, color: '#64b5f6', marginBottom: '1rem' }}>📚 Sources & Context</h4>
+                
+                {/* Data Source */}
+                <div style={{ marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '1.2rem' }}>📄</span>
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#e0e0e0' }}>Données Entreprise</div>
+                        <div style={{ fontSize: '0.9rem', color: '#aaa' }}>
+                            {(() => {
+                                try {
+                                    const data = JSON.parse(sourceData);
+                                    const date = data.ingestion_timestamp ? new Date(data.ingestion_timestamp).toLocaleDateString() : 'N/A';
+                                    return `${data.source_file || 'Unknown File'} (${date})`;
+                                } catch (e) {
+                                    return 'Raw Data (Parse Error)';
+                                }
+                            })()}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Legal Source */}
+                <div style={{ marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '1.2rem' }}>⚖️</span>
+                    <div>
+                        <div style={{ fontWeight: 'bold', color: '#e0e0e0' }}>Cadre Légal</div>
+                        <div style={{ fontSize: '0.9rem', color: '#aaa' }}>
+                            ESRS {standard.toUpperCase()} (Official Text)
+                        </div>
+                    </div>
+                </div>
+
+                {/* Raw Data Toggle */}
+                <details style={{ marginTop: '1rem' }}>
+                    <summary style={{ cursor: 'pointer', color: '#64b5f6', fontSize: '0.8rem' }}>Voir les données brutes (JSON)</summary>
+                    <pre style={{ fontSize: '0.7rem', overflowX: 'auto', color: '#888', marginTop: '0.5rem' }}>
+                        {sourceData}
+                    </pre>
+                </details>
             </div>
           )}
 
@@ -188,6 +223,26 @@ const CopilotInterface = () => {
                 {draft ? draft.replace(/\[\[\s*Source\s*:([\s\S]*?)\]\]/gi, (match, content) => ` [ℹ️](#audit:${encodeURIComponent(content.trim())})`) : ''}
             </ReactMarkdown>
           </div>
+
+          {/* Auditor's Vigilance Points */}
+          {auditReport && (
+            <div style={{ 
+                marginTop: '2rem', 
+                padding: '1.5rem', 
+                backgroundColor: '#2a1a1a', 
+                border: '1px solid #e57373', 
+                borderRadius: '8px' 
+            }}>
+                <h3 style={{ marginTop: 0, color: '#e57373', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    ⚠️ Auditor's Vigilance Points
+                </h3>
+                <div style={{ color: '#e0e0e0', lineHeight: '1.5' }}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {auditReport}
+                    </ReactMarkdown>
+                </div>
+            </div>
+          )}
         </div>
       )}
     </div>
