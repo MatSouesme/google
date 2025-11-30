@@ -10,17 +10,23 @@ const CopilotInterface = () => {
   const [auditReport, setAuditReport] = useState('');
   const [sourceData, setSourceData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [approving, setApproving] = useState(false);
   const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
   const [showSources, setShowSources] = useState(false);
+  const [currentDraftId, setCurrentDraftId] = useState(null);
 
   const handleGenerate = async () => {
     if (!topic) return;
 
     setLoading(true);
     setError('');
+    setSuccessMsg('');
     setDraft('');
     setAuditReport('');
     setSourceData(null);
+    setCurrentDraftId(null);
 
     try {
       const user = auth.currentUser;
@@ -51,6 +57,74 @@ const CopilotInterface = () => {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    if (!draft) return;
+    setSaving(true);
+    setError('');
+    setSuccessMsg('');
+
+    try {
+        const user = auth.currentUser;
+        const token = await user.getIdToken();
+        
+        const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/save-draft', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                topic,
+                standard,
+                content: draft,
+                audit_report: auditReport,
+                source_data: sourceData
+            }),
+        });
+
+        if (!response.ok) throw new Error("Failed to save draft");
+        
+        const data = await response.json();
+        setCurrentDraftId(data.draft_id);
+        setSuccessMsg("Draft saved to history!");
+    } catch (err) {
+        setError(err.message);
+    } finally {
+        setSaving(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    if (!currentDraftId) {
+        // If not saved yet, save first
+        await handleSaveDraft();
+        if (!currentDraftId) return; // If save failed
+    }
+    
+    setApproving(true);
+    try {
+        const user = auth.currentUser;
+        const token = await user.getIdToken();
+
+        const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/approve-draft', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ draft_id: currentDraftId }),
+        });
+
+        if (!response.ok) throw new Error("Failed to approve draft");
+        
+        setSuccessMsg("✅ Draft Approved & Sent to Official Report!");
+    } catch (err) {
+        setError(err.message);
+    } finally {
+        setApproving(false);
     }
   };
 
@@ -116,6 +190,12 @@ const CopilotInterface = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ fontSize: '1.1rem', color: '#81c784', margin: 0 }}>Generated Draft</h3>
             <div style={{ display: 'flex', gap: '1rem' }}>
+                <button onClick={handleSaveDraft} disabled={saving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#333', color: 'white', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer' }}>
+                    {saving ? 'Saving...' : '💾 Save Draft'}
+                </button>
+                <button onClick={handleApprove} disabled={approving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#1565c0', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                    {approving ? 'Approving...' : '✅ Approve & Send'}
+                </button>
                 <button onClick={() => setShowSources(!showSources)} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#333', color: 'white', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer' }}>
                     {showSources ? 'Hide Sources' : 'Show Sources'}
                 </button>
@@ -124,6 +204,12 @@ const CopilotInterface = () => {
                 </button>
             </div>
           </div>
+
+          {successMsg && (
+            <div style={{ padding: '0.5rem', backgroundColor: 'rgba(129, 199, 132, 0.2)', color: '#81c784', borderRadius: '4px', marginTop: '0.5rem' }}>
+                {successMsg}
+            </div>
+          )}
 
           {/* Sources Panel */}
           {showSources && sourceData && (

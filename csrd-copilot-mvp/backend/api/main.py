@@ -12,9 +12,9 @@ from pydantic import BaseModel
 
 # Fix import path for Docker environment
 try:
-    from backend.api.routes import generate_draft
+    from backend.api.routes import generate_draft, workflow
 except ImportError:
-    from routes import generate_draft
+    from routes import generate_draft, workflow
 
 app = FastAPI(title="CSRD Copilot API")
 
@@ -29,10 +29,11 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    print(">>> API STARTUP: VERSION 2.1 - WITH GEMINI FALLBACK <<<")
+    print(">>> API STARTUP: VERSION 2.2 - WITH WORKFLOW <<<")
 
-# Include the new router
+# Include the new routers
 app.include_router(generate_draft.router)
+app.include_router(workflow.router)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev
