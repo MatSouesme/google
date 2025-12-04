@@ -9,3 +9,5 @@ firebase-admin
 python-multipart
 google-cloud-discoveryengine
 google-generativeai
+simple-salesforce
+requests

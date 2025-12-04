@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import UploadWizard from './components/UploadWizard'
 import CopilotInterface from './components/CopilotInterface'
+import Connectors from './components/Connectors'
 import Login from './pages/Login'
 import { auth } from './firebase-config'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
@@ -9,6 +10,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth'
 function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('upload'); // 'upload' or 'connectors'
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -42,9 +44,40 @@ function App() {
                 </div>
             </div>
             
-            <div className="card">
-                <UploadWizard />
+            {/* Navigation Tabs */}
+            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                <button 
+                    onClick={() => setActiveTab('upload')}
+                    style={{ 
+                        padding: '0.5rem 1.5rem', 
+                        backgroundColor: activeTab === 'upload' ? 'var(--primary-color)' : '#333',
+                        border: 'none',
+                        borderRadius: '20px',
+                        cursor: 'pointer',
+                        color: 'white'
+                    }}
+                >
+                    📁 Upload Files
+                </button>
+                <button 
+                    onClick={() => setActiveTab('connectors')}
+                    style={{ 
+                        padding: '0.5rem 1.5rem', 
+                        backgroundColor: activeTab === 'connectors' ? 'var(--primary-color)' : '#333',
+                        border: 'none',
+                        borderRadius: '20px',
+                        cursor: 'pointer',
+                        color: 'white'
+                    }}
+                >
+                    🔌 Connectors
+                </button>
             </div>
+
+            <div className="card">
+                {activeTab === 'upload' ? <UploadWizard /> : <Connectors />}
+            </div>
+            
             <div className="card" style={{ marginTop: '2rem' }}>
                 <CopilotInterface />
             </div>
