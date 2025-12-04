@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase-config';
+import { useTranslation } from 'react-i18next';
 
 const Connectors = () => {
     const [connectorType, setConnectorType] = useState('salesforce');
@@ -9,6 +10,7 @@ const Connectors = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const { t } = useTranslation();
 
     const fillDemoCredentials = () => {
         setUsername('demo@salesforce.com');
@@ -24,7 +26,7 @@ const Connectors = () => {
 
         try {
             const user = auth.currentUser;
-            if (!user) throw new Error("Not authenticated");
+            if (!user) throw new Error(t('connectorsComponent.errorAuth'));
             const idToken = await user.getIdToken();
 
             // TODO: Use env var for URL
@@ -46,11 +48,11 @@ const Connectors = () => {
 
             if (!response.ok) {
                 const errData = await response.json();
-                throw new Error(errData.detail || "Sync failed");
+                throw new Error(errData.detail || t('connectorsComponent.errorSync'));
             }
 
             const data = await response.json();
-            setMessage(`✅ Success! ${data.rows_inserted} rows imported from ${data.source}.`);
+            setMessage(t('connectorsComponent.success', { count: data.rows_inserted, source: data.source }));
         } catch (err) {
             setError(err.message);
         } finally {
@@ -60,17 +62,17 @@ const Connectors = () => {
 
     return (
         <div style={{ textAlign: 'left' }}>
-            <h2 style={{ color: 'var(--primary-color)', marginTop: 0 }}>Data Connectors</h2>
+            <h2 style={{ color: 'var(--primary-color)', marginTop: 0 }}>{t('connectorsComponent.title')}</h2>
             <p style={{ color: '#aaa', fontSize: '0.9rem' }}>
-                Connect directly to your operational systems to automate data collection.
+                {t('connectorsComponent.subtitle')}
             </p>
 
             <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem' }}>
                 {/* Sidebar / List of Connectors */}
                 <div style={{ width: '200px', borderRight: '1px solid var(--border-color)' }}>
-                    <div 
-                        style={{ 
-                            padding: '10px', 
+                    <div
+                        style={{
+                            padding: '10px',
                             backgroundColor: connectorType === 'salesforce' ? 'var(--primary-color)' : 'transparent',
                             color: connectorType === 'salesforce' ? '#fff' : 'var(--text-color)',
                             cursor: 'pointer',
@@ -80,13 +82,13 @@ const Connectors = () => {
                         }}
                         onClick={() => setConnectorType('salesforce')}
                     >
-                        ☁️ Salesforce
+                        {t('connectorsComponent.salesforce')}
                     </div>
                     <div style={{ padding: '10px', color: 'var(--text-secondary)', cursor: 'not-allowed' }}>
-                        🏗️ SAP (Coming Soon)
+                        {t('connectorsComponent.sap')}
                     </div>
                     <div style={{ padding: '10px', color: 'var(--text-secondary)', cursor: 'not-allowed' }}>
-                        ⚡ AWS (Coming Soon)
+                        {t('connectorsComponent.aws')}
                     </div>
                 </div>
 
@@ -94,51 +96,51 @@ const Connectors = () => {
                 <div style={{ flex: 1 }}>
                     {connectorType === 'salesforce' && (
                         <form onSubmit={handleSync} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
-                            <h3 style={{ margin: 0, color: 'var(--text-color)' }}>Salesforce Configuration</h3>
-                            
+                            <h3 style={{ margin: 0, color: 'var(--text-color)' }}>{t('connectorsComponent.configTitle')}</h3>
+
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>Username</label>
-                                <input 
-                                    type="text" 
-                                    value={username} 
+                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>{t('connectorsComponent.username')}</label>
+                                <input
+                                    type="text"
+                                    value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    style={{ 
-                                        width: '100%', 
-                                        padding: '8px', 
-                                        backgroundColor: 'var(--bg-color)', 
-                                        border: '1px solid var(--border-color)', 
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px',
+                                        backgroundColor: 'var(--bg-color)',
+                                        border: '1px solid var(--border-color)',
                                         color: 'var(--text-color)',
                                         borderRadius: '4px'
                                     }}
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>Password</label>
-                                <input 
-                                    type="password" 
-                                    value={password} 
+                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>{t('connectorsComponent.password')}</label>
+                                <input
+                                    type="password"
+                                    value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    style={{ 
-                                        width: '100%', 
-                                        padding: '8px', 
-                                        backgroundColor: 'var(--bg-color)', 
-                                        border: '1px solid var(--border-color)', 
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px',
+                                        backgroundColor: 'var(--bg-color)',
+                                        border: '1px solid var(--border-color)',
                                         color: 'var(--text-color)',
                                         borderRadius: '4px'
                                     }}
                                 />
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>Security Token</label>
-                                <input 
-                                    type="password" 
-                                    value={token} 
+                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>{t('connectorsComponent.token')}</label>
+                                <input
+                                    type="password"
+                                    value={token}
                                     onChange={(e) => setToken(e.target.value)}
-                                    style={{ 
-                                        width: '100%', 
-                                        padding: '8px', 
-                                        backgroundColor: 'var(--bg-color)', 
-                                        border: '1px solid var(--border-color)', 
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px',
+                                        backgroundColor: 'var(--bg-color)',
+                                        border: '1px solid var(--border-color)',
                                         color: 'var(--text-color)',
                                         borderRadius: '4px'
                                     }}
@@ -146,38 +148,38 @@ const Connectors = () => {
                             </div>
 
                             <div style={{ marginBottom: '0.5rem' }}>
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     onClick={fillDemoCredentials}
-                                    style={{ 
-                                        background: 'none', 
-                                        border: '1px dashed var(--text-secondary)', 
-                                        color: 'var(--text-secondary)', 
+                                    style={{
+                                        background: 'none',
+                                        border: '1px dashed var(--text-secondary)',
+                                        color: 'var(--text-secondary)',
                                         padding: '5px 10px',
                                         fontSize: '0.8rem',
                                         cursor: 'pointer',
                                         width: '100%'
                                     }}
                                 >
-                                    🪄 Remplir avec des identifiants de test (MVP)
+                                    {t('connectorsComponent.demoBtn')}
                                 </button>
                             </div>
 
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 disabled={loading}
-                                style={{ 
-                                    marginTop: '1rem', 
-                                    padding: '10px', 
+                                style={{
+                                    marginTop: '1rem',
+                                    padding: '10px',
                                     backgroundColor: '#00a1e0', // Salesforce Blue
-                                    color: 'white', 
-                                    border: 'none', 
-                                    borderRadius: '4px', 
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
                                     cursor: loading ? 'not-allowed' : 'pointer',
                                     fontWeight: 'bold'
                                 }}
                             >
-                                {loading ? 'Syncing Data...' : 'Sync Now'}
+                                {loading ? t('connectorsComponent.syncBtn.loading') : t('connectorsComponent.syncBtn.default')}
                             </button>
                         </form>
                     )}

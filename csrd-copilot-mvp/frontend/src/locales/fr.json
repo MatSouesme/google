@@ -1,0 +1,177 @@
+{
+    "common": {
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "logout": "Déconnexion",
+        "toggleTheme": "Changer le thème",
+        "toggleLanguage": "Changer la langue"
+    },
+    "nav": {
+        "home": "Accueil",
+        "dashboard": "Tableau de bord",
+        "generator": "Générateur IA",
+        "connectors": "Connecteurs"
+    },
+    "login": {
+        "title": "CSRD Copilot",
+        "subtitle": "Reporting de Durabilité d'Entreprise",
+        "emailLabel": "Adresse Email",
+        "passwordLabel": "Mot de passe",
+        "emailPlaceholder": "nom@entreprise.com",
+        "passwordPlaceholder": "••••••••",
+        "submit": "Se connecter",
+        "authenticating": "Authentification...",
+        "footer": "Système protégé. Personnel autorisé uniquement.",
+        "errorPrefix": "Échec de la connexion : "
+    },
+    "dashboard": {
+        "title": "Tableau de bord",
+        "subtitle": "Aperçu de votre statut de conformité CSRD et de l'avancement des rapports.",
+        "stats": {
+            "reports": "Rapports Générés",
+            "reportsSubtitle": "+2 ce mois-ci",
+            "sources": "Sources de Données",
+            "sourcesSubtitle": "Toutes connectées",
+            "score": "Score de Conformité",
+            "scoreSubtitle": "Top 10% de l'industrie",
+            "tasks": "Tâches en Attente",
+            "tasksSubtitle": "Action requise"
+        },
+        "recentActivity": {
+            "title": "Activité Récente",
+            "viewAll": "Voir tout",
+            "item1": "Brouillon du Rapport Annuel de Durabilité",
+            "item1Meta": "Mis à jour il y a 2 heures par Sarah M."
+        },
+        "quickActions": {
+            "title": "Actions Rapides",
+            "newReport": "Nouveau Rapport",
+            "connectSource": "Connecter une Source",
+            "reviewTasks": "Revoir les Tâches"
+        }
+    },
+    "generator": {
+        "title": "Générateur IA",
+        "subtitle": "Téléchargez vos documents et générez des rapports CSRD avec l'IA."
+    },
+    "connectors": {
+        "title": "Connecteurs de Données",
+        "subtitle": "Connectez vos sources de données pour automatiser la collecte."
+    },
+    "home": {
+        "hero": {
+            "title": "Conformité CSRD, Simplifiée.",
+            "subtitle": "Ecoply est votre copilote intelligent pour la conformité à la Directive sur les Rapports de Durabilité des Entreprises (CSRD). Nous combinons une IA avancée avec une intégration de données sécurisée pour rationaliser votre parcours de reporting durable.",
+            "startBtn": "Commencer à Générer",
+            "connectBtn": "Connecter des Sources"
+        },
+        "features": {
+            "ingestion": {
+                "title": "Ingestion Automatisée",
+                "text": "Connectez-vous directement à vos systèmes ERP, CRM et RH (Salesforce, SAP, etc.) ou téléchargez des CSV. Nous mappons automatiquement vos données brutes aux points de données ESRS, vous faisant gagner des centaines d'heures de saisie manuelle."
+            },
+            "generation": {
+                "title": "Génération de Brouillons IA",
+                "text": "Notre LLM avancé (Gemini Pro) analyse vos données par rapport aux normes ESRS officielles (E1, G1, etc.) pour générer des brouillons narratifs conformes et prêts pour l'audit en quelques secondes."
+            },
+            "audit": {
+                "title": "Piste d'Audit & Vigilance",
+                "text": "Chaque phrase générée est liée à sa source de données. Notre système de \"Vigilance Auditeur\" signale les incohérences potentielles ou les points de données manquants avant la publication."
+            }
+        },
+        "howItWorks": {
+            "title": "Comment ça marche",
+            "step1": {
+                "title": "Connectez vos Données",
+                "text": "Utilisez nos connecteurs sécurisés ou l'assistant de téléchargement pour intégrer vos données opérationnelles dans la plateforme."
+            },
+            "step2": {
+                "title": "Sélectionnez une Norme",
+                "text": "Choisissez la norme ESRS (par ex. E1 Changement Climatique) et l'exigence de divulgation spécifique sur laquelle vous devez faire rapport."
+            },
+            "step3": {
+                "title": "Générez & Révisez",
+                "text": "Laissez l'IA rédiger votre rapport. Révisez les sources citées, vérifiez les notes de l'auditeur et approuvez le texte final."
+            }
+        }
+    },
+    "uploadWizard": {
+        "title": "Téléchargement Guidé de Données",
+        "subtitle": "Suivez les étapes ci-dessous pour ingérer vos données CSRD dans Ecoply.",
+        "step1": {
+            "title": "Étape 1 : Télécharger le Modèle",
+            "downloadE1": "⬇️ Télécharger E1 (Climat)",
+            "downloadG1": "⬇️ Télécharger G1 (Conduite des Affaires)"
+        },
+        "step2": {
+            "title": "Étape 2 : Télécharger les Données",
+            "changeFile": "📂 Changer de Fichier",
+            "chooseFile": "📂 Choisir un Fichier CSV",
+            "selected": "✅ Sélectionné : "
+        },
+        "uploadBtn": {
+            "uploading": "⏳ Téléchargement...",
+            "default": "🚀 Télécharger CSV"
+        },
+        "success": "Succès ! Fichier téléchargé. ID : ",
+        "errorPrefix": "Échec du téléchargement : "
+    },
+    "copilot": {
+        "title": "Générateur de Brouillons IA",
+        "subtitle": "Demandez à Ecoply de rédiger une section de votre rapport basée sur vos données et les normes ESRS officielles.",
+        "standardLabel": "Norme",
+        "topicLabel": "Sujet / Exigence de Divulgation",
+        "topicPlaceholder": "ex : Analyse des émissions Scope 1",
+        "generateBtn": {
+            "loading": "Génération du Brouillon (Lecture PDF & Données)...",
+            "default": "Générer le Brouillon"
+        },
+        "result": {
+            "title": "Brouillon Généré",
+            "saveBtn": {
+                "saving": "Sauvegarde...",
+                "default": "💾 Sauvegarder"
+            },
+            "approveBtn": {
+                "approving": "Approbation...",
+                "default": "✅ Approuver & Envoyer"
+            },
+            "toggleSources": {
+                "hide": "Masquer les Sources",
+                "show": "Voir les Sources"
+            },
+            "download": "Télécharger .MD",
+            "successSaved": "Brouillon sauvegardé dans l'historique !",
+            "successApproved": "✅ Brouillon Approuvé & Envoyé au Rapport Officiel !",
+            "sourcesTitle": "📚 Sources & Contexte",
+            "dataSource": "📄 Données Entreprise",
+            "legalSource": "⚖️ Cadre Légal",
+            "rawData": "Voir Données Brutes (JSON)",
+            "auditTitle": "⚠️ Points de Vigilance Auditeur"
+        },
+        "errors": {
+            "loginRequired": "Vous devez être connecté pour générer un brouillon.",
+            "saveFailed": "Échec de la sauvegarde",
+            "approveFailed": "Échec de l'approbation"
+        }
+    },
+    "connectorsComponent": {
+        "title": "Connecteurs de Données",
+        "subtitle": "Connectez-vous directement à vos systèmes opérationnels pour automatiser la collecte.",
+        "salesforce": "☁️ Salesforce",
+        "sap": "🏗️ SAP (Bientôt)",
+        "aws": "⚡ AWS (Bientôt)",
+        "configTitle": "Configuration Salesforce",
+        "username": "Nom d'utilisateur",
+        "password": "Mot de passe",
+        "token": "Jeton de Sécurité",
+        "demoBtn": "🪄 Remplir avec des identifiants de test (MVP)",
+        "syncBtn": {
+            "loading": "Synchronisation...",
+            "default": "Synchroniser Maintenant"
+        },
+        "success": "✅ Succès ! {{count}} lignes importées depuis {{source}}.",
+        "errorAuth": "Non authentifié",
+        "errorSync": "Échec de la synchronisation"
+    }
+}

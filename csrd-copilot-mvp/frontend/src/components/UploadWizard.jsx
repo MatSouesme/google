@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const UploadWizard = () => {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle'); // idle, uploading, success, error
   const [message, setMessage] = useState('');
+  const { t } = useTranslation();
 
   const handleFileChange = (e) => {
     if (e.target.files) {
@@ -27,12 +29,12 @@ const UploadWizard = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Upload failed: ${response.statusText}`);
+        throw new Error(`${t('uploadWizard.errorPrefix')}${response.statusText}`);
       }
 
       const data = await response.json();
       setStatus('success');
-      setMessage(`Success! File uploaded. ID: ${data.upload_id}`);
+      setMessage(`${t('uploadWizard.success')}${data.upload_id}`);
     } catch (error) {
       setStatus('error');
       setMessage(error.message);
@@ -46,38 +48,38 @@ const UploadWizard = () => {
 
   return (
     <div className="upload-wizard">
-      <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>Guided Data Upload</h2>
+      <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>{t('uploadWizard.title')}</h2>
       <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-        Follow the steps below to ingest your CSRD data into Ecoply.
+        {t('uploadWizard.subtitle')}
       </p>
 
       <div style={{ marginBottom: '2rem', textAlign: 'left' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-color)' }}>Step 1: Download Template</h3>
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-color)' }}>{t('uploadWizard.step1.title')}</h3>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button className="btn-animated btn-secondary" onClick={() => handleDownload('e1')}>
-            ⬇️ Download E1 (Climate)
+            {t('uploadWizard.step1.downloadE1')}
           </button>
           <button className="btn-animated btn-secondary" onClick={() => handleDownload('g1')}>
-            ⬇️ Download G1 (Business Conduct)
+            {t('uploadWizard.step1.downloadG1')}
           </button>
         </div>
       </div>
 
       <div style={{ marginBottom: '2rem', textAlign: 'left' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-color)' }}>Step 2: Upload Data</h3>
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-color)' }}>{t('uploadWizard.step2.title')}</h3>
         <div className="file-upload-container">
-          <input 
-            type="file" 
-            id="file-upload" 
-            accept=".csv" 
-            onChange={handleFileChange} 
-            className="file-upload-input" 
+          <input
+            type="file"
+            id="file-upload"
+            accept=".csv"
+            onChange={handleFileChange}
+            className="file-upload-input"
           />
           <label htmlFor="file-upload" className="file-upload-label">
-            📂 {file ? 'Change File' : 'Choose CSV File'}
+            {file ? t('uploadWizard.step2.changeFile') : t('uploadWizard.step2.chooseFile')}
           </label>
         </div>
-        {file && <p style={{ marginTop: '0.5rem', color: 'var(--primary-color)', fontWeight: 'bold' }}>✅ Selected: {file.name}</p>}
+        {file && <p style={{ marginTop: '0.5rem', color: 'var(--primary-color)', fontWeight: 'bold' }}>{t('uploadWizard.step2.selected')}{file.name}</p>}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
@@ -87,7 +89,7 @@ const UploadWizard = () => {
           disabled={!file || status === 'uploading'}
           style={{ width: '100%', opacity: (!file || status === 'uploading') ? 0.6 : 1 }}
         >
-          {status === 'uploading' ? '⏳ Uploading...' : '🚀 Upload CSV'}
+          {status === 'uploading' ? t('uploadWizard.uploadBtn.uploading') : t('uploadWizard.uploadBtn.default')}
         </button>
       </div>
 

@@ -28,13 +28,13 @@ function App() {
 
     if (loading) {
         return (
-            <div style={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                height: '100vh', 
-                backgroundColor: 'var(--bg-color)', 
-                color: 'var(--text-color)' 
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundColor: 'var(--bg-color)',
+                color: 'var(--text-color)'
             }}>
                 Loading...
             </div>
@@ -44,13 +44,13 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route 
-                    path="/login" 
-                    element={!user ? <Login /> : <Navigate to='/' replace />} 
+                <Route
+                    path="/login"
+                    element={!user ? <Login /> : <Navigate to='/' replace />}
                 />
-                
-                <Route 
-                    path="/" 
+
+                <Route
+                    path="/"
                     element={user ? <Layout user={user} /> : <Navigate to='/login' replace />}
                 >
                     <Route index element={<Home />} />

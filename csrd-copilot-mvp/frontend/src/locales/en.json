@@ -1,0 +1,177 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "logout": "Logout",
+        "toggleTheme": "Toggle Theme",
+        "toggleLanguage": "Switch Language"
+    },
+    "nav": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "generator": "IA Generator",
+        "connectors": "Connectors"
+    },
+    "login": {
+        "title": "CSRD Copilot",
+        "subtitle": "Enterprise Sustainability Reporting",
+        "emailLabel": "Email Address",
+        "passwordLabel": "Password",
+        "emailPlaceholder": "name@company.com",
+        "passwordPlaceholder": "••••••••",
+        "submit": "Sign In",
+        "authenticating": "Authenticating...",
+        "footer": "Protected System. Authorized Personnel Only.",
+        "errorPrefix": "Failed to log in: "
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Overview of your CSRD compliance status and reporting progress.",
+        "stats": {
+            "reports": "Reports Generated",
+            "reportsSubtitle": "+2 this month",
+            "sources": "Data Sources",
+            "sourcesSubtitle": "All connected",
+            "score": "Compliance Score",
+            "scoreSubtitle": "Top 10% of industry",
+            "tasks": "Pending Tasks",
+            "tasksSubtitle": "Action required"
+        },
+        "recentActivity": {
+            "title": "Recent Activity",
+            "viewAll": "View All",
+            "item1": "Annual Sustainability Report Draft",
+            "item1Meta": "Updated 2 hours ago by Sarah M."
+        },
+        "quickActions": {
+            "title": "Quick Actions",
+            "newReport": "New Report",
+            "connectSource": "Connect Data Source",
+            "reviewTasks": "Review Tasks"
+        }
+    },
+    "generator": {
+        "title": "IA Generator",
+        "subtitle": "Upload your documents and generate CSRD reports with AI."
+    },
+    "connectors": {
+        "title": "Data Connectors",
+        "subtitle": "Connect your data sources to automate data collection."
+    },
+    "home": {
+        "hero": {
+            "title": "CSRD Compliance, Simplified.",
+            "subtitle": "Ecoply is your intelligent copilot for Corporate Sustainability Reporting Directive (CSRD) compliance. We combine advanced AI with secure data integration to streamline your sustainability reporting journey.",
+            "startBtn": "Start Generating Reports",
+            "connectBtn": "Connect Data Sources"
+        },
+        "features": {
+            "ingestion": {
+                "title": "Automated Data Ingestion",
+                "text": "Connect directly to your ERP, CRM, and HR systems (Salesforce, SAP, etc.) or upload CSVs. We automatically map your raw data to ESRS data points, saving you hundreds of hours of manual entry."
+            },
+            "generation": {
+                "title": "AI Draft Generation",
+                "text": "Our advanced LLM (Gemini Pro) analyzes your data against official ESRS standards (E1, G1, etc.) to generate compliant, audit-ready narrative drafts in seconds."
+            },
+            "audit": {
+                "title": "Audit Trail & Vigilance",
+                "text": "Every generated sentence is linked back to its source data. Our \"Auditor's Vigilance\" system flags potential inconsistencies or missing data points before you publish."
+            }
+        },
+        "howItWorks": {
+            "title": "How It Works",
+            "step1": {
+                "title": "Connect Your Data",
+                "text": "Use our secure connectors or upload wizard to bring your operational data into the platform."
+            },
+            "step2": {
+                "title": "Select a Standard",
+                "text": "Choose the ESRS standard (e.g., E1 Climate Change) and the specific disclosure requirement you need to report on."
+            },
+            "step3": {
+                "title": "Generate & Review",
+                "text": "Let the AI draft your report. Review the cited sources, check the auditor's notes, and approve the final text."
+            }
+        }
+    },
+    "uploadWizard": {
+        "title": "Guided Data Upload",
+        "subtitle": "Follow the steps below to ingest your CSRD data into Ecoply.",
+        "step1": {
+            "title": "Step 1: Download Template",
+            "downloadE1": "⬇️ Download E1 (Climate)",
+            "downloadG1": "⬇️ Download G1 (Business Conduct)"
+        },
+        "step2": {
+            "title": "Step 2: Upload Data",
+            "changeFile": "📂 Change File",
+            "chooseFile": "📂 Choose CSV File",
+            "selected": "✅ Selected: "
+        },
+        "uploadBtn": {
+            "uploading": "⏳ Uploading...",
+            "default": "🚀 Upload CSV"
+        },
+        "success": "Success! File uploaded. ID: ",
+        "errorPrefix": "Upload failed: "
+    },
+    "copilot": {
+        "title": "AI Draft Generator",
+        "subtitle": "Ask Ecoply to draft a section of your report based on your uploaded data and official ESRS standards.",
+        "standardLabel": "Standard",
+        "topicLabel": "Topic / Disclosure Requirement",
+        "topicPlaceholder": "e.g., Scope 1 Emissions analysis",
+        "generateBtn": {
+            "loading": "Generating Draft (Reading PDFs & Data)...",
+            "default": "Generate Draft"
+        },
+        "result": {
+            "title": "Generated Draft",
+            "saveBtn": {
+                "saving": "Saving...",
+                "default": "💾 Save Draft"
+            },
+            "approveBtn": {
+                "approving": "Approving...",
+                "default": "✅ Approve & Send"
+            },
+            "toggleSources": {
+                "hide": "Hide Sources",
+                "show": "Show Sources"
+            },
+            "download": "Download .MD",
+            "successSaved": "Draft saved to history!",
+            "successApproved": "✅ Draft Approved & Sent to Official Report!",
+            "sourcesTitle": "📚 Sources & Context",
+            "dataSource": "📄 Enterprise Data",
+            "legalSource": "⚖️ Legal Framework",
+            "rawData": "View Raw Data (JSON)",
+            "auditTitle": "⚠️ Auditor's Vigilance Points"
+        },
+        "errors": {
+            "loginRequired": "You must be logged in to generate a draft.",
+            "saveFailed": "Failed to save draft",
+            "approveFailed": "Failed to approve draft"
+        }
+    },
+    "connectorsComponent": {
+        "title": "Data Connectors",
+        "subtitle": "Connect directly to your operational systems to automate data collection.",
+        "salesforce": "☁️ Salesforce",
+        "sap": "🏗️ SAP (Coming Soon)",
+        "aws": "⚡ AWS (Coming Soon)",
+        "configTitle": "Salesforce Configuration",
+        "username": "Username",
+        "password": "Password",
+        "token": "Security Token",
+        "demoBtn": "🪄 Fill with test credentials (MVP)",
+        "syncBtn": {
+            "loading": "Syncing Data...",
+            "default": "Sync Now"
+        },
+        "success": "✅ Success! {{count}} rows imported from {{source}}.",
+        "errorAuth": "Not authenticated",
+        "errorSync": "Sync failed"
+    }
+}

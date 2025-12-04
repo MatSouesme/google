@@ -233,7 +233,8 @@ button {
 
 /* Animated Buttons */
 .btn-animated {
-  border-radius: 50px; /* Rounded corners */
+  border-radius: 50px;
+  /* Rounded corners */
   padding: 10px 20px;
   font-weight: 600;
   cursor: pointer;
@@ -288,7 +289,8 @@ button {
   background-color: var(--surface-color);
   color: var(--text-color);
   border: 2px dashed var(--border-color);
-  border-radius: 20px; /* Rounded for file input too */
+  border-radius: 20px;
+  /* Rounded for file input too */
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
@@ -299,4 +301,3 @@ button {
   background-color: rgba(16, 185, 129, 0.05);
   transform: scale(1.02);
 }
-

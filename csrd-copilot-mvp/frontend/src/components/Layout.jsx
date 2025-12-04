@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
+import { useTranslation } from 'react-i18next';
 
 const Layout = ({ user }) => {
     const location = useLocation();
     const [theme, setTheme] = useState('dark');
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
@@ -14,6 +16,11 @@ const Layout = ({ user }) => {
 
     const toggleTheme = () => {
         setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    };
+
+    const toggleLanguage = () => {
+        const newLang = i18n.language === 'en' ? 'fr' : 'en';
+        i18n.changeLanguage(newLang);
     };
 
     const handleLogout = async () => {
@@ -33,19 +40,19 @@ const Layout = ({ user }) => {
                 <nav className="nav-menu">
                     <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
                         <Home size={20} />
-                        <span>Home</span>
+                        <span>{t('nav.home')}</span>
                     </Link>
                     <Link to="/dashboard" className={`nav-item ${isActive('/dashboard') ? 'active' : ''}`}>
                         <LayoutDashboard size={20} />
-                        <span>Dashboard</span>
+                        <span>{t('nav.dashboard')}</span>
                     </Link>
                     <Link to="/generator" className={`nav-item ${isActive('/generator') ? 'active' : ''}`}>
                         <Sparkles size={20} />
-                        <span>IA Generator</span>
+                        <span>{t('nav.generator')}</span>
                     </Link>
                     <Link to="/connectors" className={`nav-item ${isActive('/connectors') ? 'active' : ''}`}>
                         <LinkIcon size={20} />
-                        <span>Connectors</span>
+                        <span>{t('nav.connectors')}</span>
                     </Link>
                 </nav>
 
@@ -59,10 +66,14 @@ const Layout = ({ user }) => {
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button onClick={toggleTheme} className="logout-button" title="Toggle Theme">
+                        <button onClick={toggleLanguage} className="logout-button" title={t('common.toggleLanguage')}>
+                            <Languages size={18} />
+                            <span style={{ fontSize: '0.75rem', marginLeft: '4px', fontWeight: 'bold' }}>{i18n.language.toUpperCase()}</span>
+                        </button>
+                        <button onClick={toggleTheme} className="logout-button" title={t('common.toggleTheme')}>
                             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
-                        <button onClick={handleLogout} className="logout-button" title="Logout">
+                        <button onClick={handleLogout} className="logout-button" title={t('common.logout')}>
                             <LogOut size={18} />
                         </button>
                     </div>
