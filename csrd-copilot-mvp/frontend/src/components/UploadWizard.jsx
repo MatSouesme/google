@@ -52,30 +52,42 @@ const UploadWizard = () => {
       </p>
 
       <div style={{ marginBottom: '2rem', textAlign: 'left' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Step 1: Download Template</h3>
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-color)' }}>Step 1: Download Template</h3>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="secondary" onClick={() => handleDownload('e1')} style={{ backgroundColor: '#333', border: '1px solid #555' }}>
-            Download E1 (Climate)
+          <button className="btn-animated btn-secondary" onClick={() => handleDownload('e1')}>
+            ⬇️ Download E1 (Climate)
           </button>
-          <button className="secondary" onClick={() => handleDownload('g1')} style={{ backgroundColor: '#333', border: '1px solid #555' }}>
-            Download G1 (Business Conduct)
+          <button className="btn-animated btn-secondary" onClick={() => handleDownload('g1')}>
+            ⬇️ Download G1 (Business Conduct)
           </button>
         </div>
       </div>
 
       <div style={{ marginBottom: '2rem', textAlign: 'left' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Step 2: Upload Data</h3>
-        <input type="file" accept=".csv" onChange={handleFileChange} />
-        {file && <p style={{ marginTop: '0.5rem', color: 'var(--primary-color)' }}>Selected: {file.name}</p>}
+        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text-color)' }}>Step 2: Upload Data</h3>
+        <div className="file-upload-container">
+          <input 
+            type="file" 
+            id="file-upload" 
+            accept=".csv" 
+            onChange={handleFileChange} 
+            className="file-upload-input" 
+          />
+          <label htmlFor="file-upload" className="file-upload-label">
+            📂 {file ? 'Change File' : 'Choose CSV File'}
+          </label>
+        </div>
+        {file && <p style={{ marginTop: '0.5rem', color: 'var(--primary-color)', fontWeight: 'bold' }}>✅ Selected: {file.name}</p>}
       </div>
 
       <div style={{ marginBottom: '1rem' }}>
         <button
+          className="btn-animated btn-primary"
           onClick={handleUpload}
           disabled={!file || status === 'uploading'}
-          style={{ width: '100%' }}
+          style={{ width: '100%', opacity: (!file || status === 'uploading') ? 0.6 : 1 }}
         >
-          {status === 'uploading' ? 'Uploading...' : 'Upload CSV'}
+          {status === 'uploading' ? '⏳ Uploading...' : '🚀 Upload CSV'}
         </button>
       </div>
 

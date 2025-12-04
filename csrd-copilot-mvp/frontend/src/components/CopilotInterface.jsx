@@ -139,7 +139,7 @@ const CopilotInterface = () => {
   };
 
   return (
-    <div className="copilot-interface" style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid #333', borderRadius: '8px', backgroundColor: '#1e1e1e' }}>
+    <div className="copilot-interface" style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid var(--border-color)', borderRadius: '8px', backgroundColor: 'var(--surface-color)' }}>
       <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>AI Draft Generator</h2>
       <p style={{ color: 'var(--text-secondary)' }}>
         Ask Ecoply to draft a section of your report based on your uploaded data and official ESRS standards.
@@ -147,24 +147,24 @@ const CopilotInterface = () => {
 
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
         <div style={{ flex: 1 }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Standard</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-color)' }}>Standard</label>
           <select 
             value={standard} 
             onChange={(e) => setStandard(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor: '#2a2a2a', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+            style={{ width: '100%', padding: '0.5rem', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '4px' }}
           >
             <option value="e1">ESRS E1 (Climate Change)</option>
             <option value="g1">ESRS G1 (Business Conduct)</option>
           </select>
         </div>
         <div style={{ flex: 2 }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Topic / Disclosure Requirement</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-color)' }}>Topic / Disclosure Requirement</label>
           <input 
             type="text" 
             placeholder="e.g., Scope 1 Emissions analysis" 
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor: '#2a2a2a', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+            style={{ width: '100%', padding: '0.5rem', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '4px' }}
           />
         </div>
       </div>
@@ -172,13 +172,13 @@ const CopilotInterface = () => {
       <button 
         onClick={handleGenerate} 
         disabled={loading || !topic}
-        style={{ width: '100%', marginBottom: '1.5rem', backgroundColor: loading ? '#555' : 'var(--primary-color)', cursor: loading ? 'not-allowed' : 'pointer' }}
+        style={{ width: '100%', marginBottom: '1.5rem', backgroundColor: loading ? 'var(--text-secondary)' : 'var(--primary-color)', color: '#fff', border: 'none', padding: '10px', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
       >
         {loading ? 'Generating Draft (Reading PDFs & Data)...' : 'Generate Draft'}
       </button>
 
       {error && (
-        <div style={{ color: '#e57373', padding: '1rem', backgroundColor: 'rgba(207, 102, 121, 0.1)', borderRadius: '4px', marginBottom: '1rem' }}>
+        <div style={{ color: 'var(--error-color)', padding: '1rem', backgroundColor: 'rgba(229, 115, 115, 0.1)', borderRadius: '4px', marginBottom: '1rem', border: '1px solid var(--error-color)' }}>
           {error}
         </div>
       )}
@@ -188,40 +188,40 @@ const CopilotInterface = () => {
           
           {/* Toolbar */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1.1rem', color: '#81c784', margin: 0 }}>Generated Draft</h3>
+            <h3 style={{ fontSize: '1.1rem', color: 'var(--success-color)', margin: 0 }}>Generated Draft</h3>
             <div style={{ display: 'flex', gap: '1rem' }}>
-                <button onClick={handleSaveDraft} disabled={saving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#333', color: 'white', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer' }}>
+                <button onClick={handleSaveDraft} disabled={saving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', border: '1px solid var(--border-color)', borderRadius: '4px', cursor: 'pointer' }}>
                     {saving ? 'Saving...' : '💾 Save Draft'}
                 </button>
                 <button onClick={handleApprove} disabled={approving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#1565c0', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                     {approving ? 'Approving...' : '✅ Approve & Send'}
                 </button>
-                <button onClick={() => setShowSources(!showSources)} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#333', color: 'white', border: '1px solid #555', borderRadius: '4px', cursor: 'pointer' }}>
+                <button onClick={() => setShowSources(!showSources)} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', border: '1px solid var(--border-color)', borderRadius: '4px', cursor: 'pointer' }}>
                     {showSources ? 'Hide Sources' : 'Show Sources'}
                 </button>
-                <button onClick={handleDownload} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#4caf50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                <button onClick={handleDownload} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--success-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                     Download .MD
                 </button>
             </div>
           </div>
 
           {successMsg && (
-            <div style={{ padding: '0.5rem', backgroundColor: 'rgba(129, 199, 132, 0.2)', color: '#81c784', borderRadius: '4px', marginTop: '0.5rem' }}>
+            <div style={{ padding: '0.5rem', backgroundColor: 'rgba(34, 197, 94, 0.1)', color: 'var(--success-color)', borderRadius: '4px', marginTop: '0.5rem', border: '1px solid var(--success-color)' }}>
                 {successMsg}
             </div>
           )}
 
           {/* Sources Panel */}
           {showSources && sourceData && (
-            <div style={{ backgroundColor: '#2a2a2a', padding: '1rem', borderRadius: '4px', borderLeft: '4px solid #64b5f6' }}>
+            <div style={{ backgroundColor: 'var(--bg-color)', padding: '1rem', borderRadius: '4px', borderLeft: '4px solid #64b5f6', border: '1px solid var(--border-color)' }}>
                 <h4 style={{ marginTop: 0, color: '#64b5f6', marginBottom: '1rem' }}>📚 Sources & Context</h4>
                 
                 {/* Data Source */}
                 <div style={{ marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span style={{ fontSize: '1.2rem' }}>📄</span>
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#e0e0e0' }}>Données Entreprise</div>
-                        <div style={{ fontSize: '0.9rem', color: '#aaa' }}>
+                        <div style={{ fontWeight: 'bold', color: 'var(--text-color)' }}>Données Entreprise</div>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                             {(() => {
                                 try {
                                     const data = JSON.parse(sourceData);
@@ -239,8 +239,8 @@ const CopilotInterface = () => {
                 <div style={{ marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span style={{ fontSize: '1.2rem' }}>⚖️</span>
                     <div>
-                        <div style={{ fontWeight: 'bold', color: '#e0e0e0' }}>Cadre Légal</div>
-                        <div style={{ fontSize: '0.9rem', color: '#aaa' }}>
+                        <div style={{ fontWeight: 'bold', color: 'var(--text-color)' }}>Cadre Légal</div>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                             ESRS {standard.toUpperCase()} (Official Text)
                         </div>
                     </div>
@@ -249,7 +249,7 @@ const CopilotInterface = () => {
                 {/* Raw Data Toggle */}
                 <details style={{ marginTop: '1rem' }}>
                     <summary style={{ cursor: 'pointer', color: '#64b5f6', fontSize: '0.8rem' }}>Voir les données brutes (JSON)</summary>
-                    <pre style={{ fontSize: '0.7rem', overflowX: 'auto', color: '#888', marginTop: '0.5rem' }}>
+                    <pre style={{ fontSize: '0.7rem', overflowX: 'auto', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
                         {sourceData}
                     </pre>
                 </details>
@@ -258,13 +258,14 @@ const CopilotInterface = () => {
 
           {/* Draft Content */}
           <div style={{ 
-            backgroundColor: '#252525', 
+            backgroundColor: 'var(--bg-color)', 
             padding: '2rem', 
             borderRadius: '4px', 
-            border: '1px solid #444',
+            border: '1px solid var(--border-color)',
             lineHeight: '1.6',
             textAlign: 'left',
-            minHeight: '300px'
+            minHeight: '300px',
+            color: 'var(--text-color)'
           }}>
             <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
@@ -282,11 +283,11 @@ const CopilotInterface = () => {
                                     <span className="audit-tooltip-container">
                                         <span className="audit-icon">ℹ️</span>
                                         <span className="audit-tooltip">
-                                            <div style={{ borderBottom: '1px solid #555', paddingBottom: '4px', marginBottom: '4px', fontWeight: 'bold', color: '#64b5f6' }}>
+                                            <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '4px', marginBottom: '4px', fontWeight: 'bold', color: '#64b5f6' }}>
                                                 Verified Source
                                             </div>
                                             {parts.map((part, i) => (
-                                                <div key={i} style={{ marginBottom: '2px' }}>• {part}</div>
+                                                <div key={i} style={{ marginBottom: '2px', color: 'var(--text-color)' }}>• {part}</div>
                                             ))}
                                         </span>
                                     </span>
@@ -315,14 +316,14 @@ const CopilotInterface = () => {
             <div style={{ 
                 marginTop: '2rem', 
                 padding: '1.5rem', 
-                backgroundColor: '#2a1a1a', 
-                border: '1px solid #e57373', 
+                backgroundColor: 'var(--bg-color)', 
+                border: '1px solid var(--error-color)', 
                 borderRadius: '8px' 
             }}>
-                <h3 style={{ marginTop: 0, color: '#e57373', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <h3 style={{ marginTop: 0, color: 'var(--error-color)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     ⚠️ Auditor's Vigilance Points
                 </h3>
-                <div style={{ color: '#e0e0e0', lineHeight: '1.5' }}>
+                <div style={{ color: 'var(--text-color)', lineHeight: '1.5' }}>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {auditReport}
                     </ReactMarkdown>

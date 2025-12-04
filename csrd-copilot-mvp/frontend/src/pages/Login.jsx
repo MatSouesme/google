@@ -39,7 +39,10 @@ const Login = () => {
         width: '100%',
         maxWidth: '400px'
       }}>
-        <h2 style={{ textAlign: 'center', color: '#81c784', marginBottom: '2rem' }}>CSRD Copilot Login</h2>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <img src="/logo.png" alt="Ecoply Logo" style={{ height: '60px', width: 'auto', marginBottom: '1rem' }} />
+          <h2 style={{ margin: 0, color: '#81c784' }}>CSRD Copilot Login</h2>
+        </div>
         
         {error && (
           <div style={{ 

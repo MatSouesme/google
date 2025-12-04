@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import './App.css'
-import UploadWizard from './components/UploadWizard'
-import CopilotInterface from './components/CopilotInterface'
-import Connectors from './components/Connectors'
-import Login from './pages/Login'
-import { auth } from './firebase-config'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase-config';
+import './App.css';
+
+// Components
+import Layout from './components/Layout';
+import Home from './components/Home';
+
+// Pages
+import Login from './pages/Login';
+import DashboardPage from './pages/DashboardPage';
+import Generator from './pages/Generator';
+import ConnectorsPage from './pages/ConnectorsPage';
 
 function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('upload'); // 'upload' or 'connectors'
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -20,70 +26,43 @@ function App() {
         return unsubscribe;
     }, []);
 
-    const handleLogout = async () => {
-        await signOut(auth);
-    };
-
     if (loading) {
-        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'white' }}>Loading...</div>;
-    }
-
-    if (!user) {
-        return <Login />;
+        return (
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '100vh', 
+                backgroundColor: 'var(--bg-color)', 
+                color: 'var(--text-color)' 
+            }}>
+                Loading...
+            </div>
+        );
     }
 
     return (
-        <div className="App">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <h1 style={{ margin: 0 }}>Ecoply</h1>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <span style={{ fontSize: '0.9rem', color: '#aaa' }}>{user.email}</span>
-                    <button onClick={handleLogout} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#333', border: '1px solid #555' }}>
-                        Logout
-                    </button>
-                </div>
-            </div>
-            
-            {/* Navigation Tabs */}
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                <button 
-                    onClick={() => setActiveTab('upload')}
-                    style={{ 
-                        padding: '0.5rem 1.5rem', 
-                        backgroundColor: activeTab === 'upload' ? 'var(--primary-color)' : '#333',
-                        border: 'none',
-                        borderRadius: '20px',
-                        cursor: 'pointer',
-                        color: 'white'
-                    }}
+        <BrowserRouter>
+            <Routes>
+                <Route 
+                    path="/login" 
+                    element={!user ? <Login /> : <Navigate to='/' replace />} 
+                />
+                
+                <Route 
+                    path="/" 
+                    element={user ? <Layout user={user} /> : <Navigate to='/login' replace />}
                 >
-                    📁 Upload Files
-                </button>
-                <button 
-                    onClick={() => setActiveTab('connectors')}
-                    style={{ 
-                        padding: '0.5rem 1.5rem', 
-                        backgroundColor: activeTab === 'connectors' ? 'var(--primary-color)' : '#333',
-                        border: 'none',
-                        borderRadius: '20px',
-                        cursor: 'pointer',
-                        color: 'white'
-                    }}
-                >
-                    🔌 Connectors
-                </button>
-            </div>
+                    <Route index element={<Home />} />
+                    <Route path="dashboard" element={<DashboardPage />} />
+                    <Route path="generator" element={<Generator />} />
+                    <Route path="connectors" element={<ConnectorsPage />} />
+                </Route>
 
-            <div className="card">
-                {activeTab === 'upload' ? <UploadWizard /> : <Connectors />}
-            </div>
-            
-            <div className="card" style={{ marginTop: '2rem' }}>
-                <CopilotInterface />
-            </div>
-        </div>
-    )
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
-export default App
-
+export default App;

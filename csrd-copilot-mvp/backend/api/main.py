@@ -9,12 +9,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import storage
 from google.cloud import bigquery
 from pydantic import BaseModel
+import sys
+
+# Add current directory to sys.path to fix imports
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from backend.api.routes import generate_draft, workflow, connectors
+    from api.routes import generate_draft, workflow, connectors
 except ImportError:
-    from routes import generate_draft, workflow, connectors
+    try:
+        from backend.api.routes import generate_draft, workflow, connectors
+    except ImportError:
+        from routes import generate_draft, workflow, connectors
 
 app = FastAPI(title="CSRD Copilot API")
 

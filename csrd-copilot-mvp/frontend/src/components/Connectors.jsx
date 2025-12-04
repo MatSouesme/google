@@ -67,11 +67,12 @@ const Connectors = () => {
 
             <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem' }}>
                 {/* Sidebar / List of Connectors */}
-                <div style={{ width: '200px', borderRight: '1px solid #444' }}>
+                <div style={{ width: '200px', borderRight: '1px solid var(--border-color)' }}>
                     <div 
                         style={{ 
                             padding: '10px', 
-                            backgroundColor: connectorType === 'salesforce' ? '#333' : 'transparent',
+                            backgroundColor: connectorType === 'salesforce' ? 'var(--primary-color)' : 'transparent',
+                            color: connectorType === 'salesforce' ? '#fff' : 'var(--text-color)',
                             cursor: 'pointer',
                             borderRadius: '4px',
                             marginBottom: '0.5rem',
@@ -81,10 +82,10 @@ const Connectors = () => {
                     >
                         ☁️ Salesforce
                     </div>
-                    <div style={{ padding: '10px', color: '#555', cursor: 'not-allowed' }}>
+                    <div style={{ padding: '10px', color: 'var(--text-secondary)', cursor: 'not-allowed' }}>
                         🏗️ SAP (Coming Soon)
                     </div>
-                    <div style={{ padding: '10px', color: '#555', cursor: 'not-allowed' }}>
+                    <div style={{ padding: '10px', color: 'var(--text-secondary)', cursor: 'not-allowed' }}>
                         ⚡ AWS (Coming Soon)
                     </div>
                 </div>
@@ -93,37 +94,54 @@ const Connectors = () => {
                 <div style={{ flex: 1 }}>
                     {connectorType === 'salesforce' && (
                         <form onSubmit={handleSync} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
-                            <h3 style={{ margin: 0 }}>Salesforce Configuration</h3>
+                            <h3 style={{ margin: 0, color: 'var(--text-color)' }}>Salesforce Configuration</h3>
                             
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px' }}>Username</label>
+                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>Username</label>
                                 <input 
                                     type="text" 
                                     value={username} 
                                     onChange={(e) => setUsername(e.target.value)}
-                                    placeholder="user@company.com"
-                                    style={{ width: '100%', padding: '8px', backgroundColor: '#2a2a2a', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '8px', 
+                                        backgroundColor: 'var(--bg-color)', 
+                                        border: '1px solid var(--border-color)', 
+                                        color: 'var(--text-color)',
+                                        borderRadius: '4px'
+                                    }}
                                 />
                             </div>
-
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px' }}>Password</label>
+                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>Password</label>
                                 <input 
                                     type="password" 
                                     value={password} 
                                     onChange={(e) => setPassword(e.target.value)}
-                                    style={{ width: '100%', padding: '8px', backgroundColor: '#2a2a2a', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '8px', 
+                                        backgroundColor: 'var(--bg-color)', 
+                                        border: '1px solid var(--border-color)', 
+                                        color: 'var(--text-color)',
+                                        borderRadius: '4px'
+                                    }}
                                 />
                             </div>
-
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px' }}>Security Token</label>
+                                <label style={{ display: 'block', fontSize: '0.8rem', marginBottom: '4px', color: 'var(--text-color)' }}>Security Token</label>
                                 <input 
                                     type="password" 
                                     value={token} 
                                     onChange={(e) => setToken(e.target.value)}
-                                    placeholder="Optional if IP whitelisted"
-                                    style={{ width: '100%', padding: '8px', backgroundColor: '#2a2a2a', border: '1px solid #444', color: 'white', borderRadius: '4px' }}
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '8px', 
+                                        backgroundColor: 'var(--bg-color)', 
+                                        border: '1px solid var(--border-color)', 
+                                        color: 'var(--text-color)',
+                                        borderRadius: '4px'
+                                    }}
                                 />
                             </div>
 
@@ -133,8 +151,8 @@ const Connectors = () => {
                                     onClick={fillDemoCredentials}
                                     style={{ 
                                         background: 'none', 
-                                        border: '1px dashed #666', 
-                                        color: '#aaa', 
+                                        border: '1px dashed var(--text-secondary)', 
+                                        color: 'var(--text-secondary)', 
                                         padding: '5px 10px',
                                         fontSize: '0.8rem',
                                         cursor: 'pointer',
