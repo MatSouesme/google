@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import DashboardPage from './pages/DashboardPage';
 import Generator from './pages/Generator';
 import ConnectorsPage from './pages/ConnectorsPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -56,6 +57,7 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="generator" element={<Generator />} />
+                    <Route path="chat" element={<ChatPage />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
                 </Route>
 

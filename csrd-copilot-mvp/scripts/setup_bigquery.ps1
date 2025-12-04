@@ -16,7 +16,7 @@ try {
 }
 
 # Create E1 Raw Table
-$E1_SCHEMA = "year:STRING,scope1_emissions_tCO2:STRING,scope2_emissions_tCO2:STRING,scope3_emissions_tCO2:STRING,energy_consumption_MWh:STRING,renewable_share_pct:STRING,source_file:STRING,row_number:INTEGER,upload_id:STRING,ingestion_timestamp:TIMESTAMP"
+$E1_SCHEMA = "year:STRING,entity_name:STRING,scope1_emissions_tCO2:STRING,scope2_emissions_tCO2:STRING,scope3_emissions_tCO2:STRING,energy_consumption_MWh:STRING,renewable_share_pct:STRING,source_file:STRING,row_number:INTEGER,upload_id:STRING,ingestion_timestamp:TIMESTAMP"
 Write-Host "Creating table e1_raw..."
 try {
     bq mk --table "${PROJECT_ID}:${DATASET}.e1_raw" $E1_SCHEMA

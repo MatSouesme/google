@@ -1,0 +1,121 @@
+import React, { useEffect, useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { auth } from '../firebase-config';
+
+const DataVisualization = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+                const idToken = await user.getIdToken();
+
+                // TODO: Use env var for URL
+                const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/data/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${idToken}`
+                    }
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch dashboard data");
+                
+                const result = await response.json();
+                if (result.debug_error) {
+                    console.error("Backend Error:", result.debug_error);
+                    setError(`Backend Error: ${result.debug_error}`);
+                }
+                setData(result);
+            } catch (err) {
+                console.error(err);
+                setError("Could not load dashboard data. Have you synced any data yet?");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) return <div style={{ color: '#aaa' }}>Loading visualization...</div>;
+    if (error) return <div style={{ color: '#ff6b6b' }}>{error}</div>;
+    if (!data || (data.emissions_by_year.length === 0 && data.top_facilities.length === 0)) {
+        return (
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>
+                <h3>No Data Available</h3>
+                <p>Please use the "Connectors" tab to sync Salesforce data or upload a CSV.</p>
+            </div>
+        );
+    }
+
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+    return (
+        <div className="dashboard-container">
+            <h2 style={{ color: 'var(--primary-color)', marginTop: 0 }}>Data Visualization</h2>
+            <p style={{ color: '#aaa', marginBottom: '2rem' }}>
+                Real-time insights from your CSRD data warehouse (BigQuery).
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                
+                {/* Chart 1: Emissions by Year */}
+                <div style={{ backgroundColor: '#1e1e1e', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333' }}>
+                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: '#ddd' }}>CO2 Emissions by Year (Scopes 1, 2, 3)</h3>
+                    <div style={{ height: '300px', width: '100%' }}>
+                        <ResponsiveContainer>
+                            <BarChart data={data.emissions_by_year}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                                <XAxis dataKey="year" stroke="#888" />
+                                <YAxis stroke="#888" />
+                                <Tooltip 
+                                    contentStyle={{ backgroundColor: '#333', border: '1px solid #555' }}
+                                    itemStyle={{ color: '#ddd' }}
+                                />
+                                <Legend />
+                                <Bar dataKey="scope1" stackId="a" fill="#8884d8" name="Scope 1" />
+                                <Bar dataKey="scope2" stackId="a" fill="#82ca9d" name="Scope 2" />
+                                <Bar dataKey="scope3" stackId="a" fill="#ffc658" name="Scope 3" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Chart 2: Top Facilities */}
+                <div style={{ backgroundColor: '#1e1e1e', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333' }}>
+                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: '#ddd' }}>Top 5 Facilities (Total Emissions)</h3>
+                    <div style={{ height: '300px', width: '100%' }}>
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={data.top_facilities}
+                                    cx="50%"
+                                    cy="50%"
+                                    labelLine={false}
+                                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    dataKey="total_emissions"
+                                >
+                                    {data.top_facilities.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip 
+                                    contentStyle={{ backgroundColor: '#333', border: '1px solid #555' }}
+                                    itemStyle={{ color: '#ddd' }}
+                                />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    );
+};
+
+export default DataVisualization;

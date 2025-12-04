@@ -49,9 +49,9 @@ class SalesforceConnector(BaseConnector):
                 energy = round(random.uniform(1000, 20000), 2)
                 renewable = round(random.uniform(10, 100), 1)
                 
-                gas = round(random.uniform(5000, 50000), 0)
-                water = round(random.uniform(1000, 10000), 0)
-                revenue = round(random.uniform(1000000, 10000000), 0)
+                gas = int(random.uniform(5000, 50000))
+                water = int(random.uniform(1000, 10000))
+                revenue = int(random.uniform(1000000, 10000000))
                 employees = random.randint(50, 500)
 
                 record = {
@@ -95,6 +95,7 @@ class SalesforceConnector(BaseConnector):
                 "scope3_emissions_tCO2": item.get("Scope3_tCO2__c"),
                 "energy_consumption_MWh": item.get("Energy_MWh__c"),
                 "renewable_share_pct": item.get("Renewable_Percent__c"),
+                "entity_name": item.get("Facility__c"),
                 
                 # Metadata
                 "row_number": idx + 1,

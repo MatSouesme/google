@@ -230,3 +230,109 @@ class RAGClient:
         
         # If all failed
         raise RuntimeError(f"All Gemini models failed. Last error: {str(last_error)}")
+
+    def generate_sql_response(self, user_query: str) -> dict:
+        """
+        Generates a response to a natural language query about data by:
+        1. Converting NL to SQL
+        2. Executing SQL on BigQuery
+        3. Summarizing the result
+        """
+        
+        # 1. Get Schema Context
+        # We fetch the schema of our main tables to inform the LLM
+        tables = ["e1_raw", "salesforce_extra"]
+        schema_context = ""
+        
+        for table_name in tables:
+            try:
+                table_id = f"{self.project_id}.csrd_mvp.{table_name}"
+                table = self.bq_client.get_table(table_id)
+                schema_context += f"Table: {table_name}\nColumns:\n"
+                for schema_field in table.schema:
+                    schema_context += f"- {schema_field.name} ({schema_field.field_type})\n"
+                schema_context += "\n"
+            except Exception as e:
+                print(f"Warning: Could not fetch schema for {table_name}: {e}")
+
+        # 2. Generate SQL
+        sql_prompt = f"""
+        You are a BigQuery SQL expert. 
+        Your task is to convert the user's natural language question into a valid BigQuery SQL query.
+        
+        Project ID: {self.project_id}
+        Dataset: csrd_mvp
+        
+        Schema Context:
+        {schema_context}
+        
+        Rules:
+        - Use standard SQL.
+        - Always use the full table path: `{self.project_id}.csrd_mvp.table_name`.
+        - If the user asks about emissions, check 'e1_raw'.
+        - If the user asks about revenue, employees, water, gas, check 'salesforce_extra'.
+        - Return ONLY the SQL query, no markdown, no explanation.
+        - Use IFNULL(column, 0) for summations.
+        
+        User Question: "{user_query}"
+        
+        SQL Query:
+        """
+        
+        model = GenerativeModel("gemini-2.0-flash-lite-001")
+        try:
+            response_sql = model.generate_content(sql_prompt)
+            generated_sql = response_sql.text.replace("```sql", "").replace("```", "").strip()
+            print(f"Generated SQL: {generated_sql}")
+        except Exception as e:
+            # Fallback to 1.5 flash if 2.0 fails
+            print(f"Gemini 2.0 failed, trying 1.5: {e}")
+            model = GenerativeModel("gemini-1.5-flash")
+            response_sql = model.generate_content(sql_prompt)
+            generated_sql = response_sql.text.replace("```sql", "").replace("```", "").strip()
+
+        # 3. Execute SQL
+        try:
+            query_job = self.bq_client.query(generated_sql)
+            results = [dict(row) for row in query_job]
+            
+            # Handle empty results
+            if not results:
+                return {
+                    "answer": "I couldn't find any data matching your request.",
+                    "sql": generated_sql,
+                    "data": []
+                }
+                
+        except Exception as e:
+            return {
+                "answer": f"I tried to query the data but encountered an error: {str(e)}",
+                "sql": generated_sql,
+                "data": []
+            }
+
+        # 4. Summarize Results
+        summary_prompt = f"""
+        You are a data analyst.
+        User Question: "{user_query}"
+        SQL Query Executed: "{generated_sql}"
+        Data Results: {json.dumps(results, default=str)}
+        
+        Please provide a concise, natural language answer to the user's question based on the data results.
+        If the result is a single number, just state it clearly.
+        If it's a list, summarize the key trends.
+        """
+        
+        try:
+            response_summary = model.generate_content(summary_prompt)
+            return {
+                "answer": response_summary.text,
+                "sql": generated_sql,
+                "data": results
+            }
+        except Exception as e:
+             return {
+                "answer": "I found the data but couldn't summarize it. Please check the raw results.",
+                "sql": generated_sql,
+                "data": results
+            }
