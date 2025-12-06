@@ -5,6 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 const Generator = () => {
     const { t } = useTranslation();
+    const [selectedScopes, setSelectedScopes] = React.useState({
+        e1: true,
+        e2: false,
+        s1: true,
+        g1: true
+    });
 
     return (
         <div className="generator-page">
@@ -14,11 +20,14 @@ const Generator = () => {
             </div>
 
             <div className="card">
-                <UploadWizard />
+                <UploadWizard
+                    selectedScopes={selectedScopes}
+                    onScopeChange={setSelectedScopes}
+                />
             </div>
 
             <div className="card">
-                <CopilotInterface />
+                <CopilotInterface enabledScopes={selectedScopes} />
             </div>
         </div>
     );

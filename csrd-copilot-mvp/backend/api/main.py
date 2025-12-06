@@ -172,3 +172,51 @@ def get_validated_data(standard: str):
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Draft generation failed: {str(e)}")
+
+@app.get("/export-xbrl/{report_id}")
+def export_xbrl(report_id: str):
+    """
+    Generates a dummy ESEF/XBRL package (ZIP) for the given report ID.
+    Contains a dummy HTML report and a taxonomy JSON.
+    """
+    import zipfile
+    import io
+
+    # Create a dummy HTML report
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>ESEF Report - {report_id}</title>
+    </head>
+    <body>
+        <h1>Sustainability Report (ESEF/XBRL Tagged)</h1>
+        <p>Report ID: {report_id}</p>
+        <p>Generated: {datetime.datetime.now().isoformat()}</p>
+        <div style="border: 1px solid green; padding: 10px;">
+            <p><strong>ESRS E1-1</strong>: <span xbrl:tag="ClimateChange">Compliant</span></p>
+        </div>
+    </body>
+    </html>
+    """
+
+    # Create a dummy taxonomy
+    taxonomy_content = '{"taxonomy": "ESRS-2024", "tags": ["ClimateChange", "Pollution", "Workforce"]}'
+
+    # Create ZIP in memory
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+        zip_file.writestr(f"report_{report_id}.html", html_content)
+        zip_file.writestr("taxonomy.json", taxonomy_content)
+    
+    zip_buffer.seek(0)
+    
+    filename = f"ESEF_Package_{datetime.date.today().isoformat()}.zip"
+    
+    # Return as a streaming response (or FileResponse if saved to disk, but memory is cleaner for dummy)
+    from fastapi.responses import StreamingResponse
+    return StreamingResponse(
+        zip_buffer, 
+        media_type="application/zip", 
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )

@@ -98,13 +98,22 @@
     "uploadWizard": {
         "title": "Guided Data Upload",
         "subtitle": "Follow the steps below to ingest your CSRD data into Ecoply.",
+        "stepScope": {
+            "title": "Step 1: Scope & Materiality",
+            "subtitle": "Select the ESRS standards that are material to your organization.",
+            "e1": "ESRS E1: Climate Change",
+            "e2": "ESRS E2: Pollution",
+            "s1": "ESRS S1: Own Workforce",
+            "g1": "ESRS G1: Business Conduct",
+            "confirm": "Confirm Scope & Proceed"
+        },
         "step1": {
-            "title": "Step 1: Download Template",
+            "title": "Step 2: Download Template",
             "downloadE1": "⬇️ Download E1 (Climate)",
             "downloadG1": "⬇️ Download G1 (Business Conduct)"
         },
         "step2": {
-            "title": "Step 2: Upload Data",
+            "title": "Step 3: Upload Data",
             "changeFile": "📂 Change File",
             "chooseFile": "📂 Choose CSV File",
             "selected": "✅ Selected: "

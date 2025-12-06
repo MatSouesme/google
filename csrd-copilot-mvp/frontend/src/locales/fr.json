@@ -98,13 +98,22 @@
     "uploadWizard": {
         "title": "Téléchargement Guidé de Données",
         "subtitle": "Suivez les étapes ci-dessous pour ingérer vos données CSRD dans Ecoply.",
+        "stepScope": {
+            "title": "Étape 1 : Portée & Matérialité",
+            "subtitle": "Sélectionnez les normes ESRS matérielles pour votre organisation.",
+            "e1": "ESRS E1 : Changement Climatique",
+            "e2": "ESRS E2 : Pollution",
+            "s1": "ESRS S1 : Effectifs Propres",
+            "g1": "ESRS G1 : Conduite des Affaires",
+            "confirm": "Confirmer la Portée & Continuer"
+        },
         "step1": {
-            "title": "Étape 1 : Télécharger le Modèle",
+            "title": "Étape 2 : Télécharger le Modèle",
             "downloadE1": "⬇️ Télécharger E1 (Climat)",
             "downloadG1": "⬇️ Télécharger G1 (Conduite des Affaires)"
         },
         "step2": {
-            "title": "Étape 2 : Télécharger les Données",
+            "title": "Étape 3 : Télécharger les Données",
             "changeFile": "📂 Changer de Fichier",
             "chooseFile": "📂 Choisir un Fichier CSV",
             "selected": "✅ Sélectionné : "

@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
 
-const CopilotInterface = () => {
+const CopilotInterface = ({ enabledScopes }) => {
   const [topic, setTopic] = useState('');
   const [standard, setStandard] = useState('e1');
   const [draft, setDraft] = useState('');
@@ -18,6 +18,15 @@ const CopilotInterface = () => {
   const [showSources, setShowSources] = useState(false);
   const [currentDraftId, setCurrentDraftId] = useState(null);
   const { t } = useTranslation();
+
+  // Effect to ensure selected standard is valid
+  React.useEffect(() => {
+    if (enabledScopes && !enabledScopes[standard]) {
+      // If current standard is disabled, switch to first enabled one
+      const firstEnabled = Object.keys(enabledScopes).find(k => enabledScopes[k]);
+      if (firstEnabled) setStandard(firstEnabled);
+    }
+  }, [enabledScopes, standard]);
 
   const handleGenerate = async () => {
     if (!topic) return;
@@ -140,6 +149,29 @@ const CopilotInterface = () => {
     document.body.removeChild(element);
   };
 
+  const [xbrlLoading, setXbrlLoading] = useState(false);
+
+  const handleExportXBRL = async () => {
+    setXbrlLoading(true);
+    setSuccessMsg('');
+    try {
+      // Simulate mapping delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Use a dummy ID if not saved yet, or the real one
+      const reportId = currentDraftId || 'draft_' + Date.now();
+
+      // Trigger download
+      window.location.href = `https://csrd-api-71795126030.europe-west1.run.app/export-xbrl/${reportId}`;
+
+      setSuccessMsg("✅ XBRL Tagging Complete & Package Downloaded!");
+    } catch (err) {
+      setError("XBRL Export Failed");
+    } finally {
+      setXbrlLoading(false);
+    }
+  };
+
   return (
     <div className="copilot-interface" style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid var(--border-color)', borderRadius: '8px', backgroundColor: 'var(--surface-color)' }}>
       <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>{t('copilot.title')}</h2>
@@ -155,8 +187,10 @@ const CopilotInterface = () => {
             onChange={(e) => setStandard(e.target.value)}
             style={{ width: '100%', padding: '0.5rem', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '4px' }}
           >
-            <option value="e1">ESRS E1 (Climate Change)</option>
-            <option value="g1">ESRS G1 (Business Conduct)</option>
+            {(!enabledScopes || enabledScopes.e1) && <option value="e1">ESRS E1 (Climate Change)</option>}
+            {(!enabledScopes || enabledScopes.e2) && <option value="e2">ESRS E2 (Pollution)</option>}
+            {(!enabledScopes || enabledScopes.s1) && <option value="s1">ESRS S1 (Own Workforce)</option>}
+            {(!enabledScopes || enabledScopes.g1) && <option value="g1">ESRS G1 (Business Conduct)</option>}
           </select>
         </div>
         <div style={{ flex: 2 }}>
@@ -203,6 +237,9 @@ const CopilotInterface = () => {
               </button>
               <button onClick={handleDownload} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--success-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                 {t('copilot.result.download')}
+              </button>
+              <button onClick={handleExportXBRL} disabled={xbrlLoading} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#e65100', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                {xbrlLoading ? '🏷️ Mapping...' : '🏷️ Export XBRL'}
               </button>
             </div>
           </div>
