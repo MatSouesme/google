@@ -107,11 +107,17 @@ const UploadWizard = ({ selectedScopes, onScopeChange }) => {
             {t('uploadWizard.stepScope.subtitle')}
           </p>
 
-          <div style={{ marginBottom: '2rem' }}>
-            <ScopeItem id="e1" label={t('uploadWizard.stepScope.e1')} checked={selectedScopes.e1} locked={true} />
-            <ScopeItem id="e2" label={t('uploadWizard.stepScope.e2')} checked={selectedScopes.e2} />
-            <ScopeItem id="s1" label={t('uploadWizard.stepScope.s1')} checked={selectedScopes.s1} />
-            <ScopeItem id="g1" label={t('uploadWizard.stepScope.g1')} checked={selectedScopes.g1} />
+          <div style={{ marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <ScopeItem id="e1" label="ESRS E1 (Climate)" checked={selectedScopes.e1} locked={true} />
+            <ScopeItem id="e2" label="ESRS E2 (Pollution)" checked={selectedScopes.e2} />
+            <ScopeItem id="e3" label="ESRS E3 (Water)" checked={selectedScopes.e3} />
+            <ScopeItem id="e4" label="ESRS E4 (Biodiversity)" checked={selectedScopes.e4} />
+            <ScopeItem id="e5" label="ESRS E5 (Circular Economy)" checked={selectedScopes.e5} />
+            <ScopeItem id="s1" label="ESRS S1 (Own Workforce)" checked={selectedScopes.s1} />
+            <ScopeItem id="s2" label="ESRS S2 (Value Chain Workers)" checked={selectedScopes.s2} />
+            <ScopeItem id="s3" label="ESRS S3 (Affected Communities)" checked={selectedScopes.s3} />
+            <ScopeItem id="s4" label="ESRS S4 (Consumers)" checked={selectedScopes.s4} />
+            <ScopeItem id="g1" label="ESRS G1 (Business Conduct)" checked={selectedScopes.g1} />
           </div>
 
           <button

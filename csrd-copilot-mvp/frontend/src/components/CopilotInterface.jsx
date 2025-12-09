@@ -197,7 +197,13 @@ const CopilotInterface = ({ enabledScopes }) => {
           >
             {(!enabledScopes || enabledScopes.e1) && <option value="e1">ESRS E1 (Climate Change)</option>}
             {(!enabledScopes || enabledScopes.e2) && <option value="e2">ESRS E2 (Pollution)</option>}
+            {(!enabledScopes || enabledScopes.e3) && <option value="e3">ESRS E3 (Water & Marine)</option>}
+            {(!enabledScopes || enabledScopes.e4) && <option value="e4">ESRS E4 (Biodiversity)</option>}
+            {(!enabledScopes || enabledScopes.e5) && <option value="e5">ESRS E5 (Circular Economy)</option>}
             {(!enabledScopes || enabledScopes.s1) && <option value="s1">ESRS S1 (Own Workforce)</option>}
+            {(!enabledScopes || enabledScopes.s2) && <option value="s2">ESRS S2 (Value Chain Workers)</option>}
+            {(!enabledScopes || enabledScopes.s3) && <option value="s3">ESRS S3 (Affected Communities)</option>}
+            {(!enabledScopes || enabledScopes.s4) && <option value="s4">ESRS S4 (Consumers)</option>}
             {(!enabledScopes || enabledScopes.g1) && <option value="g1">ESRS G1 (Business Conduct)</option>}
           </select>
         </div>

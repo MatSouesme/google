@@ -8,7 +8,13 @@ const Generator = () => {
     const [selectedScopes, setSelectedScopes] = React.useState({
         e1: true,
         e2: false,
+        e3: false,
+        e4: false,
+        e5: false,
         s1: true,
+        s2: false,
+        s3: false,
+        s4: false,
         g1: true
     });
 

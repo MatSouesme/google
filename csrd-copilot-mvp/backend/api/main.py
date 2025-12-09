@@ -81,9 +81,10 @@ async def upload_data(file: UploadFile = File(...)):
     if not filename:
         raise HTTPException(status_code=400, detail="No filename provided")
 
-    # Basic validation for E1/G1
-    if "e1" not in filename.lower() and "g1" not in filename.lower():
-         raise HTTPException(status_code=400, detail="Filename must contain 'e1' or 'g1'")
+    # Basic validation for CSRD standards
+    valid_standards = ["e1", "e2", "e3", "e4", "e5", "s1", "s2", "s3", "s4", "g1"]
+    if not any(std in filename.lower() for std in valid_standards):
+         raise HTTPException(status_code=400, detail="Filename must contain a valid standard (e.g., 'e1', 's1', 'g1')")
 
     upload_id = str(uuid.uuid4())
     # Prefix filename with upload_id to avoid collisions (optional, but good practice)
