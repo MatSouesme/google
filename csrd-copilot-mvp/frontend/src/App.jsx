@@ -14,6 +14,7 @@ import DashboardPage from './pages/DashboardPage';
 import Generator from './pages/Generator';
 import ConnectorsPage from './pages/ConnectorsPage';
 import ChatPage from './pages/ChatPage';
+import ReportViewer from './pages/ReportViewer';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -58,6 +59,7 @@ function App() {
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="generator" element={<Generator />} />
                     <Route path="chat" element={<ChatPage />} />
+                    <Route path="view-report" element={<ReportViewer />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
                 </Route>
 

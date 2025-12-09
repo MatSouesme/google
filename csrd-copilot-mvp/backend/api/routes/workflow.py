@@ -59,10 +59,16 @@ def get_history(user=Depends(verify_token)):
     client = bigquery.Client(project=project_id)
     table_id = f"{project_id}.csrd_mvp.draft_history"
 
+    # Use QUALIFY to get only the latest version of each draft_id
+    # This handles the case where we insert a new row for APPROVED status
     query = f"""
-        SELECT draft_id, topic, standard, status, created_at 
-        FROM `{table_id}`
-        WHERE user_id = @user_id
+        SELECT * EXCEPT(rn)
+        FROM (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY draft_id ORDER BY updated_at DESC) as rn
+            FROM `{table_id}`
+            WHERE user_id = @user_id
+        )
+        WHERE rn = 1
         ORDER BY created_at DESC
         LIMIT 50
     """
@@ -78,8 +84,10 @@ def get_history(user=Depends(verify_token)):
         results = [dict(row) for row in query_job]
         # Convert datetime objects to string
         for row in results:
-            if row['created_at']:
+            if row.get('created_at') and hasattr(row['created_at'], 'isoformat'):
                 row['created_at'] = row['created_at'].isoformat()
+            if row.get('updated_at') and hasattr(row['updated_at'], 'isoformat'):
+                row['updated_at'] = row['updated_at'].isoformat()
         return results
     except Exception as e:
         # If table doesn't exist yet, return empty list
@@ -92,21 +100,49 @@ def approve_draft(request: ApproveDraftRequest, user=Depends(verify_token)):
     client = bigquery.Client(project=project_id)
     table_id = f"{project_id}.csrd_mvp.draft_history"
 
-    # Note: BigQuery UPDATEs have a slight latency and cost, but acceptable for MVP
-    query = f"""
-        UPDATE `{table_id}`
-        SET status = 'APPROVED', updated_at = CURRENT_TIMESTAMP()
-        WHERE draft_id = @draft_id AND user_id = @user_id
-    """
+    # WORKAROUND: BigQuery Streaming Buffer limitation.
+    # We cannot UPDATE rows that were recently inserted via streaming.
+    # Solution: We fetch the existing draft and INSERT a new row with status='APPROVED'.
+    # The get_history endpoint filters duplicates.
 
+    # 1. Fetch the existing draft
+    query_fetch = f"""
+        SELECT *
+        FROM `{table_id}`
+        WHERE draft_id = @draft_id AND user_id = @user_id
+        LIMIT 1
+    """
     job_config = bigquery.QueryJobConfig(
         query_parameters=[
             bigquery.ScalarQueryParameter("draft_id", "STRING", request.draft_id),
             bigquery.ScalarQueryParameter("user_id", "STRING", user['uid'])
         ]
     )
+    
+    try:
+        query_job = client.query(query_fetch, job_config=job_config)
+        rows = list(query_job)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch draft: {str(e)}")
+    
+    if not rows:
+        raise HTTPException(status_code=404, detail="Draft not found")
+        
+    draft_row = dict(rows[0])
+    
+    # 2. Prepare new row
+    new_row = draft_row.copy()
+    new_row['status'] = 'APPROVED'
+    new_row['updated_at'] = datetime.datetime.utcnow().isoformat()
+    
+    # Serialize datetimes for JSON insert
+    for key, value in new_row.items():
+        if hasattr(value, 'isoformat'):
+            new_row[key] = value.isoformat()
 
-    query_job = client.query(query, job_config=job_config)
-    query_job.result() # Wait for completion
+    # 3. Insert new row
+    errors = client.insert_rows_json(table_id, [new_row])
+    if errors:
+        raise HTTPException(status_code=500, detail=f"BigQuery Insert Error: {errors}")
 
     return {"message": "Draft approved and added to Official Report"}

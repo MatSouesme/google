@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { auth } from '../firebase-config';
@@ -18,6 +19,7 @@ const CopilotInterface = ({ enabledScopes }) => {
   const [showSources, setShowSources] = useState(false);
   const [currentDraftId, setCurrentDraftId] = useState(null);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // Effect to ensure selected standard is valid
   React.useEffect(() => {
@@ -72,7 +74,7 @@ const CopilotInterface = ({ enabledScopes }) => {
   };
 
   const handleSaveDraft = async () => {
-    if (!draft) return;
+    if (!draft) return null;
     setSaving(true);
     setError('');
     setSuccessMsg('');
@@ -101,18 +103,21 @@ const CopilotInterface = ({ enabledScopes }) => {
       const data = await response.json();
       setCurrentDraftId(data.draft_id);
       setSuccessMsg(t('copilot.result.successSaved'));
+      return data.draft_id;
     } catch (err) {
       setError(err.message);
+      return null;
     } finally {
       setSaving(false);
     }
   };
 
   const handleApprove = async () => {
-    if (!currentDraftId) {
-      // If not saved yet, save first
-      await handleSaveDraft();
-      if (!currentDraftId) return; // If save failed
+    let draftId = currentDraftId;
+    if (!draftId) {
+      // If not saved yet, save first and wait for the ID
+      draftId = await handleSaveDraft();
+      if (!draftId) return; // If save failed
     }
 
     setApproving(true);
@@ -126,12 +131,15 @@ const CopilotInterface = ({ enabledScopes }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ draft_id: currentDraftId }),
+        body: JSON.stringify({ draft_id: draftId }),
       });
 
       if (!response.ok) throw new Error(t('copilot.errors.approveFailed'));
 
       setSuccessMsg(t('copilot.result.successApproved'));
+      
+      // Navigate to report viewer
+      navigate('/view-report', { state: { draft, topic, standard } });
     } catch (err) {
       setError(err.message);
     } finally {

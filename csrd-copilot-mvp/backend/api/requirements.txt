@@ -11,3 +11,6 @@ google-cloud-discoveryengine
 google-generativeai
 simple-salesforce
 requests
+python-docx
+fpdf2
+markdown
