@@ -6,9 +6,9 @@ import remarkGfm from 'remark-gfm';
 
 const ChatPage = () => {
     const [messages, setMessages] = useState([
-        { 
-            role: 'assistant', 
-            content: "Hello! I'm your CSRD Data Assistant. You can ask me questions about your environmental data, like:\n\n* \"What were the total CO2 emissions in 2024?\"\n* \"Which facility consumed the most energy?\"\n* \"Compare water consumption between Paris and London.\"" 
+        {
+            role: 'assistant',
+            content: "Hello! I'm your CSRD Data Assistant. You can ask me questions about your environmental data, like:\n\n* \"What were the total CO2 emissions in 2024?\"\n* \"Which facility consumed the most energy?\"\n* \"Compare water consumption between Paris and London.\""
         }
     ]);
     const [input, setInput] = useState('');
@@ -38,7 +38,7 @@ const ChatPage = () => {
             const token = await user.getIdToken();
 
             // TODO: Use env var
-            const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/chat/data', {
+            const response = await fetch('http://localhost:8000/chat/data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,19 +50,19 @@ const ChatPage = () => {
             if (!response.ok) throw new Error("Failed to get response");
 
             const data = await response.json();
-            
-            const assistantMessage = { 
-                role: 'assistant', 
+
+            const assistantMessage = {
+                role: 'assistant',
                 content: data.answer,
                 sql: data.sql // We can optionally show the SQL used
             };
-            
+
             setMessages(prev => [...prev, assistantMessage]);
 
         } catch (err) {
-            setMessages(prev => [...prev, { 
-                role: 'assistant', 
-                content: "Sorry, I encountered an error processing your request. Please try again." 
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                content: "Sorry, I encountered an error processing your request. Please try again."
             }]);
             console.error(err);
         } finally {
@@ -77,10 +77,10 @@ const ChatPage = () => {
                 <p className="page-subtitle">Ask natural language questions about your CSRD metrics.</p>
             </div>
 
-            <div className="chat-container" style={{ 
-                flex: 1, 
-                backgroundColor: '#1e1e1e', 
-                borderRadius: '8px', 
+            <div className="chat-container" style={{
+                flex: 1,
+                backgroundColor: '#1e1e1e',
+                borderRadius: '8px',
                 border: '1px solid #333',
                 display: 'flex',
                 flexDirection: 'column',
@@ -88,23 +88,23 @@ const ChatPage = () => {
             }}>
                 <div className="messages-area" style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
                     {messages.map((msg, idx) => (
-                        <div key={idx} style={{ 
-                            display: 'flex', 
-                            gap: '1rem', 
+                        <div key={idx} style={{
+                            display: 'flex',
+                            gap: '1rem',
                             marginBottom: '1.5rem',
                             flexDirection: msg.role === 'user' ? 'row-reverse' : 'row'
                         }}>
-                            <div style={{ 
-                                width: '32px', height: '32px', 
-                                borderRadius: '50%', 
+                            <div style={{
+                                width: '32px', height: '32px',
+                                borderRadius: '50%',
                                 backgroundColor: msg.role === 'user' ? '#3b82f6' : '#10b981',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 flexShrink: 0
                             }}>
                                 {msg.role === 'user' ? <User size={18} color="white" /> : <Bot size={18} color="white" />}
                             </div>
-                            
-                            <div style={{ 
+
+                            <div style={{
                                 maxWidth: '70%',
                                 backgroundColor: msg.role === 'user' ? '#2563eb' : '#2a2a2a',
                                 padding: '1rem',
@@ -118,7 +118,7 @@ const ChatPage = () => {
                                 {msg.sql && (
                                     <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#888', borderTop: '1px solid #444', paddingTop: '0.5rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '4px' }}>
-                                            <Database size={12} /> 
+                                            <Database size={12} />
                                             <span>Generated SQL:</span>
                                         </div>
                                         <code style={{ backgroundColor: '#111', padding: '4px', borderRadius: '4px', display: 'block', overflowX: 'auto' }}>
@@ -143,33 +143,33 @@ const ChatPage = () => {
                 </div>
 
                 <form onSubmit={handleSend} style={{ padding: '1rem', borderTop: '1px solid #333', backgroundColor: '#252525', display: 'flex', gap: '1rem' }}>
-                    <input 
-                        type="text" 
+                    <input
+                        type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Ask a question about your data..."
-                        style={{ 
-                            flex: 1, 
-                            padding: '12px', 
-                            borderRadius: '8px', 
-                            border: '1px solid #444', 
-                            backgroundColor: '#1e1e1e', 
+                        style={{
+                            flex: 1,
+                            padding: '12px',
+                            borderRadius: '8px',
+                            border: '1px solid #444',
+                            backgroundColor: '#1e1e1e',
                             color: 'white',
                             outline: 'none'
                         }}
                         disabled={loading}
                     />
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         disabled={loading || !input.trim()}
-                        style={{ 
-                            backgroundColor: '#10b981', 
-                            color: 'white', 
-                            border: 'none', 
-                            borderRadius: '8px', 
-                            width: '48px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
+                        style={{
+                            backgroundColor: '#10b981',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            width: '48px',
+                            display: 'flex',
+                            alignItems: 'center',
                             justifyContent: 'center',
                             cursor: loading ? 'not-allowed' : 'pointer',
                             opacity: loading ? 0.7 : 1

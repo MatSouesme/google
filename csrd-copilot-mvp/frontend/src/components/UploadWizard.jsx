@@ -33,7 +33,7 @@ const UploadWizard = ({ selectedScopes, onScopeChange }) => {
     // formData.append('scopes', JSON.stringify(selectedScopes));
 
     try {
-      const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/upload-data', {
+      const response = await fetch('http://localhost:8000/upload-data', {
         method: 'POST',
         body: formData,
       });
@@ -53,7 +53,7 @@ const UploadWizard = ({ selectedScopes, onScopeChange }) => {
 
   const handleDownload = (standard) => {
     // TODO: Use environment variable for API URL
-    window.location.href = `https://csrd-api-71795126030.europe-west1.run.app/download-template/${standard}`;
+    window.location.href = `http://localhost:8000/download-template/${standard}`;
   };
 
   const ScopeItem = ({ id, label, checked, locked }) => (

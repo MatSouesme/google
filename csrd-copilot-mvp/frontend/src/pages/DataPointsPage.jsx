@@ -115,7 +115,7 @@ const DataPointsPage = () => {
             const token = user ? await user.getIdToken() : null;
 
             // TODO: Use env var
-            const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/data/manual-entry', {
+            const response = await fetch('http://localhost:8000/data/manual-entry', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

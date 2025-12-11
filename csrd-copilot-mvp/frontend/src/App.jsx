@@ -17,6 +17,7 @@ import ChatPage from './pages/ChatPage';
 import ReportViewer from './pages/ReportViewer';
 import FinalReportPage from './pages/FinalReportPage';
 import DataPointsPage from './pages/DataPointsPage';
+import SmartImportPage from './pages/SmartImportPage';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -63,6 +64,7 @@ function App() {
                     <Route path="chat" element={<ChatPage />} />
                     <Route path="view-report" element={<ReportViewer />} />
                     <Route path="data-points" element={<DataPointsPage />} />
+                    <Route path="smart-import" element={<SmartImportPage />} />
                     <Route path="final-report" element={<FinalReportPage />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
                 </Route>

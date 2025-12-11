@@ -16,12 +16,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry
+    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction
 except ImportError:
     try:
-        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry
+        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction
     except ImportError:
-        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry
+        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction
 
 app = FastAPI(title="CSRD Copilot API")
 
@@ -46,6 +46,7 @@ app.include_router(get_data.router)
 app.include_router(chat.router)
 app.include_router(export.router)
 app.include_router(manual_entry.router)
+app.include_router(smart_extraction.router)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev

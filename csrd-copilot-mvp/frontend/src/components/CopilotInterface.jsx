@@ -49,7 +49,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const token = await user.getIdToken();
 
       // TODO: Use environment variable for API URL
-      const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/generate-draft', {
+      const response = await fetch('http://localhost:8000/generate-draft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const user = auth.currentUser;
       const token = await user.getIdToken();
 
-      const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/save-draft', {
+      const response = await fetch('http://localhost:8000/save-draft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const user = auth.currentUser;
       const token = await user.getIdToken();
 
-      const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/approve-draft', {
+      const response = await fetch('http://localhost:8000/approve-draft', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       if (!response.ok) throw new Error(t('copilot.errors.approveFailed'));
 
       setSuccessMsg(t('copilot.result.successApproved'));
-      
+
       // Navigate to report viewer
       navigate('/view-report', { state: { draft, topic, standard } });
     } catch (err) {
@@ -170,7 +170,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const reportId = currentDraftId || 'draft_' + Date.now();
 
       // Trigger download
-      window.location.href = `https://csrd-api-71795126030.europe-west1.run.app/export-xbrl/${reportId}`;
+      window.location.href = `http://localhost:8000/export-xbrl/${reportId}`;
 
       setSuccessMsg("✅ XBRL Tagging Complete & Package Downloaded!");
     } catch (err) {
