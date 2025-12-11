@@ -50,9 +50,9 @@ const Layout = ({ user }) => {
                         <Sparkles size={20} />
                         <span>{t('nav.generator')}</span>
                     </Link>
-                    <Link to="/kpi" className={`nav-item ${isActive('/kpi') ? 'active' : ''}`}>
+                    <Link to="/data-points" className={`nav-item ${isActive('/data-points') ? 'active' : ''}`}>
                         <ClipboardList size={20} />
-                        <span>KPI Guide</span>
+                        <span>Data Points</span>
                     </Link>
                     <Link to="/final-report" className={`nav-item ${isActive('/final-report') ? 'active' : ''}`}>
                         <FileText size={20} />
