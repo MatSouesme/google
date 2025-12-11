@@ -16,6 +16,7 @@ import ConnectorsPage from './pages/ConnectorsPage';
 import ChatPage from './pages/ChatPage';
 import ReportViewer from './pages/ReportViewer';
 import FinalReportPage from './pages/FinalReportPage';
+import KPIPage from './pages/KPIPage';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -61,6 +62,7 @@ function App() {
                     <Route path="generator" element={<Generator />} />
                     <Route path="chat" element={<ChatPage />} />
                     <Route path="view-report" element={<ReportViewer />} />
+                    <Route path="kpi" element={<KPIPage />} />
                     <Route path="final-report" element={<FinalReportPage />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
                 </Route>

@@ -59,26 +59,26 @@ const FinalReportPage = () => {
                 <h3 style={{ marginTop: 0 }}>Completion Progress</h3>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                     <div style={{ flex: 1, height: '10px', backgroundColor: 'var(--border-color)', borderRadius: '5px', overflow: 'hidden' }}>
-                        <div style={{ 
-                            width: `${progressPercentage}%`, 
-                            height: '100%', 
+                        <div style={{
+                            width: `${progressPercentage}%`,
+                            height: '100%',
                             backgroundColor: 'var(--success-color)',
                             transition: 'width 0.5s ease'
                         }} />
                     </div>
                     <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{progressPercentage}%</span>
                 </div>
-                
+
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                     {allStandards.map(std => (
-                        <div key={std} style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
+                        <div key={std} style={{
+                            display: 'flex',
+                            alignItems: 'center',
                             gap: '0.5rem',
                             opacity: completedStandards.has(std) ? 1 : 0.5
                         }}>
-                            {completedStandards.has(std) ? 
-                                <CheckCircle size={16} color="var(--success-color)" /> : 
+                            {completedStandards.has(std) ?
+                                <CheckCircle size={16} color="var(--success-color)" /> :
                                 <Circle size={16} />
                             }
                             <span style={{ textTransform: 'uppercase' }}>{std}</span>
@@ -99,11 +99,11 @@ const FinalReportPage = () => {
                     reportData.map((section, index) => (
                         <div key={index} className="card" style={{ marginBottom: '2rem' }}>
                             <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem', marginBottom: '1rem' }}>
-                                <span style={{ 
-                                    backgroundColor: 'var(--primary-color)', 
-                                    color: 'white', 
-                                    padding: '0.2rem 0.5rem', 
-                                    borderRadius: '4px', 
+                                <span style={{
+                                    backgroundColor: 'var(--primary-color)',
+                                    color: 'white',
+                                    padding: '0.2rem 0.5rem',
+                                    borderRadius: '4px',
                                     fontSize: '0.8rem',
                                     textTransform: 'uppercase',
                                     marginRight: '1rem'
