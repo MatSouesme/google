@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `csrd_mvp.redac_final` (
+    user_id STRING,
+    standard STRING,
+    topic STRING,
+    content STRING,
+    updated_at TIMESTAMP
+);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +49,10 @@ const Layout = ({ user }) => {
                     <Link to="/generator" className={`nav-item ${isActive('/generator') ? 'active' : ''}`}>
                         <Sparkles size={20} />
                         <span>{t('nav.generator')}</span>
+                    </Link>
+                    <Link to="/final-report" className={`nav-item ${isActive('/final-report') ? 'active' : ''}`}>
+                        <FileText size={20} />
+                        <span>Final Report</span>
                     </Link>
                     <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
                         <MessageSquare size={20} />

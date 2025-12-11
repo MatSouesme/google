@@ -145,4 +145,61 @@ def approve_draft(request: ApproveDraftRequest, user=Depends(verify_token)):
     if errors:
         raise HTTPException(status_code=500, detail=f"BigQuery Insert Error: {errors}")
 
+    # 4. Insert into redac_final (Consolidated Report)
+    # We use a separate table for the final report to track progress
+    final_table_id = f"{project_id}.csrd_mvp.redac_final"
+    
+    # Prepare row for redac_final
+    final_row = {
+        "user_id": user['uid'],
+        "standard": draft_row['standard'],
+        "topic": draft_row['topic'],
+        "content": draft_row['content'],
+        "updated_at": datetime.datetime.utcnow().isoformat()
+    }
+    
+    # We use insert_rows_json. Since we want to "upsert" (replace if exists), 
+    # and BigQuery streaming doesn't support update easily, we will just insert.
+    # The reading logic will have to pick the latest one (like we did for history).
+    # Alternatively, we could use a MERGE statement if we weren't using streaming inserts,
+    # but for consistency let's stick to append-only + read-latest pattern.
+    
+    errors_final = client.insert_rows_json(final_table_id, [final_row])
+    if errors_final:
+        print(f"Warning: Failed to insert into redac_final: {errors_final}")
+        # We don't fail the request if this fails, as the main approval worked.
+
     return {"message": "Draft approved and added to Official Report"}
+
+@router.get("/final-report")
+def get_final_report(user=Depends(verify_token)):
+    """Retrieves the consolidated final report and progress."""
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
+    client = bigquery.Client(project=project_id)
+    table_id = f"{project_id}.csrd_mvp.redac_final"
+
+    # Get latest version of each (standard, topic) pair
+    query = f"""
+        SELECT * EXCEPT(rn)
+        FROM (
+            SELECT *, ROW_NUMBER() OVER (PARTITION BY standard, topic ORDER BY updated_at DESC) as rn
+            FROM `{table_id}`
+            WHERE user_id = @user_id
+        )
+        WHERE rn = 1
+        ORDER BY standard, topic
+    """
+    
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ScalarQueryParameter("user_id", "STRING", user['uid'])
+        ]
+    )
+
+    try:
+        query_job = client.query(query, job_config=job_config)
+        results = [dict(row) for row in query_job]
+        return results
+    except Exception as e:
+        # Table might not exist yet
+        return []
