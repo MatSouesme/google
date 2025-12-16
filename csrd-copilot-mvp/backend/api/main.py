@@ -156,14 +156,6 @@ def get_validated_data(standard: str):
              raise HTTPException(status_code=404, detail=f"Validated data for {standard} not found (Table {table_id} missing)")
         raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
 
-# Removed old generate_draft endpoint to avoid conflict
-# class DraftRequest(BaseModel):
-#     topic: str
-#     standard: str
-
-# @app.post("/generate-draft")
-# def generate_draft(request: DraftRequest):
-# ...
     """
     Generates a draft using Dual-Core RAG.
     """
