@@ -135,12 +135,13 @@ class RAGClient:
         except Exception as e:
             return f"Error fetching data: {str(e)}"
 
-    def generate_draft(self, topic: str, standard: str) -> dict:
+    def generate_draft(self, topic: str, standard: str, language: str = "fr") -> dict:
         """
         Orchestrates the generation process:
         1. Fetch Data
         2. Load Prompts
         3. Call Gemini
+        Language: 'fr' for French, 'en' for English
         """
         
         # 1. Fetch Context
@@ -156,12 +157,16 @@ class RAGClient:
         
         # 3. Construct the Final Prompt (Strategist)
         # We combine the system instructions with the specific task
+        language_instruction = "Write the report in FRENCH." if language == "fr" else "Write the report in ENGLISH."
+        
         full_prompt = f"""
         {system_prompt}
 
         ---
         TASK:
         {strategist_prompt}
+
+        IMPORTANT: {language_instruction}
 
         ---
         INPUT CONTEXT:
@@ -174,7 +179,7 @@ class RAGClient:
         LEGAL CONTEXT (Official ESRS {standard.upper()} Text):
         {legal_context}
         
-        Please generate the draft now.
+        Please generate the draft now in the specified language.
         """
 
         # 3b. Construct the Auditor Prompt
@@ -185,6 +190,8 @@ class RAGClient:
         TASK:
         {auditor_prompt}
 
+        IMPORTANT: {language_instruction}
+
         ---
         INPUT CONTEXT:
         TOPIC: {topic}
@@ -196,7 +203,7 @@ class RAGClient:
         LEGAL CONTEXT (Official ESRS {standard.upper()} Text):
         {legal_context}
         
-        Please generate the audit report now.
+        Please generate the audit report now in the specified language.
         """
 
         # 4. Call Gemini with Fallback

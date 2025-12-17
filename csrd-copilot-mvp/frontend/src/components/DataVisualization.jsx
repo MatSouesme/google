@@ -40,12 +40,12 @@ const DataVisualization = () => {
         fetchData();
     }, []);
 
-    if (loading) return <div style={{ color: '#aaa' }}>Loading visualization...</div>;
-    if (error) return <div style={{ color: '#ff6b6b' }}>{error}</div>;
+    if (loading) return <div style={{ color: 'var(--text-secondary)' }}>Loading visualization...</div>;
+    if (error) return <div style={{ color: 'var(--error-color)' }}>{error}</div>;
     if (!data || (data.emissions_by_year.length === 0 && data.top_facilities.length === 0)) {
         return (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#aaa' }}>
-                <h3>No Data Available</h3>
+            <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
+                <h3 style={{ color: 'var(--text-color)' }}>No Data Available</h3>
                 <p>Please use the "Connectors" tab to sync Salesforce data or upload a CSV.</p>
             </div>
         );
@@ -56,24 +56,24 @@ const DataVisualization = () => {
     return (
         <div className="dashboard-container">
             <h2 style={{ color: 'var(--primary-color)', marginTop: 0 }}>Data Visualization</h2>
-            <p style={{ color: '#aaa', marginBottom: '2rem' }}>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
                 Real-time insights from your CSRD data warehouse (BigQuery).
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                 
                 {/* Chart 1: Emissions by Year */}
-                <div style={{ backgroundColor: '#1e1e1e', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333' }}>
-                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: '#ddd' }}>CO2 Emissions by Year (Scopes 1, 2, 3)</h3>
+                <div style={{ backgroundColor: 'var(--surface-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--text-color)' }}>CO2 Emissions by Year (Scopes 1, 2, 3)</h3>
                     <div style={{ height: '300px', width: '100%' }}>
                         <ResponsiveContainer>
                             <BarChart data={data.emissions_by_year}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                                <XAxis dataKey="year" stroke="#888" />
-                                <YAxis stroke="#888" />
+                                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+                                <XAxis dataKey="year" stroke="var(--text-secondary)" />
+                                <YAxis stroke="var(--text-secondary)" />
                                 <Tooltip 
-                                    contentStyle={{ backgroundColor: '#333', border: '1px solid #555' }}
-                                    itemStyle={{ color: '#ddd' }}
+                                    contentStyle={{ backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
+                                    itemStyle={{ color: 'var(--text-color)' }}
                                 />
                                 <Legend />
                                 <Bar dataKey="scope1" stackId="a" fill="#8884d8" name="Scope 1" />
@@ -85,8 +85,8 @@ const DataVisualization = () => {
                 </div>
 
                 {/* Chart 2: Top Facilities */}
-                <div style={{ backgroundColor: '#1e1e1e', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333' }}>
-                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: '#ddd' }}>Top 5 Facilities (Total Emissions)</h3>
+                <div style={{ backgroundColor: 'var(--surface-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--text-color)' }}>Top 5 Facilities (Total Emissions)</h3>
                     <div style={{ height: '300px', width: '100%' }}>
                         <ResponsiveContainer>
                             <PieChart>
@@ -105,8 +105,8 @@ const DataVisualization = () => {
                                     ))}
                                 </Pie>
                                 <Tooltip 
-                                    contentStyle={{ backgroundColor: '#333', border: '1px solid #555' }}
-                                    itemStyle={{ color: '#ddd' }}
+                                    contentStyle={{ backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)' }}
+                                    itemStyle={{ color: 'var(--text-color)' }}
                                 />
                             </PieChart>
                         </ResponsiveContainer>

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 const CopilotInterface = ({ enabledScopes }) => {
   const [topic, setTopic] = useState('');
   const [standard, setStandard] = useState('e1');
+  const [language, setLanguage] = useState('fr');
   const [draft, setDraft] = useState('');
   const [auditReport, setAuditReport] = useState('');
   const [sourceData, setSourceData] = useState(null);
@@ -55,7 +56,7 @@ const CopilotInterface = ({ enabledScopes }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ topic, standard }),
+        body: JSON.stringify({ topic, standard, language }),
       });
 
       if (!response.ok) {
@@ -181,51 +182,132 @@ const CopilotInterface = ({ enabledScopes }) => {
   };
 
   return (
-    <div className="copilot-interface" style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid var(--border-color)', borderRadius: '8px', backgroundColor: 'var(--surface-color)' }}>
-      <h2 style={{ marginTop: 0, color: 'var(--primary-color)' }}>{t('copilot.title')}</h2>
-      <p style={{ color: 'var(--text-secondary)' }}>
-        {t('copilot.subtitle')}
-      </p>
+    <div className="copilot-interface">
+      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+        <h2 style={{ 
+          marginTop: 0, 
+          fontSize: '1.75rem',
+          color: 'var(--success-color)',
+          fontWeight: 'bold',
+          marginBottom: '0.5rem'
+        }}>{t('copilot.title')}</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '600px', margin: '0 auto' }}>
+          {t('copilot.subtitle')}
+        </p>
+      </div>
 
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-        <div style={{ flex: 1 }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-color)' }}>{t('copilot.standardLabel')}</label>
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: '1fr 1fr 2fr', 
+        gap: '1rem', 
+        marginBottom: '1.5rem',
+        padding: '1.5rem',
+        backgroundColor: 'var(--bg-secondary)',
+        borderRadius: '8px',
+        border: '1px solid var(--border-color)'
+      }}>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-color)' }}>📋 {t('copilot.standardLabel')}</label>
           <select
             value={standard}
             onChange={(e) => setStandard(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '4px' }}
+            style={{ 
+              width: '100%', 
+              padding: '0.75rem', 
+              backgroundColor: 'var(--bg-color)', 
+              border: '2px solid var(--border-color)', 
+              color: 'var(--text-color)', 
+              borderRadius: '6px',
+              fontSize: '0.95rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'border-color 0.2s ease'
+            }}
           >
-            {(!enabledScopes || enabledScopes.e1) && <option value="e1">ESRS E1 (Climate Change)</option>}
-            {(!enabledScopes || enabledScopes.e2) && <option value="e2">ESRS E2 (Pollution)</option>}
-            {(!enabledScopes || enabledScopes.e3) && <option value="e3">ESRS E3 (Water & Marine)</option>}
-            {(!enabledScopes || enabledScopes.e4) && <option value="e4">ESRS E4 (Biodiversity)</option>}
-            {(!enabledScopes || enabledScopes.e5) && <option value="e5">ESRS E5 (Circular Economy)</option>}
-            {(!enabledScopes || enabledScopes.s1) && <option value="s1">ESRS S1 (Own Workforce)</option>}
-            {(!enabledScopes || enabledScopes.s2) && <option value="s2">ESRS S2 (Value Chain Workers)</option>}
-            {(!enabledScopes || enabledScopes.s3) && <option value="s3">ESRS S3 (Affected Communities)</option>}
-            {(!enabledScopes || enabledScopes.s4) && <option value="s4">ESRS S4 (Consumers)</option>}
-            {(!enabledScopes || enabledScopes.g1) && <option value="g1">ESRS G1 (Business Conduct)</option>}
+            {(!enabledScopes || enabledScopes.e1) && <option value="e1">E1 - Climate</option>}
+            {(!enabledScopes || enabledScopes.e2) && <option value="e2">E2 - Pollution</option>}
+            {(!enabledScopes || enabledScopes.e3) && <option value="e3">E3 - Water</option>}
+            {(!enabledScopes || enabledScopes.e4) && <option value="e4">E4 - Biodiversity</option>}
+            {(!enabledScopes || enabledScopes.e5) && <option value="e5">E5 - Circular Economy</option>}
+            {(!enabledScopes || enabledScopes.s1) && <option value="s1">S1 - Workforce</option>}
+            {(!enabledScopes || enabledScopes.s2) && <option value="s2">S2 - Value Chain</option>}
+            {(!enabledScopes || enabledScopes.s3) && <option value="s3">S3 - Communities</option>}
+            {(!enabledScopes || enabledScopes.s4) && <option value="s4">S4 - Consumers</option>}
+            {(!enabledScopes || enabledScopes.g1) && <option value="g1">G1 - Business Conduct</option>}
           </select>
         </div>
-        <div style={{ flex: 2 }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-color)' }}>{t('copilot.topicLabel')}</label>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-color)' }}>🌍 {t('generator.language')}</label>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            style={{ 
+              width: '100%', 
+              padding: '0.75rem', 
+              backgroundColor: 'var(--bg-color)', 
+              border: '2px solid var(--border-color)', 
+              color: 'var(--text-color)', 
+              borderRadius: '6px',
+              fontSize: '0.95rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'border-color 0.2s ease'
+            }}
+          >
+            <option value="fr">{t('generator.languages.fr')}</option>
+            <option value="en">{t('generator.languages.en')}</option>
+          </select>
+        </div>
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-color)' }}>🎯 {t('copilot.topicLabel')}</label>
           <input
             type="text"
             placeholder={t('copilot.topicPlaceholder')}
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'var(--text-color)', borderRadius: '4px' }}
+            style={{ 
+              width: '100%', 
+              padding: '0.75rem', 
+              backgroundColor: 'var(--bg-color)', 
+              border: '2px solid var(--border-color)', 
+              color: 'var(--text-color)', 
+              borderRadius: '6px',
+              fontSize: '0.95rem',
+              transition: 'border-color 0.2s ease'
+            }}
+            onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
+            onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
           />
         </div>
       </div>
 
-      <button
-        onClick={handleGenerate}
-        disabled={loading || !topic}
-        style={{ width: '100%', marginBottom: '1.5rem', backgroundColor: loading ? 'var(--text-secondary)' : 'var(--primary-color)', color: '#fff', border: 'none', padding: '10px', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
-      >
-        {loading ? t('copilot.generateBtn.loading') : t('copilot.generateBtn.default')}
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+        <button
+          onClick={handleGenerate}
+          disabled={loading || !topic}
+          className="btn-animated btn-primary"
+          style={{ 
+            padding: '1rem 3rem',
+            fontSize: '1.15rem',
+            fontWeight: '700',
+            letterSpacing: '0.02em',
+            opacity: (loading || !topic) ? 0.6 : 1,
+            cursor: (loading || !topic) ? 'not-allowed' : 'pointer',
+            minWidth: '320px',
+            background: (loading || !topic) ? 'var(--primary-color)' : 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+            border: 'none',
+            boxShadow: (loading || !topic) ? 'none' : '0 4px 15px rgba(59, 130, 246, 0.3)',
+            transform: (loading || !topic) ? 'none' : 'translateY(0)',
+            transition: 'all 0.3s ease'
+          }}
+          aria-label={loading ? 'Generating draft' : 'Generate CSRD draft'}
+          aria-busy={loading}
+          onMouseEnter={(e) => !loading && !topic || (e.target.style.transform = 'translateY(-2px)', e.target.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.4)')}
+          onMouseLeave={(e) => (e.target.style.transform = 'translateY(0)', e.target.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)')}
+        >
+          {loading ? '⏳ ' + t('copilot.generateBtn.loading') : '✨ ' + t('copilot.generateBtn.default')}
+        </button>
+      </div>
 
       {error && (
         <div style={{ color: 'var(--error-color)', padding: '1rem', backgroundColor: 'rgba(229, 115, 115, 0.1)', borderRadius: '4px', marginBottom: '1rem', border: '1px solid var(--error-color)' }}>
@@ -234,25 +316,120 @@ const CopilotInterface = ({ enabledScopes }) => {
       )}
 
       {draft && (
-        <div className="draft-result" style={{ display: 'flex', gap: '2rem', flexDirection: 'column' }}>
+        <div className="draft-result" style={{ 
+          display: 'flex', 
+          gap: '2rem', 
+          flexDirection: 'column',
+          padding: '2rem',
+          backgroundColor: 'var(--bg-secondary)',
+          borderRadius: '12px',
+          border: '2px solid var(--success-color)',
+          animation: 'fadeIn 0.5s ease-in'
+        }}>
 
           {/* Toolbar */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '1.1rem', color: 'var(--success-color)', margin: 0 }}>{t('copilot.result.title')}</h3>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button onClick={handleSaveDraft} disabled={saving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', border: '1px solid var(--border-color)', borderRadius: '4px', cursor: 'pointer' }}>
-                {saving ? t('copilot.result.saveBtn.saving') : t('copilot.result.saveBtn.default')}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <h3 style={{ 
+              fontSize: '1.3rem', 
+              color: 'var(--success-color)', 
+              margin: 0,
+              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              ✅ {t('copilot.result.title')}
+            </h3>
+            <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap' }}>
+              <button 
+                onClick={handleSaveDraft} 
+                disabled={saving} 
+                className="btn-animated btn-secondary"
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  fontSize: '0.9rem', 
+                  fontWeight: '600',
+                  opacity: saving ? 0.6 : 1,
+                  cursor: saving ? 'not-allowed' : 'pointer'
+                }}
+                aria-label="Save draft"
+                aria-busy={saving}
+              >
+                💾 {saving ? t('copilot.result.saveBtn.saving') : t('copilot.result.saveBtn.default')}
               </button>
-              <button onClick={handleApprove} disabled={approving} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#1565c0', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                {approving ? t('copilot.result.approveBtn.approving') : t('copilot.result.approveBtn.default')}
+              <button 
+                onClick={handleApprove} 
+                disabled={approving} 
+                className="btn-animated"
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  fontSize: '0.9rem', 
+                  fontWeight: '600',
+                  backgroundColor: '#1565c0', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '6px',
+                  opacity: approving ? 0.6 : 1,
+                  cursor: approving ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                aria-label="Approve draft"
+                aria-busy={approving}
+              >
+                ✓ {approving ? t('copilot.result.approveBtn.approving') : t('copilot.result.approveBtn.default')}
               </button>
-              <button onClick={() => setShowSources(!showSources)} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)', border: '1px solid var(--border-color)', borderRadius: '4px', cursor: 'pointer' }}>
-                {showSources ? t('copilot.result.toggleSources.hide') : t('copilot.result.toggleSources.show')}
+              <button 
+                onClick={() => setShowSources(!showSources)} 
+                className="btn-animated btn-secondary"
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  fontSize: '0.9rem', 
+                  fontWeight: '600'
+                }}
+                aria-label={showSources ? 'Hide sources' : 'Show sources'}
+                aria-expanded={showSources}
+              >
+                📊 {showSources ? t('copilot.result.toggleSources.hide') : t('copilot.result.toggleSources.show')}
               </button>
-              <button onClick={handleDownload} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: 'var(--success-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                {t('copilot.result.download')}
+              <button 
+                onClick={handleDownload} 
+                className="btn-animated"
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  fontSize: '0.9rem', 
+                  fontWeight: '600',
+                  backgroundColor: 'var(--success-color)', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '6px',
+                  transition: 'all 0.2s ease'
+                }}
+                aria-label="Download draft as markdown"
+              >
+                ⬇️ {t('copilot.result.download')}
               </button>
-              <button onClick={handleExportXBRL} disabled={xbrlLoading} style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', backgroundColor: '#e65100', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <button 
+                onClick={handleExportXBRL} 
+                disabled={xbrlLoading} 
+                className="btn-animated"
+                style={{ 
+                  padding: '0.5rem 1rem', 
+                  fontSize: '0.9rem', 
+                  fontWeight: '600',
+                  backgroundColor: '#e65100', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '6px',
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.375rem',
+                  opacity: xbrlLoading ? 0.6 : 1,
+                  cursor: xbrlLoading ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                aria-label="Export as XBRL format"
+                aria-busy={xbrlLoading}
+              >
                 {xbrlLoading ? '🏷️ Mapping...' : '🏷️ Export XBRL'}
               </button>
             </div>

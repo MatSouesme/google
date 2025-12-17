@@ -15,6 +15,7 @@ router = APIRouter()
 class DraftRequest(BaseModel):
     topic: str
     standard: str
+    language: str = "fr"  # Default to French
 
 @router.post("/generate-draft")
 def generate_draft_route(request: DraftRequest, user=Depends(verify_token)):
@@ -29,7 +30,7 @@ def generate_draft_route(request: DraftRequest, user=Depends(verify_token)):
         
     try:
         client = RAGClient(project_id=project_id)
-        result = client.generate_draft(request.topic, request.standard)
+        result = client.generate_draft(request.topic, request.standard, request.language)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Draft generation failed: {str(e)}")

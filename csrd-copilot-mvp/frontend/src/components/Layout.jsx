@@ -42,30 +42,37 @@ const Layout = ({ user }) => {
                         <Home size={20} />
                         <span>{t('nav.home')}</span>
                     </Link>
-                    <Link to="/dashboard" className={`nav-item ${isActive('/dashboard') ? 'active' : ''}`}>
-                        <LayoutDashboard size={20} />
-                        <span>{t('nav.dashboard')}</span>
+                    
+                    {/* 1. Ingestion des données */}
+                    <Link to="/smart-import" className={`nav-item ${isActive('/smart-import') ? 'active' : ''}`}>
+                        <UploadCloud size={20} />
+                        <span>{t('nav.smartImport')}</span>
                     </Link>
+                    
+                    {/* 2. Monitorer les data points */}
+                    <Link to="/data-points" className={`nav-item ${isActive('/data-points') ? 'active' : ''}`}>
+                        <ClipboardList size={20} />
+                        <span>{t('nav.dataPoints')}</span>
+                    </Link>
+                    
+                    {/* 3. Générateur de rapports */}
                     <Link to="/generator" className={`nav-item ${isActive('/generator') ? 'active' : ''}`}>
                         <Sparkles size={20} />
                         <span>{t('nav.generator')}</span>
                     </Link>
-                    <Link to="/data-points" className={`nav-item ${isActive('/data-points') ? 'active' : ''}`}>
-                        <ClipboardList size={20} />
-                        <span>Data Points</span>
-                    </Link>
-                    <Link to="/smart-import" className={`nav-item ${isActive('/smart-import') ? 'active' : ''}`}>
-                        <UploadCloud size={20} />
-                        <span>Files Import</span>
-                    </Link>
+                    
+                    {/* 4. Rapport final - Dernière étape du workflow */}
                     <Link to="/final-report" className={`nav-item ${isActive('/final-report') ? 'active' : ''}`}>
                         <FileText size={20} />
-                        <span>Final Report</span>
+                        <span>{t('nav.finalReport')}</span>
                     </Link>
+                    
+                    {/* Autres fonctionnalités */}
                     <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
                         <MessageSquare size={20} />
-                        <span>Chat with Data</span>
+                        <span>{t('nav.chat')}</span>
                     </Link>
+                    
                     <Link to="/connectors" className={`nav-item ${isActive('/connectors') ? 'active' : ''}`}>
                         <LinkIcon size={20} />
                         <span>{t('nav.connectors')}</span>

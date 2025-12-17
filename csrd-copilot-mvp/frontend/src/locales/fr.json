@@ -8,9 +8,13 @@
     },
     "nav": {
         "home": "Accueil",
+        "smartImport": "Import de données",
+        "dataPoints": "Data Points",
         "dashboard": "Tableau de bord",
+        "chat": "Discuter avec les Données",
         "generator": "Générateur IA",
-        "connectors": "Connecteurs"
+        "connectors": "Connecteurs",
+        "finalReport": "Rapport Final"
     },
     "login": {
         "title": "CSRD Copilot",
@@ -52,7 +56,13 @@
     },
     "generator": {
         "title": "Générateur IA",
-        "subtitle": "Téléchargez vos documents et générez des rapports CSRD avec l'IA."
+        "subtitle": "Téléchargez vos documents et générez des rapports CSRD avec l'IA.",
+        "nextStep": "Prochaine étape: Rapport Final",
+        "language": "Langue du rapport",
+        "languages": {
+            "fr": "Français",
+            "en": "Anglais"
+        }
     },
     "connectors": {
         "title": "Connecteurs de Données",
@@ -64,6 +74,13 @@
             "subtitle": "Ecoply est votre copilote intelligent pour la conformité à la Directive sur les Rapports de Durabilité des Entreprises (CSRD). Nous combinons une IA avancée avec une intégration de données sécurisée pour rationaliser votre parcours de reporting durable.",
             "startBtn": "Commencer à Générer",
             "connectBtn": "Connecter des Sources"
+        },
+        "cta": {
+            "viewDemo": "Voir la démo",
+            "configureDataPoints": "Configurer les Data Points",
+            "importMoreData": "Importer plus de données",
+            "viewReport": "Voir votre rapport",
+            "dashboard": "Tableau de bord"
         },
         "features": {
             "ingestion": {
@@ -182,5 +199,202 @@
         "success": "✅ Succès ! {{count}} lignes importées depuis {{source}}.",
         "errorAuth": "Non authentifié",
         "errorSync": "Échec de la synchronisation"
+    },
+    "alerts": {
+        "home": {
+            "noData": {
+                "title": "🚀 Commencez par importer vos données",
+                "message": "Pour générer vos rapports CSRD, commencez par importer vos données via la page 'Import de données'. Cela vous permettra ensuite de monitorer vos data points et générer votre rapport final.",
+                "action": "Aller à l'import →"
+            },
+            "noDataPoints": {
+                "title": "⚠️ Configuration des data points recommandée",
+                "message": "Vos données sont importées ! Configurez maintenant vos data points pour un suivi optimal de vos indicateurs CSRD.",
+                "action": "Configurer les data points →"
+            },
+            "ready": {
+                "title": "✅ Tout est prêt !",
+                "message": "Vos données sont importées et vos data points configurés. Vous pouvez maintenant générer votre rapport final.",
+                "action": "Voir le rapport final →"
+            }
+        },
+        "generator": {
+            "noData": {
+                "title": "⚠️ Aucune donnée importée",
+                "message": "Vous devez d'abord importer vos données avant de pouvoir générer des rapports. Sans données, le générateur ne pourra pas produire de contenu pertinent.",
+                "action": "Importer des données maintenant →"
+            }
+        },
+        "dataPoints": {
+            "noData": {
+                "title": "⚠️ Importez d'abord vos données",
+                "message": "Avant de configurer vos data points, vous devez importer vos données via la page Smart Import.",
+                "action": "Aller à l'import →"
+            },
+            "noConfigured": {
+                "title": "ℹ️ Commencez à configurer vos data points",
+                "message": "Sélectionnez les indicateurs pertinents pour votre organisation et configurez-les pour un suivi optimal."
+            }
+        },
+        "finalReport": {
+            "noData": {
+                "title": "❌ Données manquantes",
+                "message": "Vous devez d'abord importer vos données pour pouvoir générer et consulter votre rapport CSRD.",
+                "action": "Importer des données →"
+            },
+            "noDataPoints": {
+                "title": "⚠️ Data points non configurés",
+                "message": "Pour un rapport complet, configurez vos data points avant de générer le rapport final.",
+                "action": "Configurer les data points →"
+            },
+            "noDrafts": {
+                "title": "ℹ️ Aucun brouillon généré",
+                "message": "Utilisez le générateur IA pour créer des brouillons de sections de votre rapport.",
+                "action": "Aller au générateur →"
+            }
+        },
+        "smartImport": {
+            "success": {
+                "title": "✅ Import réussi !",
+                "message": "Vos données ont été importées avec succès. Vous pouvez maintenant configurer vos data points."
+            },
+            "firstTime": {
+                "title": "ℹ️ Bienvenue sur Smart Import",
+                "message": "Téléchargez vos fichiers CSV ou connectez vos sources de données pour démarrer votre analyse CSRD."
+            }
+        }
+    },
+    "sharepoint": {
+        "title": "📁 Connexion SharePoint",
+        "subtitle": "Connectez-vous à SharePoint pour importer automatiquement vos fichiers",
+        "siteUrl": "URL du site SharePoint",
+        "siteUrlPlaceholder": "https://votre-entreprise.sharepoint.com/sites/csrd",
+        "folderPath": "Chemin du dossier",
+        "folderPathPlaceholder": "/Shared Documents/CSRD Data",
+        "clientId": "Client ID (Azure AD)",
+        "clientIdPlaceholder": "Votre Application Client ID",
+        "clientSecret": "Client Secret",
+        "clientSecretPlaceholder": "Votre Application Secret",
+        "testConnection": "Tester la connexion",
+        "connecting": "Connexion en cours...",
+        "connected": "✅ Connecté",
+        "connectionFailed": "❌ Échec de la connexion",
+        "listFiles": "Lister les fichiers",
+        "loadingFiles": "Chargement des fichiers...",
+        "noFiles": "Aucun fichier trouvé",
+        "downloadAndIngest": "Télécharger et ingérer",
+        "downloading": "Téléchargement...",
+        "filesFound": "{{count}} fichiers trouvés",
+        "selectFiles": "Sélectionnez les fichiers à importer",
+        "fileName": "Nom du fichier",
+        "fileSize": "Taille",
+        "modified": "Modifié",
+        "actions": "Actions"
+    },
+    "navigation": {
+        "nextStep": {
+            "configureDataPoints": "Étape suivante : Configurer les Data Points",
+            "viewFinalReport": "Étape suivante : Voir le rapport final",
+            "viewReport": "Voir le rapport final",
+            "viewDashboard": "Voir le tableau de bord"
+        },
+        "sections": {
+            "readyToGenerate": {
+                "title": "Prêt à générer votre rapport ?",
+                "message": "Vos data points sont configurés. Passez à la génération de votre rapport CSRD."
+            },
+            "viewComplete": {
+                "title": "Voir votre rapport complet",
+                "message": "Consultez et gérez l'ensemble de votre rapport CSRD finalisé."
+            },
+            "exploreData": {
+                "title": "Explorez vos données",
+                "message": "Visualisez les statistiques et indicateurs de votre rapport dans le tableau de bord."
+            }
+        }
+    },
+    "smartImport": {
+        "title": "Import de données",
+        "subtitle": "Téléchargez vos rapports (PDF, Excel) et laissez l'IA extraire automatiquement vos data points CSRD.",
+        "nextStep": "Prochaine étape: Data Points",
+        "manualUpload": "Téléchargement manuel",
+        "sharepointConnection": "Connexion SharePoint",
+        "importSuccess": {
+            "title": "✅ Import réussi !",
+            "message": "Vos données ont été importées avec succès. Vous pouvez maintenant configurer vos data points et générer votre rapport."
+        },
+        "firstTime": {
+            "title": "📤 Première étape : Importer vos données",
+            "message": "C'est ici que tout commence ! Importez vos fichiers Excel, CSV ou PDF contenant vos données ESG. Notre IA extraira automatiquement les data points pertinents pour votre rapport CSRD."
+        },
+        "successfullyIngested": "{{count}} data points ingérés avec succès !",
+        "confirmIngest": "Confirmer & Ingérer {{count}} Data Points"
+    },
+    "dataPoints": {
+        "title": "Data Points Library",
+        "subtitle": "Explorez, filtrez et générez des requêtes SQL pour tous les data points CSRD.",
+        "nextStep": "Prochaine étape: Générateur IA",
+        "stats": {
+            "overallProgress": "Progression Globale",
+            "dataCollected": "Données Collectées",
+            "missingDataPoints": "Data Points Manquants"
+        },
+        "search": {
+            "placeholder": "Rechercher par ID, Nom ou Description..."
+        },
+        "filters": {
+            "allCategories": "Toutes les Catégories",
+            "allStandards": "Toutes les Normes",
+            "allStatuses": "Tous les Statuts"
+        },
+        "categories": {
+            "Environmental": "🌍 Environnemental",
+            "Social": "👥 Social",
+            "Governance": "⚖️ Gouvernance",
+            "General": "📊 Général"
+        },
+        "kpiCount": "{{count}} indicateurs",
+        "generateSQL": "🤖 Générer SQL",
+        "generatingSQL": "Génération...",
+        "sqlGenerated": "SQL Généré",
+        "copySQL": "Copier SQL",
+        "status": {
+            "collected": "Collecté",
+            "missing": "Manquant",
+            "pending": "En attente"
+        },
+        "completed": "complétés",
+        "dataPoints": "data points",
+        "unit": "Unité",
+        "showing": "Affichage de {{count}} sur {{total}} data points",
+        "noResults": "Aucun data point ne correspond à vos filtres.",
+        "regenerateSQL": "Regénérer SQL",
+        "getSQL": "Obtenir SQL",
+        "description": "Description",
+        "generatedSQLQuery": "Requête SQL Générée",
+        "clearFilters": "Effacer les filtres",
+        "resetFilters": "Réinitialiser les filtres"
+    },
+    "finalReport": {
+        "title": "Statut du Rapport Final",
+        "subtitle": "Suivez votre progression et consultez le rapport consolidé.",
+        "completionProgress": "Progression de Complétion",
+        "approvedTopics": "Sujets Approuvés",
+        "standard": "Norme",
+        "topic": "Sujet",
+        "approvedAt": "Approuvé le",
+        "viewDraft": "Voir le brouillon",
+        "noTopics": "Aucun sujet approuvé pour cette norme pour le moment."
+    },
+    "chat": {
+        "title": "Discuter avec les Données",
+        "subtitle": "Posez des questions en langage naturel sur vos métriques CSRD.",
+        "welcome": "Bonjour ! Je suis votre assistant de données CSRD. Vous pouvez me poser des questions sur vos données environnementales, comme :\n\n* \"Quelles étaient les émissions totales de CO2 en 2024 ?\"\n* \"Quelle installation a consommé le plus d'énergie ?\"\n* \"Compare la consommation d'eau entre Paris et Londres.\"",
+        "thinking": "Réflexion...",
+        "error": "Désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez réessayer.",
+        "notAuthenticated": "Non authentifié",
+        "placeholder": "Posez une question sur vos données...",
+        "send": "Envoyer",
+        "generatedSQL": "SQL Généré :"
     }
 }

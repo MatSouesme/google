@@ -1,14 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { kpis as initialKpis } from '../data/kpis';
-import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Database, Code, Bot, Loader2 } from 'lucide-react';
+import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Database, Code, Bot, Loader2, ArrowRight, Folder, FolderOpen } from 'lucide-react';
 import { auth } from '../firebase-config';
+import Alert from '../components/Alert';
+import { useDataStatus } from '../hooks/useDataStatus';
 
 const DataPointsPage = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { hasImportedData } = useDataStatus();
     const [kpis, setKpis] = useState(initialKpis);
     const [expandedKPI, setExpandedKPI] = useState(null);
+    const [expandedFolders, setExpandedFolders] = useState({ Environmental: false, Social: false, Governance: false, General: false });
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [categoryFilter, setCategoryFilter] = useState('all');
@@ -21,6 +27,10 @@ const DataPointsPage = () => {
 
     const toggleKPI = (id) => {
         setExpandedKPI(expandedKPI === id ? null : id);
+    };
+
+    const toggleFolder = (category) => {
+        setExpandedFolders(prev => ({ ...prev, [category]: !prev[category] }));
     };
 
     const handleGenerateSQL = async (e, kpi) => {
@@ -153,6 +163,14 @@ const DataPointsPage = () => {
 
     const categories = ['Environmental', 'Social', 'Governance', 'General'];
 
+    // Group KPIs by category
+    const groupedKPIs = {
+        Environmental: filteredKPIs.filter(k => k.category === 'Environmental'),
+        Social: filteredKPIs.filter(k => k.category === 'Social'),
+        Governance: filteredKPIs.filter(k => k.category === 'Governance'),
+        General: filteredKPIs.filter(k => k.category === 'General')
+    };
+
     // Stats Calculation
     const stats = {
         total: kpis.length,
@@ -160,19 +178,97 @@ const DataPointsPage = () => {
         missing: kpis.filter(k => k.status === 'missing').length
     };
     const progressPercentage = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+    
+    // Category stats
+    const categoryStats = {
+        Environmental: {
+            total: kpis.filter(k => k.category === 'Environmental').length,
+            completed: kpis.filter(k => k.category === 'Environmental' && k.status === 'completed').length
+        },
+        Social: {
+            total: kpis.filter(k => k.category === 'Social').length,
+            completed: kpis.filter(k => k.category === 'Social' && k.status === 'completed').length
+        },
+        Governance: {
+            total: kpis.filter(k => k.category === 'Governance').length,
+            completed: kpis.filter(k => k.category === 'Governance' && k.status === 'completed').length
+        },
+        General: {
+            total: kpis.filter(k => k.category === 'General').length,
+            completed: kpis.filter(k => k.category === 'General' && k.status === 'completed').length
+        }
+    };
+    
+    const getCategoryIcon = (category) => {
+        const icons = {
+            Environmental: '🌍',
+            Social: '👥',
+            Governance: '⚖️',
+            General: '📊'
+        };
+        return icons[category] || '📁';
+    };
+    
+    const getCategoryColor = (category) => {
+        const colors = {
+            Environmental: '#10B981',
+            Social: '#3B82F6',
+            Governance: '#8B5CF6',
+            General: '#6B7280'
+        };
+        return colors[category] || '#6B7280';
+    };
 
     return (
         <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>Data Points Library</h1>
-                <p style={{ color: 'var(--text-secondary)' }}>Explore, filter, and generate SQL queries for all CSRD data points.</p>
+            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ flex: 1 }}>
+                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('dataPoints.title')}</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>{t('dataPoints.subtitle')}</p>
+                </div>
+                <button
+                    onClick={() => navigate('/generator')}
+                    className="btn-animated btn-primary"
+                        style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '0.5rem',
+                            padding: '0.75rem 1.5rem',
+                            fontSize: '0.95rem',
+                            fontWeight: '600',
+                            whiteSpace: 'nowrap'
+                        }}
+                >
+                    {t('dataPoints.nextStep')} <ArrowRight size={18} />
+                </button>
             </div>
+
+            {/* Alertes de guidance */}
+            {!hasImportedData && (
+                <Alert
+                    type="warning"
+                    title={t('alerts.dataPoints.noData.title')}
+                    message={t('alerts.dataPoints.noData.message')}
+                    action={{
+                        label: t('alerts.dataPoints.noData.action'),
+                        onClick: () => navigate('/smart-import')
+                    }}
+                />
+            )}
+
+            {hasImportedData && stats.completed === 0 && (
+                <Alert
+                    type="info"
+                    title={t('alerts.dataPoints.noConfigured.title')}
+                    message={t('alerts.dataPoints.noConfigured.message')}
+                />
+            )}
 
             {/* Stats Overview */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                 <div className="card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '4px solid var(--primary-color)' }}>
                     <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Overall Progress</div>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{t('dataPoints.stats.overallProgress')}</div>
                         <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{progressPercentage}%</div>
                         <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', marginTop: '0.5rem' }}>
                             <div style={{
@@ -190,7 +286,7 @@ const DataPointsPage = () => {
                         <CheckCircle size={24} color="#10B981" />
                     </div>
                     <div>
-                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Data Collected</div>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{t('dataPoints.stats.dataCollected')}</div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.completed}/{stats.total}</div>
                     </div>
                 </div>
@@ -199,7 +295,7 @@ const DataPointsPage = () => {
                         <AlertCircle size={24} color="#EF4444" />
                     </div>
                     <div>
-                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Missing Data Points</div>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{t('dataPoints.stats.missingDataPoints')}</div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{stats.missing}</div>
                     </div>
                 </div>
@@ -213,7 +309,7 @@ const DataPointsPage = () => {
                     <Search size={20} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                     <input
                         type="text"
-                        placeholder="Search by ID, Name or Description..."
+                        placeholder={t('dataPoints.search.placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         style={{
@@ -238,7 +334,7 @@ const DataPointsPage = () => {
                             onChange={(e) => setCategoryFilter(e.target.value)}
                             style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                         >
-                            <option value="all">All Categories</option>
+                            <option value="all">{t('dataPoints.filters.allCategories')}</option>
                             {categories.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                     </div>
@@ -250,7 +346,7 @@ const DataPointsPage = () => {
                             onChange={(e) => setStandardFilter(e.target.value)}
                             style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                         >
-                            <option value="all">All Standards</option>
+                            <option value="all">{t('dataPoints.filters.allStandards')}</option>
                             <option value="ESRS E">Environmental (ESRS E)</option>
                             <option value="ESRS S">Social (ESRS S)</option>
                             <option value="ESRS G">Governance (ESRS G)</option>
@@ -273,32 +369,120 @@ const DataPointsPage = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                    <span>Showing {filteredKPIs.length} of {kpis.length} data points</span>
+                    <span>{t('dataPoints.showing', { count: filteredKPIs.length, total: kpis.length })}</span>
                     <button
                         onClick={() => { setSearchQuery(''); setCategoryFilter('all'); setStatusFilter('all'); setStandardFilter('all'); }}
-                        className="btn btn-ghost"
-                        style={{ fontSize: '0.9rem' }}
+                        className="btn-animated"
+                        style={{ 
+                            fontSize: '0.9rem',
+                            padding: '0.5rem 1rem',
+                            backgroundColor: 'transparent',
+                            border: '2px solid var(--primary-color)',
+                            color: 'var(--primary-color)',
+                            borderRadius: '6px',
+                            fontWeight: '600',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = 'var(--primary-color)';
+                            e.target.style.color = 'white';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = 'transparent';
+                            e.target.style.color = 'var(--primary-color)';
+                        }}
                     >
-                        Clear Filters
+                        <Filter size={16} />
+                        {t('dataPoints.clearFilters')}
                     </button>
                 </div>
             </div>
 
-            {/* List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {filteredKPIs.map(kpi => (
-                    <div key={kpi.id} className="card" style={{ overflow: 'hidden', border: '1px solid var(--border-color)' }}>
-                        <div
-                            style={{
-                                padding: '1.25rem 1.5rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                cursor: 'pointer',
-                                backgroundColor: expandedKPI === kpi.id ? 'var(--bg-secondary)' : 'transparent',
-                                transition: 'background-color 0.2s'
-                            }}
-                            onClick={() => toggleKPI(kpi.id)}
+            {/* List by Folders */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {categories.map(category => {
+                    const categoryKPIs = groupedKPIs[category] || [];
+                    if (categoryKPIs.length === 0) return null;
+                    
+                    const isExpanded = expandedFolders[category];
+                    const catStats = categoryStats[category];
+                    
+                    return (
+                        <div key={category} className="animate-fade-in">
+                            {/* Folder Header */}
+                            <div 
+                                className="card"
+                                style={{
+                                    padding: '1.5rem',
+                                    cursor: 'pointer',
+                                    border: `2px solid ${getCategoryColor(category)}`,
+                                    backgroundColor: isExpanded ? 'var(--bg-secondary)' : 'var(--surface-color)',
+                                    transition: 'all 0.3s ease',
+                                    marginBottom: isExpanded ? '0.5rem' : '0'
+                                }}
+                                onClick={() => toggleFolder(category)}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        {isExpanded ? (
+                                            <FolderOpen size={32} style={{ color: getCategoryColor(category) }} />
+                                        ) : (
+                                            <Folder size={32} style={{ color: getCategoryColor(category) }} />
+                                        )}
+                                        <div>
+                                            <h3 style={{ 
+                                                fontSize: '1.5rem', 
+                                                fontWeight: 'bold',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '0.75rem',
+                                                marginBottom: '0.25rem'
+                                            }}>
+                                                <span>{getCategoryIcon(category)}</span>
+                                                <span>{category}</span>
+                                            </h3>
+                                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                                                {catStats.completed} / {catStats.total} {t('dataPoints.dataPoints')} {t('dataPoints.completed')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                        <div style={{ textAlign: 'right' }}>
+                                            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: getCategoryColor(category) }}>
+                                                {catStats.total > 0 ? Math.round((catStats.completed / catStats.total) * 100) : 0}%
+                                            </div>
+                                            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                                {categoryKPIs.length} {t('dataPoints.dataPoints')}
+                                            </div>
+                                        </div>
+                                        {isExpanded ? (
+                                            <ChevronUp size={24} style={{ color: getCategoryColor(category) }} />
+                                        ) : (
+                                            <ChevronDown size={24} style={{ color: getCategoryColor(category) }} />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Folder Content */}
+                            {isExpanded && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingLeft: '1rem' }}>
+                                    {categoryKPIs.map(kpi => (
+                                        <div key={kpi.id} className="card animate-fade-in" style={{ overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+                                            <div
+                                                style={{
+                                                    padding: '1.25rem 1.5rem',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between',
+                                                    cursor: 'pointer',
+                                                    backgroundColor: expandedKPI === kpi.id ? 'var(--bg-secondary)' : 'transparent',
+                                                    transition: 'background-color 0.2s'
+                                                }}
+                                                onClick={() => toggleKPI(kpi.id)}
                         >
                             <div style={{ display: 'flex', flex: 1, alignItems: 'center', gap: '1.5rem', overflow: 'hidden' }}>
                                 {/* Status Icon */}
@@ -329,7 +513,7 @@ const DataPointsPage = () => {
                                         <span>•</span>
                                         <span>{kpi.standard}</span>
                                         <span>•</span>
-                                        <span>Unit: {kpi.unit}</span>
+                                        <span>{t('dataPoints.unit')}: {kpi.unit}</span>
                                     </div>
                                 </div>
                             </div>
@@ -343,7 +527,7 @@ const DataPointsPage = () => {
                                     style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                                 >
                                     {sqlLoading[kpi.id] ? <Loader2 size={16} className="spin" /> : <Database size={16} />}
-                                    <span>{generatedSql[kpi.id] ? 'Regenerate SQL' : 'Get SQL'}</span>
+                                    <span>{generatedSql[kpi.id] ? t('dataPoints.regenerateSQL') : t('dataPoints.getSQL')}</span>
                                 </button>
                                 {expandedKPI === kpi.id ? <ChevronUp size={20} color="var(--text-secondary)" /> : <ChevronDown size={20} color="var(--text-secondary)" />}
                             </div>
@@ -356,14 +540,14 @@ const DataPointsPage = () => {
 
                                     {/* Left: Description & SQL */}
                                     <div>
-                                        <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Description</h4>
+                                        <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>{t('dataPoints.description')}</h4>
                                         <p style={{ marginBottom: '1.5rem', lineHeight: '1.6' }}>{kpi.description}</p>
 
                                         {generatedSql[kpi.id] && (
                                             <div className="animate-fade-in" style={{ marginTop: '1rem' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                                                     <h4 style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
-                                                        <Code size={16} color="var(--primary-color)" /> Generated SQL Query
+                                                        <Code size={16} color="var(--primary-color)" /> {t('dataPoints.generatedSQLQuery')}
                                                     </h4>
                                                 </div>
                                                 <div style={{ position: 'relative' }}>
@@ -455,23 +639,43 @@ const DataPointsPage = () => {
                                 </div>
                             </div>
                         )}
-                    </div>
-                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
 
                 {filteredKPIs.length === 0 && (
-                    <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-secondary)' }}>
-                        <Search size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
-                        <p>No data points found matching your filters.</p>
+                    <div className="card" style={{ textAlign: 'center', padding: '4rem' }}>
+                        <Search size={48} style={{ opacity: 0.2, marginBottom: '1rem', color: 'var(--text-secondary)' }} />
+                        <p style={{ color: 'var(--text-secondary)' }}>{t('dataPoints.noResults')}</p>
                         <button
                             onClick={() => { setSearchQuery(''); setCategoryFilter('all'); setStatusFilter('all'); setStandardFilter('all'); }}
                             className="btn btn-outline"
                             style={{ marginTop: '1rem' }}
                         >
-                            Reset Filters
+                            {t('dataPoints.resetFilters')}
                         </button>
                     </div>
                 )}
             </div>
+
+            {hasImportedData && filteredKPIs.length > 0 && (
+                <div style={{ marginTop: '3rem', padding: '2rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                    <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)' }}>{t('navigation.sections.readyToGenerate.title')}</h3>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>{t('navigation.sections.readyToGenerate.message')}</p>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => navigate('/final-report')}
+                        style={{ padding: '0.75rem 2rem', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.75rem' }}
+                    >
+                        {t('navigation.nextStep.viewFinalReport')}
+                        <ArrowRight size={20} />
+                    </button>
+                </div>
+            )}
 
             <style>{`
                 .spin { animation: spin 1s linear infinite; }

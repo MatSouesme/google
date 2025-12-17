@@ -1,12 +1,35 @@
 import React, { useState } from 'react';
-import { UploadCloud, FileText, CheckCircle, AlertTriangle, X, Loader2, ArrowRight, Save } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { UploadCloud, FileText, CheckCircle, AlertTriangle, X, Loader2, ArrowRight, Save, Share2, Download, Folder } from 'lucide-react';
 import { auth } from '../firebase-config';
+import Alert from '../components/Alert';
+import { useDataStatus } from '../hooks/useDataStatus';
 
 const SmartImportPage = () => {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
     const [file, setFile] = useState(null);
     const [analyzing, setAnalyzing] = useState(false);
     const [extractedData, setExtractedData] = useState([]); // Array of { id, kpi_id, name, value, unit, date, confidence }
     const [ingesting, setIngesting] = useState(false);
+    const [importSuccess, setImportSuccess] = useState(false);
+    const { markDataImported, hasImportedData } = useDataStatus();
+    
+    // SharePoint states
+    const [showSharePoint, setShowSharePoint] = useState(false);
+    const [sharepointConfig, setSharepointConfig] = useState({
+        siteUrl: '',
+        folderPath: '',
+        clientId: '',
+        clientSecret: ''
+    });
+    const [sharepointConnected, setSharepointConnected] = useState(false);
+    const [testingConnection, setTestingConnection] = useState(false);
+    const [sharepointFiles, setSharepointFiles] = useState([]);
+    const [loadingFiles, setLoadingFiles] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [downloadingFiles, setDownloadingFiles] = useState(false);
 
     const handleFileDrop = (e) => {
         e.preventDefault();
@@ -71,6 +94,84 @@ const SmartImportPage = () => {
         setExtractedData(prev => prev.map(row => row.id === id ? { ...row, [field]: value } : row));
     };
 
+    const handleTestSharePointConnection = async () => {
+        setTestingConnection(true);
+        try {
+            // Simuler un test de connexion (remplacer par vraie API)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setSharepointConnected(true);
+            alert(t('sharepoint.connected'));
+        } catch (error) {
+            setSharepointConnected(false);
+            alert(t('sharepoint.connectionFailed'));
+        } finally {
+            setTestingConnection(false);
+        }
+    };
+
+    const handleListSharePointFiles = async () => {
+        if (!sharepointConnected) {
+            alert('Please connect to SharePoint first');
+            return;
+        }
+        
+        setLoadingFiles(true);
+        try {
+            // Simuler récupération de fichiers (remplacer par vraie API Microsoft Graph)
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const mockFiles = [
+                { id: 1, name: 'CSRD_Report_2023.xlsx', size: '2.4 MB', modified: '2023-12-15', url: '#' },
+                { id: 2, name: 'ESG_Data_Q4.csv', size: '856 KB', modified: '2023-12-10', url: '#' },
+                { id: 3, name: 'Sustainability_Metrics.pdf', size: '1.2 MB', modified: '2023-12-01', url: '#' }
+            ];
+            setSharepointFiles(mockFiles);
+        } catch (error) {
+            alert('Failed to list files');
+        } finally {
+            setLoadingFiles(false);
+        }
+    };
+
+    const handleToggleFileSelection = (fileId) => {
+        setSelectedFiles(prev => 
+            prev.includes(fileId) 
+                ? prev.filter(id => id !== fileId)
+                : [...prev, fileId]
+        );
+    };
+
+    const handleDownloadAndIngest = async () => {
+        if (selectedFiles.length === 0) {
+            alert('Please select at least one file');
+            return;
+        }
+        
+        setDownloadingFiles(true);
+        try {
+            // Simuler téléchargement et ingestion (remplacer par vraie API)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Mock des données extraites
+            const mockExtracted = selectedFiles.map((fileId, idx) => ({
+                id: idx,
+                kpi_id: `E${idx + 1}-1`,
+                name: `Data Point ${idx + 1}`,
+                value: String(Math.floor(Math.random() * 10000)),
+                unit: ['tCO2e', 'FTE', '%'][idx % 3],
+                date: '2023-12-31',
+                confidence: 0.85 + Math.random() * 0.15
+            }));
+            
+            setExtractedData(mockExtracted);
+            setShowSharePoint(false);
+            alert(`Downloaded and extracted ${selectedFiles.length} files!`);
+        } catch (error) {
+            alert('Failed to download files');
+        } finally {
+            setDownloadingFiles(false);
+        }
+    };
+
     const handleIngest = async () => {
         if (extractedData.length === 0) return;
         setIngesting(true);
@@ -106,18 +207,271 @@ const SmartImportPage = () => {
         setIngesting(false);
         setExtractedData([]);
         setFile(null);
-        alert(`Successfully ingested ${successCount} data points!`);
+        
+        // Marquer les données comme importées
+        markDataImported();
+        setImportSuccess(true);
+        
+        alert(t('smartImport.successfullyIngested', { count: successCount }));
     };
 
     return (
         <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>Files Import</h1>
-                <p style={{ color: 'var(--text-secondary)' }}>Upload your reports (PDF, Excel) and let AI extract CSRD data points for you.</p>
+            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ flex: 1 }}>
+                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('smartImport.title')}</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>{t('smartImport.subtitle')}</p>
+                </div>
+                <button
+                    onClick={() => navigate('/data-points')}
+                    className="btn-animated btn-primary"
+                        style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '0.5rem',
+                            padding: '0.75rem 1.5rem',
+                            fontSize: '0.95rem',
+                            fontWeight: '600',
+                            whiteSpace: 'nowrap'
+                        }}
+                >
+                    {t('smartImport.nextStep')} <ArrowRight size={18} />
+                </button>
             </div>
 
-            {/* File Upload Section */}
+            {/* Alerte de succès après import */}
+            {importSuccess && (
+                <Alert
+                    type="success"
+                    title={t('smartImport.importSuccess.title')}
+                    message={t('smartImport.importSuccess.message')}
+                    onClose={() => setImportSuccess(false)}
+                />
+            )}
+
+            {/* Info pour première utilisation */}
+            {!hasImportedData && !extractedData.length && !file && (
+                <Alert
+                    type="info"
+                    title={t('smartImport.firstTime.title')}
+                    message={t('smartImport.firstTime.message')}
+                />
+            )}
+
+            {/* SharePoint Connection Toggle */}
             {!extractedData.length && (
+                <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
+                    <button
+                        className={`btn ${!showSharePoint ? 'btn-primary' : 'btn-outline'}`}
+                        onClick={() => setShowSharePoint(false)}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                    >
+                        <UploadCloud size={20} />
+                        {t('smartImport.manualUpload')}
+                    </button>
+                    <button
+                        className={`btn ${showSharePoint ? 'btn-primary' : 'btn-outline'}`}
+                        onClick={() => setShowSharePoint(true)}
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                    >
+                        <img 
+                            src="/Microsoft_Office_SharePoint_(2019–2025).svg.png" 
+                            alt="SharePoint" 
+                            style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                        />
+                        SharePoint
+                    </button>
+                </div>
+            )}
+
+            {/* SharePoint Connection Section */}
+            {showSharePoint && !extractedData.length && (
+                <div className="card animate-fade-in" style={{ padding: '2rem', marginBottom: '2rem' }}>
+                    <div style={{ marginBottom: '2rem' }}>
+                        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <img 
+                                src="/Microsoft_Office_SharePoint_(2019–2025).svg.png" 
+                                alt="SharePoint" 
+                                style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+                            />
+                            {t('sharepoint.title')}
+                        </h2>
+                        <p style={{ color: 'var(--text-secondary)' }}>{t('sharepoint.subtitle')}</p>
+                    </div>
+
+                    <div style={{ display: 'grid', gap: '1.5rem', marginBottom: '2rem' }}>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                {t('sharepoint.siteUrl')}
+                            </label>
+                            <input
+                                type="text"
+                                value={sharepointConfig.siteUrl}
+                                onChange={(e) => setSharepointConfig({...sharepointConfig, siteUrl: e.target.value})}
+                                placeholder={t('sharepoint.siteUrlPlaceholder')}
+                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                {t('sharepoint.folderPath')}
+                            </label>
+                            <input
+                                type="text"
+                                value={sharepointConfig.folderPath}
+                                onChange={(e) => setSharepointConfig({...sharepointConfig, folderPath: e.target.value})}
+                                placeholder={t('sharepoint.folderPathPlaceholder')}
+                                style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+                            />
+                        </div>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                    {t('sharepoint.clientId')}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={sharepointConfig.clientId}
+                                    onChange={(e) => setSharepointConfig({...sharepointConfig, clientId: e.target.value})}
+                                    placeholder={t('sharepoint.clientIdPlaceholder')}
+                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                    {t('sharepoint.clientSecret')}
+                                </label>
+                                <input
+                                    type="password"
+                                    value={sharepointConfig.clientSecret}
+                                    onChange={(e) => setSharepointConfig({...sharepointConfig, clientSecret: e.target.value})}
+                                    placeholder={t('sharepoint.clientSecretPlaceholder')}
+                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleTestSharePointConnection}
+                            disabled={testingConnection || !sharepointConfig.siteUrl}
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                        >
+                            {testingConnection ? (
+                                <>
+                                    <Loader2 size={20} className="spin" />
+                                    {t('sharepoint.connecting')}
+                                </>
+                            ) : (
+                                <>
+                                    <CheckCircle size={20} />
+                                    {t('sharepoint.testConnection')}
+                                </>
+                            )}
+                        </button>
+                        
+                        {sharepointConnected && (
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleListSharePointFiles}
+                                disabled={loadingFiles}
+                                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                            >
+                                {loadingFiles ? (
+                                    <>
+                                        <Loader2 size={20} className="spin" />
+                                        {t('sharepoint.loadingFiles')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <FileText size={20} />
+                                        {t('sharepoint.listFiles')}
+                                    </>
+                                )}
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Files List */}
+                    {sharepointFiles.length > 0 && (
+                        <div className="animate-fade-in">
+                            <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>
+                                {t('sharepoint.selectFiles')} ({sharepointFiles.length} {t('sharepoint.filesFound', { count: sharepointFiles.length })})
+                            </h3>
+                            <div style={{ border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <thead style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                                        <tr>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left', width: '40px' }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedFiles.length === sharepointFiles.length}
+                                                    onChange={(e) => setSelectedFiles(e.target.checked ? sharepointFiles.map(f => f.id) : [])}
+                                                />
+                                            </th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>{t('sharepoint.fileName')}</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>{t('sharepoint.fileSize')}</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>{t('sharepoint.modified')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sharepointFiles.map(file => (
+                                            <tr key={file.id} style={{ borderTop: '1px solid var(--border-color)' }}>
+                                                <td style={{ padding: '0.75rem' }}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedFiles.includes(file.id)}
+                                                        onChange={() => handleToggleFileSelection(file.id)}
+                                                    />
+                                                </td>
+                                                <td style={{ padding: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <FileText size={16} style={{ color: 'var(--primary-color)' }} />
+                                                    {file.name}
+                                                </td>
+                                                <td style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>{file.size}</td>
+                                                <td style={{ padding: '0.75rem', color: 'var(--text-secondary)' }}>{file.modified}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleDownloadAndIngest}
+                                disabled={downloadingFiles || selectedFiles.length === 0}
+                                style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                            >
+                                {downloadingFiles ? (
+                                    <>
+                                        <Loader2 size={20} className="spin" />
+                                        {t('sharepoint.downloading')}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Download size={20} />
+                                        {t('sharepoint.downloadAndIngest')} ({selectedFiles.length})
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
+                    {sharepointConnected && sharepointFiles.length === 0 && !loadingFiles && (
+                        <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
+                            <FileText size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
+                            <p>{t('sharepoint.noFiles')}</p>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* File Upload Section */}
+            {!extractedData.length && !showSharePoint && (
                 <div
                     className="card"
                     style={{
@@ -257,7 +611,7 @@ const SmartImportPage = () => {
                         </div>
                     </div>
 
-                    <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
                         <button
                             className="btn btn-primary"
                             onClick={handleIngest}
@@ -272,10 +626,21 @@ const SmartImportPage = () => {
                             ) : (
                                 <>
                                     <Save size={20} />
-                                    Confirm & Ingest {extractedData.length} Data Points
+                                    {t('smartImport.confirmIngest', { count: extractedData.length })}
                                 </>
                             )}
                         </button>
+                        
+                        {importSuccess && (
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => navigate('/data-points')}
+                                style={{ padding: '0.75rem 2rem', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}
+                            >
+                                {t('navigation.nextStep.configureDataPoints')}
+                                <ArrowRight size={20} />
+                            </button>
+                        )}
                     </div>
                 </div>
             )}

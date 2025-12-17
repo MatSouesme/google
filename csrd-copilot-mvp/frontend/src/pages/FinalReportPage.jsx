@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { auth } from '../firebase-config';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { FileText, CheckCircle, Circle } from 'lucide-react';
+import { FileText, CheckCircle, Circle, ArrowRight } from 'lucide-react';
+import Alert from '../components/Alert';
+import { useDataStatus } from '../hooks/useDataStatus';
 
 const FinalReportPage = () => {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+    const { hasImportedData, hasDataPoints } = useDataStatus();
     const [reportData, setReportData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -49,14 +56,54 @@ const FinalReportPage = () => {
 
     return (
         <div className="page-container">
-            <div className="page-header">
-                <h1 className="page-title">Final Report Status</h1>
-                <p className="page-subtitle">Track your progress and view the consolidated report.</p>
+            <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                    <h1 className="page-title">{t('finalReport.title')}</h1>
+                    <p className="page-subtitle">{t('finalReport.subtitle')}</p>
+                </div>
             </div>
+
+            {/* Alertes de guidance */}
+            {!hasImportedData && (
+                <Alert
+                    type="error"
+                    title={t('alerts.finalReport.noData.title')}
+                    message={t('alerts.finalReport.noData.message')}
+                    action={{
+                        label: t('alerts.finalReport.noData.action'),
+                        onClick: () => navigate('/smart-import')
+                    }}
+                    dismissible={false}
+                />
+            )}
+
+            {hasImportedData && !hasDataPoints && (
+                <Alert
+                    type="warning"
+                    title={t('alerts.finalReport.noDataPoints.title')}
+                    message={t('alerts.finalReport.noDataPoints.message')}
+                    action={{
+                        label: t('alerts.finalReport.noDataPoints.action'),
+                        onClick: () => navigate('/data-points')
+                    }}
+                />
+            )}
+
+            {hasImportedData && reportData.length === 0 && (
+                <Alert
+                    type="info"
+                    title={t('alerts.finalReport.noDrafts.title')}
+                    message={t('alerts.finalReport.noDrafts.message')}
+                    action={{
+                        label: t('alerts.finalReport.noDrafts.action'),
+                        onClick: () => navigate('/generator')
+                    }}
+                />
+            )}
 
             {/* Progress Section */}
             <div className="card" style={{ marginBottom: '2rem' }}>
-                <h3 style={{ marginTop: 0 }}>Completion Progress</h3>
+                <h3 style={{ marginTop: 0 }}>{t('finalReport.completionProgress')}</h3>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                     <div style={{ flex: 1, height: '10px', backgroundColor: 'var(--border-color)', borderRadius: '5px', overflow: 'hidden' }}>
                         <div style={{
@@ -122,6 +169,21 @@ const FinalReportPage = () => {
                             </div>
                         </div>
                     ))
+                )}
+
+                {reportData.length > 0 && (
+                    <div style={{ marginTop: '3rem', padding: '2rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                        <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)' }}>{t('navigation.sections.exploreData.title')}</h3>
+                        <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>{t('navigation.sections.exploreData.message')}</p>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => navigate('/dashboard')}
+                            style={{ padding: '0.75rem 2rem', fontSize: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.75rem' }}
+                        >
+                            {t('navigation.nextStep.viewDashboard')}
+                            <ArrowRight size={20} />
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

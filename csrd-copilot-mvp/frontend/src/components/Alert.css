@@ -1,0 +1,138 @@
+.alert {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    border: 1px solid;
+    animation: slideDown 0.3s ease-out;
+    position: relative;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.alert-message {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.alert-action {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.alert-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* Success Alert */
+.alert-success {
+    background: var(--success-bg, rgba(16, 185, 129, 0.1));
+    border-color: var(--success, #10b981);
+    color: var(--success, #10b981);
+}
+
+.alert-success .alert-action {
+    background: var(--success, #10b981);
+    color: white;
+}
+
+.alert-success .alert-action:hover {
+    background: #059669;
+}
+
+/* Warning Alert */
+.alert-warning {
+    background: var(--warning-bg, rgba(245, 158, 11, 0.1));
+    border-color: var(--warning, #f59e0b);
+    color: var(--warning, #f59e0b);
+}
+
+.alert-warning .alert-action {
+    background: var(--warning, #f59e0b);
+    color: white;
+}
+
+.alert-warning .alert-action:hover {
+    background: #d97706;
+}
+
+/* Error Alert */
+.alert-error {
+    background: var(--error-bg, rgba(239, 68, 68, 0.1));
+    border-color: var(--error, #ef4444);
+    color: var(--error, #ef4444);
+}
+
+.alert-error .alert-action {
+    background: var(--error, #ef4444);
+    color: white;
+}
+
+.alert-error .alert-action:hover {
+    background: #dc2626;
+}
+
+/* Info Alert */
+.alert-info {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--accent-primary, #3b82f6);
+    color: var(--accent-primary, #3b82f6);
+}
+
+.alert-info .alert-action {
+    background: var(--accent-primary, #3b82f6);
+    color: white;
+}
+
+.alert-info .alert-action:hover {
+    background: var(--accent-hover, #2563eb);
+}
