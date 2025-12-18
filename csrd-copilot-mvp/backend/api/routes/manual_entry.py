@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 import os
 import datetime
 from google.cloud import bigquery
@@ -15,7 +15,7 @@ router = APIRouter()
 
 class ManualEntryRequest(BaseModel):
     kpi_id: str
-    value: str
+    value: Union[str, int, float]
     date: str
     comment: Optional[str] = None
     unit: Optional[str] = None
@@ -32,7 +32,7 @@ def submit_manual_entry(request: ManualEntryRequest, user=Depends(verify_token))
     # Prepare row data
     row = {
         "kpi_id": request.kpi_id,
-        "value": request.value,
+        "value": str(request.value), # Ensure value is string for BigQuery
         "date": request.date,
         "comment": request.comment,
         "unit": request.unit,

@@ -167,6 +167,18 @@ const SmartImportPage = () => {
 
     const handleIngest = async () => {
         if (extractedData.length === 0) return;
+
+        // Group by Standard (E1, S1, G1)
+        const standards = [...new Set(extractedData.map(item => {
+            if (!item.kpi_id) return 'Unknown';
+            const parts = item.kpi_id.split('-');
+            return parts[0] ? parts[0].toUpperCase() : 'Unknown';
+        }))].filter(s => s !== 'Unknown');
+
+        // Ask for confirmation
+        const message = `Do you want to ingest ${extractedData.length} data points into the following standards: ${standards.join(', ')}?`;
+        if (!window.confirm(message)) return;
+
         setIngesting(true);
 
         // Ingest each row one by one (or batch if API supports it, here Reuse manual entry logic loop)
@@ -185,10 +197,10 @@ const SmartImportPage = () => {
                     },
                     body: JSON.stringify({
                         kpi_id: row.kpi_id,
-                        value: row.value,
+                        value: String(row.value), // Ensure string
                         date: row.date,
                         unit: row.unit,
-                        comment: `Files Import from ${file.name} (Confidence: ${row.confidence})`
+                        comment: `Files Import from ${file ? file.name : 'Unknown File'} (Confidence: ${row.confidence})`
                     })
                 });
                 successCount++;
