@@ -16,5 +16,3 @@ fpdf2
 markdown
 pandas
 openpyxl
-pandas
-openpyxl

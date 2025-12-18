@@ -23,6 +23,39 @@ const DataPointsPage = () => {
     const [sqlLoading, setSqlLoading] = useState({}); // { [kpiId]: boolean }
     const [generatedSql, setGeneratedSql] = useState({}); // { [kpiId]: string }
 
+    useEffect(() => {
+        const fetchStatus = async () => {
+            try {
+                const user = auth.currentUser;
+                const token = user ? await user.getIdToken() : null;
+                // If no token yet, it might be loading, but we can try. 
+                // Better to wait for auth state, but for MVP this is okay if triggered on mount/auth change.
+                
+                if (token) {
+                    const response = await fetch(`${API_BASE_URL}/data/status`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.completed_kpis) {
+                            setKpis(prev => prev.map(k => 
+                                data.completed_kpis.includes(k.id) 
+                                    ? { ...k, status: 'completed' } 
+                                    : k
+                            ));
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch status:", error);
+            }
+        };
+        
+        fetchStatus();
+    }, [auth.currentUser]); // Re-run when user auth state changes
+
     // Derive unique standards for filter
     const standards = [...new Set(kpis.map(k => k.standard.split(' ')[0]))].sort();
 
@@ -162,6 +195,44 @@ const DataPointsPage = () => {
         }
     };
 
+    const [dispatching, setDispatching] = useState(false);
+
+    const handleDispatch = async () => {
+        setDispatching(true);
+        try {
+            const user = auth.currentUser;
+            const token = user ? await user.getIdToken() : null;
+            
+            const response = await fetch(`${API_BASE_URL}/data/dispatch`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : ''
+                }
+            });
+            
+            if (!response.ok) throw new Error("Dispatch failed");
+            
+            const data = await response.json();
+            
+            // Update KPIs status based on response
+            if (data.stats && data.stats.completed_kpis) {
+                setKpis(prev => prev.map(k => 
+                    data.stats.completed_kpis.includes(k.id) 
+                        ? { ...k, status: 'completed' } 
+                        : k
+                ));
+            }
+            
+            alert("Data dispatched and progress updated!");
+            
+        } catch (error) {
+            console.error("Dispatch error:", error);
+            alert("Failed to update progress.");
+        } finally {
+            setDispatching(false);
+        }
+    };
+
     const categories = ['Environmental', 'Social', 'Governance', 'General'];
 
     // Group KPIs by category
@@ -264,6 +335,18 @@ const DataPointsPage = () => {
                     message={t('alerts.dataPoints.noConfigured.message')}
                 />
             )}
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+                <button 
+                    onClick={handleDispatch} 
+                    disabled={dispatching}
+                    className="btn btn-primary"
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                >
+                    {dispatching ? <Loader2 className="animate-spin" size={18} /> : <Database size={18} />}
+                    Update Progress & Dispatch Data
+                </button>
+            </div>
 
             {/* Stats Overview */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
