@@ -4,6 +4,7 @@ import { Send, Bot, User, Database } from 'lucide-react';
 import { auth } from '../firebase-config';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { API_BASE_URL } from '../api/apiClient';
 
 const ChatPage = () => {
     const { t } = useTranslation();
@@ -40,7 +41,7 @@ const ChatPage = () => {
             const token = await user.getIdToken();
 
             // TODO: Use env var
-            const response = await fetch('http://localhost:8000/chat/data', {
+            const response = await fetch(`${API_BASE_URL}/chat/data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

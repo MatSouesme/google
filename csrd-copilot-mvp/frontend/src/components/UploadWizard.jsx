@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Check, Lock } from 'lucide-react';
+import { API_BASE_URL } from '../api/apiClient';
 
 const UploadWizard = ({ selectedScopes, onScopeChange }) => {
   const [step, setStep] = useState(0); // 0: Scope, 1: Upload
@@ -33,7 +34,7 @@ const UploadWizard = ({ selectedScopes, onScopeChange }) => {
     // formData.append('scopes', JSON.stringify(selectedScopes));
 
     try {
-      const response = await fetch('http://localhost:8000/upload-data', {
+      const response = await fetch(`${API_BASE_URL}/upload-data`, {
         method: 'POST',
         body: formData,
       });
@@ -53,7 +54,7 @@ const UploadWizard = ({ selectedScopes, onScopeChange }) => {
 
   const handleDownload = (standard) => {
     // TODO: Use environment variable for API URL
-    window.location.href = `http://localhost:8000/download-template/${standard}`;
+    window.location.href = `${API_BASE_URL}/download-template/${standard}`;
   };
 
   const ScopeItem = ({ id, label, checked, locked }) => (

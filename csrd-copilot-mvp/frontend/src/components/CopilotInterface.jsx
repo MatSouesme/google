@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../api/apiClient';
 
 const CopilotInterface = ({ enabledScopes }) => {
   const [topic, setTopic] = useState('');
@@ -50,7 +51,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const token = await user.getIdToken();
 
       // TODO: Use environment variable for API URL
-      const response = await fetch('http://localhost:8000/generate-draft', {
+      const response = await fetch(`${API_BASE_URL}/generate-draft`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +85,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const user = auth.currentUser;
       const token = await user.getIdToken();
 
-      const response = await fetch('http://localhost:8000/save-draft', {
+      const response = await fetch(`${API_BASE_URL}/save-draft`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const user = auth.currentUser;
       const token = await user.getIdToken();
 
-      const response = await fetch('http://localhost:8000/approve-draft', {
+      const response = await fetch(`${API_BASE_URL}/approve-draft`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +172,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       const reportId = currentDraftId || 'draft_' + Date.now();
 
       // Trigger download
-      window.location.href = `http://localhost:8000/export-xbrl/${reportId}`;
+      window.location.href = `${API_BASE_URL}/export-xbrl/${reportId}`;
 
       setSuccessMsg("✅ XBRL Tagging Complete & Package Downloaded!");
     } catch (err) {

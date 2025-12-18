@@ -7,6 +7,7 @@ import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Datab
 import { auth } from '../firebase-config';
 import Alert from '../components/Alert';
 import { useDataStatus } from '../hooks/useDataStatus';
+import { API_BASE_URL } from '../api/apiClient';
 
 const DataPointsPage = () => {
     const { t } = useTranslation();
@@ -125,7 +126,7 @@ const DataPointsPage = () => {
             const token = user ? await user.getIdToken() : null;
 
             // TODO: Use env var
-            const response = await fetch('http://localhost:8000/data/manual-entry', {
+            const response = await fetch(`${API_BASE_URL}/data/manual-entry`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

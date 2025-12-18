@@ -5,6 +5,7 @@ import { UploadCloud, FileText, CheckCircle, AlertTriangle, X, Loader2, ArrowRig
 import { auth } from '../firebase-config';
 import Alert from '../components/Alert';
 import { useDataStatus } from '../hooks/useDataStatus';
+import { API_BASE_URL } from '../api/apiClient';
 
 const SmartImportPage = () => {
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ const SmartImportPage = () => {
             const token = user ? await user.getIdToken() : null;
 
             // Call Backend API
-            const response = await fetch('http://localhost:8000/data/smart-extract', {
+            const response = await fetch(`${API_BASE_URL}/data/smart-extract`, {
                 method: 'POST',
                 headers: {
                     'Authorization': token ? `Bearer ${token}` : ''
@@ -184,7 +185,7 @@ const SmartImportPage = () => {
 
         for (const row of extractedData) {
             try {
-                await fetch('http://localhost:8000/data/manual-entry', {
+                await fetch(`${API_BASE_URL}/data/manual-entry`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
