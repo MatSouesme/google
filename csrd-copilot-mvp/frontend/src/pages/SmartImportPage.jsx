@@ -73,15 +73,7 @@ const SmartImportPage = () => {
         } catch (error) {
             console.error("Analysis Error:", error);
             alert("Failed to analyze file. Please try again.");
-
-            // Mock data for demo if API fails/not implemented yet
-            const mockData = [
-                { id: 1, kpi_id: 'E1-1', name: 'Scope 1 Emissions', value: '12500', unit: 'tCO2e', date: '2023-12-31', confidence: 0.95 },
-                { id: 2, kpi_id: 'S1-1', name: 'Total Employees', value: '450', unit: 'FTE', date: '2023-12-31', confidence: 0.88 },
-                { id: 3, kpi_id: 'G1-1', name: 'Board Diversity', value: '40', unit: '%', date: '2023-12-31', confidence: 0.72 },
-            ];
-            setExtractedData(mockData);
-
+            setExtractedData([]); // Clear data on error
         } finally {
             setAnalyzing(false);
         }

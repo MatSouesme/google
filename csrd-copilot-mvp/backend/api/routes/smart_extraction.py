@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Union
 import os
 import json
-import google.generativeai as genai
+import vertexai
+from vertexai.generative_models import GenerativeModel
 from pypdf import PdfReader
 from io import BytesIO
 import pandas as pd
@@ -19,7 +20,7 @@ router = APIRouter()
 class ExtractedCandidate(BaseModel):
     kpi_id: str
     name: str
-    value: str
+    value: Union[str, int, float]
     unit: str
     date: str
     confidence: float
@@ -30,7 +31,7 @@ class ExtractionResponse(BaseModel):
 @router.post("/data/smart-extract", response_model=ExtractionResponse)
 async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)):
     """
-    Analyzes an uploaded file (PDF/Excel) using Gemini to extract likely CSRD data points.
+    Analyzes an uploaded file (PDF/Excel) using Gemini (Vertex AI) to extract likely CSRD data points.
     """
     
     # 1. Read File Content
@@ -67,22 +68,14 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading file: {str(e)}")
 
-    # 2. Call Gemini
+    # 2. Call Gemini via Vertex AI
     try:
-        api_key = os.environ.get("GOOGLE_API_KEY")
-        if not api_key:
-             # Fallback mock for demo if no API key
-             print("Warning: GOOGLE_API_KEY not set. Returning mock data.")
-             return {
-                 "candidates": [
-                     {"kpi_id": "E1-1", "name": "Scope 1 GHG Emissions", "value": "12540", "unit": "tCO2e", "date": "2023-12-31", "confidence": 0.95},
-                     {"kpi_id": "S1-1", "name": "Total Employees", "value": "450", "unit": "FTE", "date": "2023-12-31", "confidence": 0.88},
-                     {"kpi_id": "G1-1", "name": "Board Diversity", "value": "40", "unit": "%", "date": "2023-12-31", "confidence": 0.72}
-                 ]
-             }
-
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
+        print(f"Initializing Vertex AI with project={project_id}, location=us-central1")
+        # Initialize Vertex AI (us-central1 often has better model availability for Gemini)
+        vertexai.init(project=project_id, location="us-central1")
+        
+        model = GenerativeModel("gemini-2.0-flash-lite-001")
 
         prompt = f"""
         You are an expert ESG Data Analyst. Analyze the following document snippet and extract potential CSRD quantitative data points.
@@ -105,20 +98,26 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
         
         # Clean response (remove markdown code blocks if any)
         text_response = response.text.replace('```json', '').replace('```', '').strip()
+        print(f"DEBUG: Raw Gemini response: {text_response}")
         
-        candidates = json.loads(text_response)
+        try:
+            candidates = json.loads(text_response)
+        except json.JSONDecodeError:
+            print("DEBUG: JSON Decode Error")
+            candidates = []
         
         # Ensure format match
         valid_candidates = []
         for c in candidates:
             try:
                 valid_candidates.append(ExtractedCandidate(**c))
-            except Exception:
+            except Exception as e:
+                print(f"DEBUG: Candidate validation failed: {e} for {c}")
                 continue
-                
+        
+        print(f"DEBUG: Returning {len(valid_candidates)} candidates")
         return {"candidates": valid_candidates}
 
     except Exception as e:
         print(f"Gemini Error: {e}")
-        # Return empty or mock on error for resilience
         raise HTTPException(status_code=500, detail=f" AI Analysis failed: {str(e)}")
