@@ -248,7 +248,7 @@ class RAGClient:
         
         # 1. Get Schema Context
         # We fetch the schema of our main tables to inform the LLM
-        tables = ["e1_raw", "salesforce_extra"]
+        tables = ["e1_raw", "salesforce_extra", "manual_entries"]
         schema_context = ""
         
         for table_name in tables:
@@ -278,6 +278,9 @@ class RAGClient:
         - Always use the full table path: `{self.project_id}.csrd_mvp.table_name`.
         - If the user asks about emissions, check 'e1_raw'.
         - If the user asks about revenue, employees, water, gas, check 'salesforce_extra'.
+        - If the user asks about a specific KPI ID (e.g. "E1-6-1") or a topic not in the other tables, check 'manual_entries'.
+        - For 'manual_entries', filter by `kpi_id` if provided in the question.
+        - For 'manual_entries', SELECT `value`, `date`, `unit`, `comment`.
         - Return ONLY the SQL query, no markdown, no explanation.
         - Use IFNULL(column, 0) for summations.
         

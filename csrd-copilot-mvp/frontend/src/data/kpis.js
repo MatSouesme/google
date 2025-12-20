@@ -290,11 +290,11 @@ export const kpis = [
         "unit": "Date"
     },
     {
-        "id": " E1.GOV-3 -1",
+        "id": "E1.GOV-3",
         "name": "Percentage of remuneration recognised that is linked to climate related considerations",
         "status": "missing",
         "category": "Environmental",
-        "standard": "E1  E1.GOV-3 ",
+        "standard": "E1 E1.GOV-3",
         "description": "Percentage of remuneration recognised that is linked to climate related considerations",
         "calculation": "",
         "unit": "%"

@@ -1,12 +1,91 @@
 from fastapi import APIRouter, HTTPException, Depends
 from google.cloud import bigquery
 import os
+import json
+from vertexai.generative_models import GenerativeModel
+import vertexai
+
 try:
     from backend.api.utils.auth import verify_token
 except ImportError:
     from utils.auth import verify_token
 
 router = APIRouter()
+
+def load_kpis():
+    """Loads the reference KPIs from the JSON file."""
+    try:
+        # Adjust path based on where the code is running
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        json_path = os.path.join(base_dir, "data", "kpis.json")
+        
+        if not os.path.exists(json_path):
+            # Fallback for Docker structure if needed
+            json_path = os.path.join("/app", "data", "kpis.json")
+            
+        with open(json_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading KPIs: {e}")
+        return []
+
+def match_kpis_with_ai(unmapped_entries, all_kpis):
+    """
+    Uses Gemini to match unmapped entries to valid KPI IDs.
+    """
+    try:
+        project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
+        vertexai.init(project=project_id, location="us-central1")
+        model = GenerativeModel("gemini-2.0-flash-lite-001")
+        
+        # Prepare Context (Simplify KPIs to save tokens)
+        kpi_context = []
+        for k in all_kpis:
+            kpi_context.append(f"ID: {k['id']} | Name: {k['name']} | Desc: {k.get('description', '')}")
+        
+        kpi_text = "\n".join(kpi_context)
+        
+        # Prepare Input
+        input_items = []
+        for entry in unmapped_entries:
+            input_items.append(f"TempID: {entry['kpi_id']} | Value: {entry['value']} | Comment: {entry['comment']}")
+        
+        input_text = "\n".join(input_items)
+        
+        prompt = f"""
+        You are a CSRD Data Mapping Expert.
+        Your task is to map input data points to the correct Standard KPI ID.
+        
+        --- REFERENCE KPIS (ID | Name | Description) ---
+        {kpi_text}
+        
+        --- INPUT DATA (TempID | Value | Comment) ---
+        {input_text}
+        
+        --- INSTRUCTIONS ---
+        For each input item, find the best matching KPI ID from the Reference list.
+        - Use the 'TempID' (which might be a description) and 'Comment' to understand the data.
+        - If the 'TempID' is already a valid ID (or close to it), map it to the correct ID.
+        - If it's a description (e.g. "Expected GHG emission reductions"), find the KPI with the closest meaning.
+        - If you are not sure, return null for that item.
+        
+        Return a JSON object with a list of mappings:
+        {{
+            "mappings": [
+                {{ "temp_id": "original_temp_id", "matched_id": "VALID_KPI_ID_OR_NULL" }}
+            ]
+        }}
+        """
+        
+        response = model.generate_content(prompt)
+        # Clean up response
+        text = response.text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+        
+    except Exception as e:
+        print(f"AI Matching failed: {e}")
+        return {"mappings": []}
+
 
 @router.post("/data/dispatch")
 def dispatch_data(user=Depends(verify_token)):
@@ -31,6 +110,49 @@ def dispatch_data(user=Depends(verify_token)):
     except Exception as e:
         print(f"Error fetching manual entries: {e}")
         return {"message": "Error fetching manual entries", "error": str(e)}
+
+    # --- AI MAPPING STEP ---
+    all_kpis = load_kpis()
+    valid_ids = set(k['id'] for k in all_kpis)
+    
+    unmapped_entries = []
+    for entry in manual_entries:
+        # Normalize ID first
+        normalized_id = entry['kpi_id'].strip()
+        if normalized_id not in valid_ids:
+            unmapped_entries.append(entry)
+            
+    if unmapped_entries and all_kpis:
+        print(f"Found {len(unmapped_entries)} unmapped entries. Calling AI...")
+        mapping_result = match_kpis_with_ai(unmapped_entries, all_kpis)
+        
+        if mapping_result and 'mappings' in mapping_result:
+            for mapping in mapping_result['mappings']:
+                temp_id = mapping.get('temp_id')
+                matched_id = mapping.get('matched_id')
+                
+                if matched_id and matched_id in valid_ids:
+                    print(f"Mapping '{temp_id}' -> '{matched_id}'")
+                    
+                    # Update BigQuery
+                    # Note: This updates ALL rows with this temp_id. 
+                    # In a real app, we might want to update specific rows by a unique ID (if we had one).
+                    # But here, kpi_id IS the identifier we have.
+                    query_update = f"""
+                        UPDATE `{project_id}.csrd_mvp.manual_entries`
+                        SET kpi_id = '{matched_id}'
+                        WHERE kpi_id = '{temp_id}'
+                    """
+                    try:
+                        client.query(query_update).result()
+                        
+                        # Update local list for immediate processing
+                        for entry in manual_entries:
+                            if entry['kpi_id'] == temp_id:
+                                entry['kpi_id'] = matched_id
+                                
+                    except Exception as e:
+                        print(f"Error updating BigQuery mapping: {e}")
 
     # 3. Process and Insert
     try:
@@ -93,7 +215,19 @@ def dispatch_data(user=Depends(verify_token)):
 
     # 4. Calculate Stats
     # Return the list of completed KPIs (present in manual_entries)
-    unique_kpis = list(set(entry['kpi_id'] for entry in manual_entries))
+    # Also normalize IDs (e.g. remove spaces) to match frontend
+    unique_kpis = []
+    for entry in manual_entries:
+        raw_id = entry['kpi_id']
+        # Normalize: remove spaces, handle potential variations
+        normalized_id = raw_id.strip()
+        unique_kpis.append(normalized_id)
+        
+        # Also add the raw ID just in case
+        if raw_id != normalized_id:
+            unique_kpis.append(raw_id)
+            
+    unique_kpis = list(set(unique_kpis))
     
     return {
         "message": "Data dispatched successfully",
@@ -111,10 +245,15 @@ def get_data_status(user=Depends(verify_token)):
     query = f"SELECT DISTINCT kpi_id FROM `{project_id}.csrd_mvp.manual_entries`"
     try:
         query_job = client.query(query)
-        completed_kpis = [row['kpi_id'] for row in query_job]
+        completed_kpis = []
+        for row in query_job:
+            raw_id = row['kpi_id']
+            completed_kpis.append(raw_id)
+            completed_kpis.append(raw_id.strip())
+            
         return {
-            "completed_count": len(completed_kpis),
-            "completed_kpis": completed_kpis
+            "completed_count": len(set(completed_kpis)),
+            "completed_kpis": list(set(completed_kpis))
         }
     except Exception as e:
         print(f"Error fetching status: {e}")

@@ -76,19 +76,11 @@ const DataPointsPage = () => {
             const token = user ? await user.getIdToken() : null;
 
             // Construct a prompt for the SQL generation
-            const prompt = `Generate a standard SQL query to retrieve or calculate the following CSRD data point:
+            const prompt = `Retrieve the data for the following CSRD KPI:
             ID: ${kpi.id}
             Name: ${kpi.name}
             Description: ${kpi.description}
-            Unit: ${kpi.unit}
-            
-            Assume a schema with tables: 
-            - energy_consumption (site_id, date, fuel_type, amount_mwh)
-            - ghg_emissions (site_id, date, scope, tco2e)
-            - employees (employee_id, gender, department, salary, is_manager)
-            - incidents (incident_id, date, type, severity)
-            
-            Return ONLY the SQL query.`;
+            Unit: ${kpi.unit}`;
 
             // Call the chat API
             // Note: Using the same endpoint as ChatPage. If unavailable or fails, fallback to mock.
