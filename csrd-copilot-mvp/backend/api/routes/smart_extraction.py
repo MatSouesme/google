@@ -6,8 +6,9 @@ import json
 import vertexai
 from vertexai.generative_models import GenerativeModel
 from pypdf import PdfReader
-from io import BytesIO
-import pandas as pd
+from io import BytesIO, StringIO
+import csv
+import openpyxl
 
 # Fix import path for Docker environment
 try:
@@ -53,12 +54,25 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
         elif filename.endswith('.xlsx') or filename.endswith('.csv'):
             # Extract text from Excel/CSV (Turn into CSV string)
             contents = await file.read()
-            if filename.endswith('.xlsx'):
-                df = pd.read_excel(BytesIO(contents))
-            else:
-                df = pd.read_csv(BytesIO(contents))
             
-            content_text = df.to_csv(index=False)
+            if filename.endswith('.xlsx'):
+                # Use openpyxl for Excel
+                wb = openpyxl.load_workbook(BytesIO(contents), data_only=True)
+                sheet = wb.active
+                
+                # Convert to CSV string
+                output = StringIO()
+                writer = csv.writer(output)
+                for row in sheet.iter_rows(values_only=True):
+                    writer.writerow(row)
+                content_text = output.getvalue()
+                
+            else:
+                # Use csv module for CSV
+                # Decode bytes to string
+                text_content = contents.decode('utf-8', errors='replace')
+                content_text = text_content
+            
             if len(content_text) > 50000:
                 content_text = content_text[:50000] # Truncate
 

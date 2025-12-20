@@ -94,3 +94,6 @@ data/processed/
 backend/api/rag_compliance/
 
 
+
+# Ignore copied AI prompts for Docker build
+backend/api/ai/

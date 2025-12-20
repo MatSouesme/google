@@ -14,5 +14,5 @@ requests
 python-docx
 fpdf2
 markdown
-pandas
+# pandas
 openpyxl
