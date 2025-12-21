@@ -16,7 +16,7 @@ router = APIRouter()
 class ManualEntryRequest(BaseModel):
     kpi_id: str
     value: Union[str, int, float]
-    date: str
+    date: Optional[str] = None
     comment: Optional[str] = None
     unit: Optional[str] = None
 
@@ -30,10 +30,13 @@ def submit_manual_entry(request: ManualEntryRequest, user=Depends(verify_token))
     table_id = f"{project_id}.csrd_mvp.manual_entries"
 
     # Prepare row data
+    # Default date to today if not provided
+    entry_date = request.date if request.date else datetime.date.today().isoformat()
+
     row = {
         "kpi_id": request.kpi_id,
         "value": str(request.value), # Ensure value is string for BigQuery
-        "date": request.date,
+        "date": entry_date,
         "comment": request.comment,
         "unit": request.unit,
         "user_email": user.get('email') if user else 'anonymous',

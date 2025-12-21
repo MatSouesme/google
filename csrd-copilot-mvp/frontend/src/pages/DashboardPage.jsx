@@ -1,5 +1,6 @@
 import React from 'react';
 import DataVisualization from '../components/DataVisualization';
+import GapAnalysisSection from '../components/Dashboard'; // Updated import
 import { useTranslation } from 'react-i18next';
 
 const DashboardPage = () => {
@@ -12,6 +13,7 @@ const DashboardPage = () => {
                 <p className="page-subtitle">{t('dashboard.subtitle')}</p>
             </div>
             
+            <GapAnalysisSection />
             <DataVisualization />
         </div>
     );

@@ -84,7 +84,7 @@ const DataPointsPage = () => {
 
             // Call the chat API
             // Note: Using the same endpoint as ChatPage. If unavailable or fails, fallback to mock.
-            const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/chat/data', {
+            const response = await fetch(`${API_BASE_URL}/chat/data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

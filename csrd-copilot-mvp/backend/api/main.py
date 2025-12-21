@@ -16,23 +16,32 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher
+    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics
 except ImportError:
     try:
-        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher
+        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics
     except ImportError:
-        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher
+        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics
 
 app = FastAPI(title="CSRD Copilot API")
 
 # Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins (for development)
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://csrd-copilot-mvp.web.app",
+        "https://csrd-copilot-mvp.firebaseapp.com"
+    ],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+@app.get("/")
+def health_check():
+    return {"status": "ok", "service": "csrd-api", "version": "2.5"}
 
 @app.on_event("startup")
 async def startup_event():
@@ -48,6 +57,7 @@ app.include_router(export.router)
 app.include_router(manual_entry.router)
 app.include_router(smart_extraction.router)
 app.include_router(dispatcher.router)
+app.include_router(analytics.router)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev

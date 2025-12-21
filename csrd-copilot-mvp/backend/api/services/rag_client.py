@@ -154,6 +154,7 @@ class RAGClient:
         system_prompt = self._load_prompt("base_system_prompt.txt")
         strategist_prompt = self._load_prompt("strategist_prompt.txt")
         auditor_prompt = self._load_prompt("auditor_prompt.txt")
+        consistency_prompt = self._load_prompt("consistency_check_prompt.txt")
         
         # 3. Construct the Final Prompt (Strategist)
         # We combine the system instructions with the specific task
@@ -217,15 +218,32 @@ class RAGClient:
                 
                 # Generate Draft (Strategist)
                 response_draft = model.generate_content(full_prompt)
+                draft_text = response_draft.text
                 
                 # Generate Audit (Auditor) - Sequential call
                 # We use the same model instance for consistency
                 print("Generating Audit Report...")
                 response_audit = model.generate_content(full_auditor_prompt)
 
+                # Generate Consistency Check (Critic)
+                print("Running Consistency Check...")
+                full_consistency_prompt = f"""
+                {consistency_prompt}
+                
+                ---
+                RAW COMPANY DATA:
+                {company_data}
+                
+                GENERATED DRAFT:
+                {draft_text}
+                """
+                response_consistency = model.generate_content(full_consistency_prompt)
+                consistency_json = response_consistency.text.replace("```json", "").replace("```", "").strip()
+
                 return {
-                    "draft": response_draft.text,
+                    "draft": draft_text,
                     "audit_report": response_audit.text,
+                    "consistency_check": consistency_json,
                     "source_data": company_data,
                     "model_used": model_name
                 }
@@ -237,6 +255,59 @@ class RAGClient:
         
         # If all failed
         raise RuntimeError(f"All Gemini models failed. Last error: {str(last_error)}")
+
+    def search_documents(self, query: str) -> str:
+        """
+        Searches uploaded user documents for the query.
+        Uses a simple keyword search on BigQuery for MVP.
+        """
+        try:
+            # Simple keyword search
+            # In production, use Vector Search
+            sql = f"""
+                SELECT filename, content_text
+                FROM `{self.project_id}.csrd_mvp.documents_content`
+                WHERE LOWER(content_text) LIKE @query
+                LIMIT 3
+            """
+            
+            job_config = bigquery.QueryJobConfig(
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("query", "STRING", f"%{query.lower()}%")
+                ]
+            )
+            
+            query_job = self.bq_client.query(sql, job_config=job_config)
+            results = [dict(row) for row in query_job]
+            
+            if not results:
+                return "I couldn't find any relevant information in your uploaded documents."
+            
+            # Summarize results with Gemini
+            context = ""
+            for row in results:
+                # Take a snippet around the match? 
+                # For MVP, we just feed the first 2000 chars of the doc to Gemini
+                context += f"--- Document: {row['filename']} ---\n{row['content_text'][:2000]}...\n\n"
+            
+            prompt = f"""
+            You are a helpful assistant answering questions based on the user's uploaded documents.
+            
+            User Question: "{query}"
+            
+            Context from Documents:
+            {context}
+            
+            Answer the question based ONLY on the context provided. If the answer is not in the context, say so.
+            """
+            
+            model = GenerativeModel("gemini-2.0-flash-lite-001")
+            response = model.generate_content(prompt)
+            return response.text
+            
+        except Exception as e:
+            print(f"Document search failed: {e}")
+            return "Sorry, I encountered an error searching your documents."
 
     def generate_sql_response(self, user_query: str) -> dict:
         """

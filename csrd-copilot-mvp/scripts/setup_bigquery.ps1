@@ -35,4 +35,24 @@ try {
     Write-Host "Table g1_raw might already exist." -ForegroundColor Yellow
 }
 
+# Create Documents Content Table (For Chat with Docs)
+$DOCS_SCHEMA = "document_id:STRING,upload_id:STRING,filename:STRING,content_text:STRING,ingestion_timestamp:TIMESTAMP"
+Write-Host "Creating table documents_content..."
+try {
+    bq mk --table "${PROJECT_ID}:${DATASET}.documents_content" $DOCS_SCHEMA
+    Write-Host "Table documents_content created." -ForegroundColor Green
+} catch {
+    Write-Host "Table documents_content might already exist." -ForegroundColor Yellow
+}
+
+# Create Data Lineage Table (For Proof/Traceability)
+$LINEAGE_SCHEMA = "lineage_id:STRING,upload_id:STRING,kpi_id:STRING,source_filename:STRING,page_number:INTEGER,snippet:STRING,confidence:FLOAT,ingestion_timestamp:TIMESTAMP"
+Write-Host "Creating table data_lineage..."
+try {
+    bq mk --table "${PROJECT_ID}:${DATASET}.data_lineage" $LINEAGE_SCHEMA
+    Write-Host "Table data_lineage created." -ForegroundColor Green
+} catch {
+    Write-Host "Table data_lineage might already exist." -ForegroundColor Yellow
+}
+
 Write-Host "BigQuery setup complete." -ForegroundColor Green

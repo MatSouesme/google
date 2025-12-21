@@ -1,0 +1,14 @@
+{
+    "standard": "ESRS E1",
+    "kpis": [
+        { "id": "E1-1", "name": "Transition plan for climate change mitigation", "type": "narrative", "mandatory": true },
+        { "id": "E1-2", "name": "Policies related to climate change mitigation and adaptation", "type": "narrative", "mandatory": true },
+        { "id": "E1-3", "name": "Actions and resources in relation to climate change policies", "type": "narrative", "mandatory": true },
+        { "id": "E1-4", "name": "Targets related to climate change mitigation and adaptation", "type": "narrative", "mandatory": true },
+        { "id": "E1-5", "name": "Energy consumption and mix", "type": "quantitative", "mandatory": true, "fields": ["energy_total_mwh", "energy_renewable_mwh", "energy_non_renewable_mwh"] },
+        { "id": "E1-6", "name": "Gross Scopes 1, 2, 3 and Total GHG emissions", "type": "quantitative", "mandatory": true, "fields": ["scope1_gross_tco2e", "scope2_market_based_tco2e", "scope3_gross_tco2e"] },
+        { "id": "E1-7", "name": "GHG removals and GHG mitigation projects financed through carbon credits", "type": "quantitative", "mandatory": false },
+        { "id": "E1-8", "name": "Internal carbon pricing", "type": "narrative", "mandatory": false },
+        { "id": "E1-9", "name": "Anticipated financial effects from material physical and transition risks", "type": "quantitative", "mandatory": true }
+    ]
+}

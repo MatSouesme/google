@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { auth } from '../firebase-config';
+import { API_BASE_URL } from '../api/apiClient';
 
 const DataVisualization = () => {
     const [data, setData] = useState(null);
@@ -15,7 +16,7 @@ const DataVisualization = () => {
                 const idToken = await user.getIdToken();
 
                 // TODO: Use env var for URL
-                const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/data/dashboard', {
+                const response = await fetch(`${API_BASE_URL}/data/dashboard`, {
                     headers: {
                         'Authorization': `Bearer ${idToken}`
                     }

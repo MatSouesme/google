@@ -562,7 +562,7 @@ const SmartImportPage = () => {
                                             <td style={{ padding: '1rem', fontFamily: 'monospace', fontWeight: 'bold' }}>
                                                 <input
                                                     type="text"
-                                                    value={row.kpi_id}
+                                                    value={row.kpi_id || ''}
                                                     onChange={(e) => handleUpdateRow(row.id, 'kpi_id', e.target.value)}
                                                     style={{ width: '80px', padding: '4px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                                                 />
@@ -571,7 +571,7 @@ const SmartImportPage = () => {
                                             <td style={{ padding: '1rem' }}>
                                                 <input
                                                     type="text"
-                                                    value={row.value}
+                                                    value={row.value || ''}
                                                     onChange={(e) => handleUpdateRow(row.id, 'value', e.target.value)}
                                                     style={{ width: '100px', padding: '4px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                                                 />
@@ -579,7 +579,7 @@ const SmartImportPage = () => {
                                             <td style={{ padding: '1rem' }}>
                                                 <input
                                                     type="text"
-                                                    value={row.unit}
+                                                    value={row.unit || ''}
                                                     onChange={(e) => handleUpdateRow(row.id, 'unit', e.target.value)}
                                                     style={{ width: '80px', padding: '4px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                                                 />
@@ -587,7 +587,7 @@ const SmartImportPage = () => {
                                             <td style={{ padding: '1rem' }}>
                                                 <input
                                                     type="date"
-                                                    value={row.date}
+                                                    value={row.date || ''}
                                                     onChange={(e) => handleUpdateRow(row.id, 'date', e.target.value)}
                                                     style={{ width: '130px', padding: '4px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                                                 />

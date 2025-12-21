@@ -1,0 +1,11 @@
+{
+    "standard": "ESRS G1",
+    "kpis": [
+        { "id": "G1-1", "name": "Corporate culture and business conduct policies", "type": "narrative", "mandatory": true },
+        { "id": "G1-2", "name": "Management of relationships with suppliers", "type": "narrative", "mandatory": true },
+        { "id": "G1-3", "name": "Prevention and detection of corruption and bribery", "type": "narrative", "mandatory": true },
+        { "id": "G1-4", "name": "Confirmed incidents of corruption or bribery", "type": "quantitative", "mandatory": true, "fields": ["corruption_incidents_count", "fines_corruption_eur"] },
+        { "id": "G1-5", "name": "Political influence and lobbying activities", "type": "quantitative", "mandatory": true, "fields": ["political_contributions_eur"] },
+        { "id": "G1-6", "name": "Payment practices", "type": "quantitative", "mandatory": true, "fields": ["payment_terms_days_avg"] }
+    ]
+}

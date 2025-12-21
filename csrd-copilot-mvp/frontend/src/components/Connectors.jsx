@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../api/apiClient';
 
 const Connectors = () => {
     const [connectorType, setConnectorType] = useState('salesforce');
@@ -44,7 +45,7 @@ const Connectors = () => {
             await new Promise(resolve => setTimeout(resolve, 1500));
 
             // TODO: Use env var for URL
-            const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/connectors/sync', {
+            const response = await fetch(`${API_BASE_URL}/connectors/sync`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

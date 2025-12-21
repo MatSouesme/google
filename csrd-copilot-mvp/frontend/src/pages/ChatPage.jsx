@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Send, Bot, User, Database } from 'lucide-react';
+import { Send, Bot, User, Database, FileText } from 'lucide-react';
 import { auth } from '../firebase-config';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -15,6 +15,7 @@ const ChatPage = () => {
         }
     ]);
     const [input, setInput] = useState('');
+    const [mode, setMode] = useState('data'); // 'data' or 'docs'
     const [loading, setLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
@@ -47,17 +48,30 @@ const ChatPage = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ query: userMessage.content })
+                body: JSON.stringify({ query: userMessage.content, mode: mode })
             });
 
             if (!response.ok) throw new Error("Failed to get response");
 
             const data = await response.json();
 
+            // Handle different response formats (SQL vs Docs)
+            let content = "";
+            let sql = null;
+
+            if (mode === 'docs') {
+                // Docs mode returns { response: "...", type: "text" }
+                content = data.response || "No answer found in documents.";
+            } else {
+                // Data mode returns { answer: "...", sql: "..." }
+                content = data.answer;
+                sql = data.sql;
+            }
+
             const assistantMessage = {
                 role: 'assistant',
-                content: data.answer,
-                sql: data.sql // We can optionally show the SQL used
+                content: content,
+                sql: sql
             };
 
             setMessages(prev => [...prev, assistantMessage]);
@@ -78,6 +92,25 @@ const ChatPage = () => {
             <div className="page-header">
                 <h1 className="page-title">{t('chat.title')}</h1>
                 <p className="page-subtitle">{t('chat.subtitle')}</p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', padding: '0 1rem' }}>
+                <button 
+                    onClick={() => setMode('data')}
+                    className={`btn-animated ${mode === 'data' ? 'btn-primary' : 'btn-secondary'}`}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: mode === 'data' ? 'var(--primary-color)' : 'var(--surface-color)', color: mode === 'data' ? 'white' : 'var(--text-color)' }}
+                >
+                    <Database size={16} />
+                    <span>Data (SQL)</span>
+                </button>
+                <button 
+                    onClick={() => setMode('docs')}
+                    className={`btn-animated ${mode === 'docs' ? 'btn-primary' : 'btn-secondary'}`}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: mode === 'docs' ? 'var(--primary-color)' : 'var(--surface-color)', color: mode === 'docs' ? 'white' : 'var(--text-color)' }}
+                >
+                    <FileText size={16} />
+                    <span>Documents (RAG)</span>
+                </button>
             </div>
 
             <div className="chat-container" style={{

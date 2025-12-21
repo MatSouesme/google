@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import { FileText, CheckCircle, Circle, ArrowRight } from 'lucide-react';
 import Alert from '../components/Alert';
 import { useDataStatus } from '../hooks/useDataStatus';
+import { API_BASE_URL } from '../api/apiClient';
 
 const FinalReportPage = () => {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const FinalReportPage = () => {
             if (!user) return;
             const token = await user.getIdToken();
 
-            const response = await fetch('https://csrd-api-71795126030.europe-west1.run.app/final-report', {
+            const response = await fetch(`${API_BASE_URL}/final-report`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

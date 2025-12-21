@@ -1,0 +1,22 @@
+{
+    "standard": "ESRS S1",
+    "kpis": [
+        { "id": "S1-1", "name": "Policies related to own workforce", "type": "narrative", "mandatory": true },
+        { "id": "S1-2", "name": "Processes for engaging with own workers", "type": "narrative", "mandatory": true },
+        { "id": "S1-3", "name": "Processes to remediate negative impacts", "type": "narrative", "mandatory": true },
+        { "id": "S1-4", "name": "Taking action on material impacts", "type": "narrative", "mandatory": true },
+        { "id": "S1-5", "name": "Targets related to managing material negative impacts", "type": "narrative", "mandatory": true },
+        { "id": "S1-6", "name": "Characteristics of the undertaking's employees", "type": "quantitative", "mandatory": true, "fields": ["total_employees_headcount", "employees_male_headcount", "employees_female_headcount"] },
+        { "id": "S1-7", "name": "Characteristics of non-employee workers", "type": "quantitative", "mandatory": false },
+        { "id": "S1-8", "name": "Collective bargaining coverage", "type": "quantitative", "mandatory": true, "fields": ["collective_bargaining_coverage_pct"] },
+        { "id": "S1-9", "name": "Diversity metrics", "type": "quantitative", "mandatory": true, "fields": ["gender_diversity_top_management_pct"] },
+        { "id": "S1-10", "name": "Adequate wages", "type": "quantitative", "mandatory": true, "fields": ["adequate_wages_pct"] },
+        { "id": "S1-11", "name": "Social protection", "type": "quantitative", "mandatory": true, "fields": ["social_protection_coverage_pct"] },
+        { "id": "S1-12", "name": "Persons with disabilities", "type": "quantitative", "mandatory": true, "fields": ["persons_with_disabilities_pct"] },
+        { "id": "S1-13", "name": "Training and skills development", "type": "quantitative", "mandatory": true, "fields": ["training_hours_per_employee"] },
+        { "id": "S1-14", "name": "Health and safety", "type": "quantitative", "mandatory": true, "fields": ["work_related_injuries_rate"] },
+        { "id": "S1-15", "name": "Work-life balance", "type": "quantitative", "mandatory": false },
+        { "id": "S1-16", "name": "Remuneration metrics (Pay gap)", "type": "quantitative", "mandatory": true, "fields": ["gender_pay_gap_pct"] },
+        { "id": "S1-17", "name": "Incidents and complaints", "type": "quantitative", "mandatory": true, "fields": ["human_rights_incidents_count"] }
+    ]
+}
