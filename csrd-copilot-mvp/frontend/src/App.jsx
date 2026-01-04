@@ -18,12 +18,21 @@ import ReportViewer from './pages/ReportViewer';
 import FinalReportPage from './pages/FinalReportPage';
 import DataPointsPage from './pages/DataPointsPage';
 import SmartImportPage from './pages/SmartImportPage';
+import EcovadisPage from './pages/EcovadisPage';
 
 function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Check for demo mode first
+        const isDemo = localStorage.getItem('ecoply_demo_mode');
+        if (isDemo === 'true') {
+            setUser({ email: 'demo@ecoply.com', uid: 'demo123' });
+            setLoading(false);
+            return;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
@@ -67,6 +76,7 @@ function App() {
                     <Route path="smart-import" element={<SmartImportPage />} />
                     <Route path="final-report" element={<FinalReportPage />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
+                    <Route path="ecovadis" element={<EcovadisPage />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />

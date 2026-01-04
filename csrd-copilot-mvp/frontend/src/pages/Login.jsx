@@ -113,6 +113,27 @@ const Login = () => {
           >
             {loading ? t('login.authenticating') : t('login.submit')}
           </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.setItem('ecoply_demo_mode', 'true');
+              window.location.reload();
+            }}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              marginTop: '1rem',
+              backgroundColor: '#2196f3',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            🚀 {t('login.demoMode') || "Mode Démo (Hackathon)"}
+          </button>
         </form>
         <p style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.8rem', color: '#888' }}>
           ({t('login.footer')})

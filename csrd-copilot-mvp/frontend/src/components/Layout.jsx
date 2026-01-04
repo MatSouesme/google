@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
 
 const Layout = ({ user }) => {
     const location = useLocation();
-    const [theme, setTheme] = useState('dark');
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
     }, [theme]);
 
     const toggleTheme = () => {
@@ -24,7 +25,9 @@ const Layout = ({ user }) => {
     };
 
     const handleLogout = async () => {
+        localStorage.removeItem('ecoply_demo_mode');
         await signOut(auth);
+        window.location.reload(); // Force reload to reset state
     };
 
     const isActive = (path) => location.pathname === path;
@@ -42,37 +45,43 @@ const Layout = ({ user }) => {
                         <Home size={20} />
                         <span>{t('nav.home')}</span>
                     </Link>
-                    
+
                     {/* 1. Ingestion des données */}
                     <Link to="/smart-import" className={`nav-item ${isActive('/smart-import') ? 'active' : ''}`}>
                         <UploadCloud size={20} />
                         <span>{t('nav.smartImport')}</span>
                     </Link>
-                    
+
                     {/* 2. Monitorer les data points */}
                     <Link to="/data-points" className={`nav-item ${isActive('/data-points') ? 'active' : ''}`}>
                         <ClipboardList size={20} />
                         <span>{t('nav.dataPoints')}</span>
                     </Link>
-                    
+
                     {/* 3. Générateur de rapports */}
                     <Link to="/generator" className={`nav-item ${isActive('/generator') ? 'active' : ''}`}>
                         <Sparkles size={20} />
                         <span>{t('nav.generator')}</span>
                     </Link>
-                    
+
+                    {/* NEW: EcoVadis Audit */}
+                    <Link to="/ecovadis" className={`nav-item ${isActive('/ecovadis') ? 'active' : ''}`}>
+                        <ShieldCheck size={20} />
+                        <span>EcoVadis Audit</span>
+                    </Link>
+
                     {/* 4. Rapport final - Dernière étape du workflow */}
                     <Link to="/final-report" className={`nav-item ${isActive('/final-report') ? 'active' : ''}`}>
                         <FileText size={20} />
                         <span>{t('nav.finalReport')}</span>
                     </Link>
-                    
+
                     {/* Autres fonctionnalités */}
                     <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
                         <MessageSquare size={20} />
                         <span>{t('nav.chat')}</span>
                     </Link>
-                    
+
                     <Link to="/connectors" className={`nav-item ${isActive('/connectors') ? 'active' : ''}`}>
                         <LinkIcon size={20} />
                         <span>{t('nav.connectors')}</span>
