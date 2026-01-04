@@ -101,8 +101,32 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
 
         prompt = f"""
         You are an expert ESG Data Analyst. Analyze the following document snippet and extract potential CSRD quantitative data points.
+        
+        Your goal is to map the extracted data to the official ESRS (European Sustainability Reporting Standards) KPI IDs.
+        
+        Reference for Mapping:
+        - E1: Climate Change (e.g., E1-1 Transition plan, E1-6 Gross Scopes 1, 2, 3 GHG emissions)
+        - E2: Pollution
+        - E3: Water and marine resources
+        - E4: Biodiversity and ecosystems
+        - E5: Resource use and circular economy
+        - S1: Own workforce (e.g., S1-1 Policies, S1-14 Health & Safety)
+        - S2: Workers in the value chain
+        - S3: Affected communities
+        - S4: Consumers and end-users
+        - G1: Business conduct (e.g., G1-1 Corporate culture, G1-3 Prevention of corruption/bribery, G1-4 Confirmed incidents of corruption)
+
+        Instructions:
+        1. Identify quantitative data points (values, units, dates).
+        2. Look for explicit KPI IDs (e.g., "G1-3-1") in the text/table. If found, use them.
+        3. If no ID is found, infer the most likely ESRS KPI ID based on the "Metric Name" or description.
+           - Example: "Anti-corruption training coverage" -> "G1-3" or "G1-3-1".
+           - Example: "Scope 1 Emissions" -> "E1-6".
+        4. If you are unsure, use the top-level category (e.g., "E1", "G1").
+        5. Assign a confidence score (0.0 to 1.0). If you inferred the ID without explicit mention, lower the confidence slightly (e.g., 0.8).
+
         Return a JSON array of objects with the following keys:
-        - kpi_id: The likely ESRS KPI ID (e.g., E1-1, S1-1). Guess if not explicit.
+        - kpi_id: The likely ESRS KPI ID.
         - name: A short descriptive name of the data point.
         - value: The numerical value extracted.
         - unit: The unit of measurement (e.g., tCO2e, %, EUR).

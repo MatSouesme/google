@@ -242,19 +242,32 @@ def get_data_status(user=Depends(verify_token)):
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
     client = bigquery.Client(project=project_id)
     
-    query = f"SELECT DISTINCT kpi_id FROM `{project_id}.csrd_mvp.manual_entries`"
+    # Get latest value for each KPI
+    query = f"""
+        SELECT kpi_id, value, unit 
+        FROM `{project_id}.csrd_mvp.manual_entries`
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY kpi_id ORDER BY submission_timestamp DESC) = 1
+    """
     try:
         query_job = client.query(query)
         completed_kpis = []
+        kpi_values = {} # Map kpi_id -> {value, unit}
+
         for row in query_job:
             raw_id = row['kpi_id']
+            clean_id = raw_id.strip()
+            
             completed_kpis.append(raw_id)
-            completed_kpis.append(raw_id.strip())
+            completed_kpis.append(clean_id)
+            
+            kpi_values[raw_id] = {"value": row['value'], "unit": row['unit']}
+            kpi_values[clean_id] = {"value": row['value'], "unit": row['unit']}
             
         return {
             "completed_count": len(set(completed_kpis)),
-            "completed_kpis": list(set(completed_kpis))
+            "completed_kpis": list(set(completed_kpis)),
+            "kpi_values": kpi_values
         }
     except Exception as e:
         print(f"Error fetching status: {e}")
-        return {"completed_count": 0, "completed_kpis": []}
+        return {"completed_count": 0, "completed_kpis": [], "kpi_values": {}}

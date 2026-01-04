@@ -40,11 +40,19 @@ const DataPointsPage = () => {
                     if (response.ok) {
                         const data = await response.json();
                         if (data.completed_kpis) {
-                            setKpis(prev => prev.map(k => 
-                                data.completed_kpis.includes(k.id) 
-                                    ? { ...k, status: 'completed' } 
-                                    : k
-                            ));
+                            setKpis(prev => prev.map(k => {
+                                const isCompleted = data.completed_kpis.includes(k.id);
+                                const valueData = data.kpi_values ? data.kpi_values[k.id] : null;
+                                
+                                return isCompleted 
+                                    ? { 
+                                        ...k, 
+                                        status: 'completed',
+                                        value: valueData ? valueData.value : k.value,
+                                        unit: valueData && valueData.unit ? valueData.unit : k.unit
+                                      } 
+                                    : k;
+                            }));
                         }
                     }
                 }
@@ -648,6 +656,16 @@ const DataPointsPage = () => {
                                                 {kpi.status === 'completed' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
                                                 <span style={{ fontWeight: '500' }}>{kpi.status === 'completed' ? 'Completed' : 'Missing Data'}</span>
                                             </div>
+                                            
+                                            {kpi.status === 'completed' && kpi.value && (
+                                                <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                                                    <div style={{ fontSize: '0.8rem', color: '#065F46', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: '600' }}>Current Value</div>
+                                                    <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#065F46' }}>
+                                                        {kpi.value} <span style={{ fontSize: '1rem', fontWeight: 'normal', color: '#047857' }}>{kpi.unit}</span>
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             {kpi.status === 'missing' && (
                                                 <button className="btn btn-outline" style={{ width: '100%' }} onClick={() => {
                                                     setKpis(prev => prev.map(p => p.id === kpi.id ? { ...p, status: 'completed' } : p));
