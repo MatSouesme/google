@@ -6,6 +6,64 @@ import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../api/apiClient';
 
+const TOPICS_BY_STANDARD = {
+  e1: [
+    "Transition Plan for Climate Change Mitigation",
+    "Gross Scopes 1, 2, 3 and Total GHG Emissions",
+    "Climate-related Risks and Opportunities",
+    "Energy Consumption and Mix",
+    "Internal Carbon Pricing"
+  ],
+  e2: [
+    "Pollution of Air, Water and Soil",
+    "Substances of Concern",
+    "Microplastics"
+  ],
+  e3: [
+    "Water Consumption",
+    "Water Withdrawals",
+    "Water Discharges",
+    "Marine Resources"
+  ],
+  e4: [
+    "Biodiversity Loss",
+    "Impact on Ecosystems",
+    "Land-use Change"
+  ],
+  e5: [
+    "Resource Inflows and Outflows",
+    "Waste Management",
+    "Circular Economy Strategy"
+  ],
+  s1: [
+    "Working Conditions",
+    "Equal Treatment and Opportunities",
+    "Health and Safety",
+    "Work-life Balance"
+  ],
+  s2: [
+    "Workers in the Value Chain",
+    "Human Rights",
+    "Forced Labour"
+  ],
+  s3: [
+    "Impact on Affected Communities",
+    "Engagement with Communities"
+  ],
+  s4: [
+    "Consumers and End-users",
+    "Product Safety",
+    "Data Privacy"
+  ],
+  g1: [
+    "Corporate Culture",
+    "Management of Relationships with Suppliers",
+    "Prevention and Detection of Corruption or Bribery",
+    "Political Influence and Lobbying Activities",
+    "Payment Practices"
+  ]
+};
+
 const CopilotInterface = ({ enabledScopes }) => {
   const [topic, setTopic] = useState('');
   const [standard, setStandard] = useState('e1');
@@ -31,6 +89,16 @@ const CopilotInterface = ({ enabledScopes }) => {
       if (firstEnabled) setStandard(firstEnabled);
     }
   }, [enabledScopes, standard]);
+
+  // Effect to update topic when standard changes
+  React.useEffect(() => {
+    const topics = TOPICS_BY_STANDARD[standard] || [];
+    if (topics.length > 0) {
+      setTopic(topics[0]);
+    } else {
+      setTopic('');
+    }
+  }, [standard]);
 
   const handleGenerate = async () => {
     if (!topic) return;
@@ -261,9 +329,7 @@ const CopilotInterface = ({ enabledScopes }) => {
         </div>
         <div>
           <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-color)' }}>🎯 {t('copilot.topicLabel')}</label>
-          <input
-            type="text"
-            placeholder={t('copilot.topicPlaceholder')}
+          <select
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             style={{ 
@@ -274,11 +340,15 @@ const CopilotInterface = ({ enabledScopes }) => {
               color: 'var(--text-color)', 
               borderRadius: '6px',
               fontSize: '0.95rem',
+              fontWeight: '500',
+              cursor: 'pointer',
               transition: 'border-color 0.2s ease'
             }}
-            onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
-            onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
-          />
+          >
+            {(TOPICS_BY_STANDARD[standard] || []).map((t, index) => (
+              <option key={index} value={t}>{t}</option>
+            ))}
+          </select>
         </div>
       </div>
 

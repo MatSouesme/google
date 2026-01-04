@@ -30,12 +30,17 @@ def submit_manual_entry(request: ManualEntryRequest, user=Depends(verify_token))
     table_id = f"{project_id}.csrd_mvp.manual_entries"
 
     # Prepare row data
-    # Default date to today if not provided
-    entry_date = request.date if request.date else datetime.date.today().isoformat()
+    # Default date to today if not provided or empty
+    entry_date = request.date
+    if not entry_date:
+        entry_date = datetime.date.today().isoformat()
+
+    # Ensure value is string and not "undefined" or "null" literals if possible, though BQ accepts strings
+    safe_value = str(request.value) if request.value is not None else ""
 
     row = {
         "kpi_id": request.kpi_id,
-        "value": str(request.value), # Ensure value is string for BigQuery
+        "value": safe_value,
         "date": entry_date,
         "comment": request.comment,
         "unit": request.unit,
@@ -68,6 +73,8 @@ def submit_manual_entry(request: ManualEntryRequest, user=Depends(verify_token))
         errors = client.insert_rows_json(table_id, [row])
         
         if errors:
+            print(f"BigQuery Insert Errors: {errors}")
+            # Return detailed error
             raise HTTPException(status_code=500, detail=f"BigQuery Insert Error: {errors}")
             
         return {"message": "Data submitted successfully", "data": row}

@@ -66,40 +66,85 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
             if filename.endswith('.xlsx'):
                 # Use openpyxl for Excel
                 wb = openpyxl.load_workbook(BytesIO(contents), data_only=True)
-                sheet = wb.active
                 
-                # Convert to CSV string
+                # Convert to CSV string (Iterate over ALL visible sheets)
                 output = StringIO()
                 writer = csv.writer(output)
-                for row in sheet.iter_rows(values_only=True):
-                    writer.writerow(row)
+                
+                for sheet in wb.worksheets:
+                    # Skip hidden sheets
+                    if sheet.sheet_state != 'visible':
+                        continue
+                        
+                    writer.writerow([f"--- Sheet: {sheet.title} ---"]) # Context for AI
+                    
+                    for row in sheet.iter_rows(values_only=True):
+                        # Skip completely empty rows to save context window
+                        if any(cell is not None for cell in row):
+                            # Replace None with empty string
+                            clean_row = [str(cell) if cell is not None else "" for cell in row]
+                            writer.writerow(clean_row)
+                            
                 content_text = output.getvalue()
                 
             else:
                 # Use csv module for CSV
-                # Decode bytes to string
-                text_content = contents.decode('utf-8', errors='replace')
-                content_text = text_content
+                # Try to decode with utf-8, fallback to latin-1 (common in Europe)
+                try:
+                    text_content = contents.decode('utf-8')
+                except UnicodeDecodeError:
+                    text_content = contents.decode('latin-1', errors='replace')
+                
+                # Try to normalize CSV to standard comma-separated format to help the AI
+                try:
+                    # Use StringIO to treat string as file
+                    f = StringIO(text_content)
+                    # Sniff the dialect (delimiter) - read a sample
+                    sample = f.read(2048)
+                    f.seek(0)
+                    
+                    if len(sample) > 0:
+                        dialect = csv.Sniffer().sniff(sample)
+                        reader = csv.reader(f, dialect)
+                        output = StringIO()
+                        writer = csv.writer(output)
+                        for row in reader:
+                            writer.writerow(row)
+                        content_text = output.getvalue()
+                    else:
+                        content_text = text_content
+                except Exception as csv_e:
+                    print(f"CSV Parsing Warning: {csv_e}. Using raw content.")
+                    # Fallback to raw content if sniffing fails
+                    content_text = text_content
             
             if len(content_text) > 50000:
                 content_text = content_text[:50000] # Truncate
 
         else:
-            raise HTTPException(status_code=400, detail="Unsupported file format. Please upload PDF, XLSX, or CSV.")
+            # Return error instead of raising HTTPException to avoid CORS masking
+            return {"candidates": [], "upload_id": upload_id, "error": "Unsupported file format. Please upload PDF, XLSX, or CSV."}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error reading file: {str(e)}")
+        print(f"Error reading file: {str(e)}")
+        # Return error in response instead of 500 to avoid CORS issues
+        return {"candidates": [], "upload_id": upload_id, "error": f"Error reading file: {str(e)}"}
 
     # 2. Call Gemini via Vertex AI
     try:
         project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
         print(f"Initializing Vertex AI with project={project_id}, location=us-central1")
-        # Initialize Vertex AI (us-central1 often has better model availability for Gemini)
-        vertexai.init(project=project_id, location="us-central1")
         
-        model = GenerativeModel("gemini-2.0-flash-lite-001")
+        try:
+            # Initialize Vertex AI (us-central1 often has better model availability for Gemini)
+            vertexai.init(project=project_id, location="us-central1")
+            model = GenerativeModel("gemini-2.0-flash-lite-001")
+        except Exception as e:
+            print(f"Vertex AI Init Error: {e}")
+            return {"candidates": [], "upload_id": upload_id, "error": f"AI Initialization Failed: {str(e)}"}
 
-        prompt = f"""
+        # Use concatenation instead of f-string for content_text to avoid issues with curly braces in the document
+        base_prompt = """
         You are an expert ESG Data Analyst. Analyze the following document snippet and extract potential CSRD quantitative data points.
         
         Your goal is to map the extracted data to the official ESRS (European Sustainability Reporting Standards) KPI IDs.
@@ -138,8 +183,9 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
         Only return Valid JSON. No markdown formatting.
         
         Document Snippet:
-        {content_text[:10000]} 
         """
+        
+        prompt = base_prompt + content_text[:10000]
         # Limit prompt context for speed/cost in MVP
 
         response = model.generate_content(prompt)
