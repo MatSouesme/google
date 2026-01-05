@@ -1190,51 +1190,51 @@ export const kpis = [
         "unit": "%"
     },
     {
-        "id": " E1-8 -1",
+        "id": "E1-8-1",
         "name": "Carbon pricing scheme by type",
         "status": "missing",
         "category": "Environmental",
-        "standard": "E1  E1-8 ",
+        "standard": "E1 E1-8",
         "description": "Carbon pricing scheme by type",
         "calculation": "",
         "unit": "Table"
     },
     {
-        "id": " E1-8 -2",
+        "id": "E1-8-2",
         "name": "Carbon price applied for each metric tonne of greenhouse gas emission",
         "status": "missing",
         "category": "Environmental",
-        "standard": "E1  E1-8 ",
+        "standard": "E1 E1-8",
         "description": "Carbon price applied for each metric tonne of greenhouse gas emission",
         "calculation": "",
         "unit": "EUR"
     },
     {
-        "id": " E1-8 -3",
+        "id": "E1-8-3",
         "name": "Percentage of gross Scope 1 greenhouse gas emissions covered by internal carbon pricing scheme",
         "status": "missing",
         "category": "Environmental",
-        "standard": "E1  E1-8 ",
+        "standard": "E1 E1-8",
         "description": "Percentage of gross Scope 1 greenhouse gas emissions covered by internal carbon pricing scheme",
         "calculation": "",
         "unit": "%"
     },
     {
-        "id": " E1-8 -4",
+        "id": "E1-8-4",
         "name": "Percentage of gross Scope 2 greenhouse gas emissions covered by internal carbon pricing scheme",
         "status": "missing",
         "category": "Environmental",
-        "standard": "E1  E1-8 ",
+        "standard": "E1 E1-8",
         "description": "Percentage of gross Scope 2 greenhouse gas emissions covered by internal carbon pricing scheme",
         "calculation": "",
         "unit": "%"
     },
     {
-        "id": " E1-8 -5",
+        "id": "E1-8-5",
         "name": "Percentage of gross Scope 3 greenhouse gas emissions covered by internal carbon pricing scheme",
         "status": "missing",
         "category": "Environmental",
-        "standard": "E1  E1-8 ",
+        "standard": "E1 E1-8",
         "description": "Percentage of gross Scope 3 greenhouse gas emissions covered by internal carbon pricing scheme",
         "calculation": "",
         "unit": "%"
