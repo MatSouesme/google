@@ -1,86 +1,98 @@
-# Ecoply (CSRD Copilot MVP)
+# 🌿 Ecoply - Your Intelligent CSRD Copilot
 
-Ecoply is an AI-powered CSRD (Corporate Sustainability Reporting Directive) Copilot. It helps companies manage their sustainability data (ESRS E1, G1, etc.), validates it against legal standards, and provides AI-driven drafting assistance using a "Dual-Core RAG" approach.
+Welcome to **Ecoply**, the solution that turns the CSRD compliance nightmare into a smooth, AI-assisted experience.
 
-## Architecture
+The CSRD (Corporate Sustainability Reporting Directive) requires companies to collect thousands of data points and draft complex reports. Ecoply was designed to automate this tedious work, allowing you to focus on your CSR strategy rather than data entry.
 
-The project consists of three main pillars:
+---
 
-1.  **Frontend (P4)**:
-    *   **React/Vite App**: A modern, dark-themed UI ("Ecoply" branding).
-    *   **Upload Wizard**: Guided interface for downloading templates and uploading CSV data.
-2.  **Backend/Data (P2)**:
-    *   **FastAPI (Cloud Run)**: Central API for data upload and AI generation.
-    *   **Google Cloud Storage (GCS)**: Stores raw CSV uploads.
-    *   **Cloud Functions**: Triggers on upload to parse and ingest data.
-    *   **BigQuery**: Data warehouse for structured sustainability data.
-    *   **Dataform**: Manages BigQuery schemas and data quality assertions.
-3.  **AI/ML (P3)**:
-    *   **Dual-Core RAG**: Orchestrates queries to:
-        *   *Core 1 (Compliance)*: Vertex AI Search (Legal Texts).
-        *   *Core 2 (Strategist)*: Vertex AI Search (Best-in-class Reports).
-        *   *User Data*: BigQuery (Validated Company Data).
-    *   **Gemini**: Synthesizes inputs into professional drafts.
+## 🚀 Why Ecoply?
 
-## Project Structure
+CSR compliance shouldn't be a barrier. Ecoply uses the power of Generative AI (Google Vertex AI) to:
+1.  **Understand your documents**: Stop wasting time copy-pasting figures from invoices or PDF reports.
+2.  **Centralize your data**: A single source of truth for all your ESRS indicators (E1, S1, G1...).
+3.  **Draft for you**: Generate report drafts compliant with European standards in seconds.
 
-```
-.
-├── backend/
-│   ├── api/                # FastAPI application (main.py)
-│   ├── ai/                 # RAG Engine logic (rag_engine.py)
-│   ├── cloud_functions/    # Python Cloud Functions (ingest_csv)
-│   └── dataform/           # SQLX definitions for BigQuery schemas
-├── frontend/               # React + Vite application
-├── data/                   # Local data for testing and curation
-├── scripts/                # Utility scripts for setup and maintenance
-└── docs/                   # Documentation
-```
+---
 
-## Setup & Deployment
+## ✨ Key Features
+
+### 🧠 Smart Import
+Drag and drop any file (PDF, Excel, CSV). Our AI analyzes the content, automatically detects relevant indicators (e.g., "Energy Consumption", "Pay Gap"), and maps them to official ESRS standards.
+*   *Technology: Gemini 2.0 Flash via Vertex AI.*
+
+### 📊 Data Points Hub
+A centralized dashboard to track your progress.
+*   Visualize which KPIs are completed or missing.
+*   Validate data extracted by AI.
+*   Intuitive manual entry for missing data.
+
+### ✍️ Report Generator (RAG)
+Need to draft the "G1 - Business Conduct" section?
+*   Select a topic.
+*   The AI combines your real data (BigQuery) with official legal texts.
+*   Get a structured, sourced draft ready for review.
+
+### 📈 Impact Dashboard
+Visualize your carbon emissions (Scope 1, 2, 3) and other key metrics via interactive charts.
+
+---
+
+## 🛠️ Under the Hood (Tech Stack)
+
+Ecoply is built on a modern and scalable architecture hosted on **Google Cloud Platform**.
+
+*   **Frontend**: React + Vite (Fast and reactive interface).
+*   **Backend**: FastAPI on Cloud Run (Robust Python API).
+*   **Intelligence**:
+    *   **LLM**: Gemini 2.0 Flash (Google's fastest and most efficient model).
+    *   **RAG**: Retrieval Augmented Generation to anchor answers in the reality of your data.
+*   **Data**:
+    *   **BigQuery**: Data warehouse to store KPIs and regulatory texts.
+    *   **Cloud Storage**: Secure storage for raw files.
+*   **Auth**: Firebase Authentication.
+
+---
+
+## 🏁 How to Start?
 
 ### Prerequisites
-- Google Cloud Platform (GCP) project.
-- `gcloud` CLI installed and authenticated.
-- Python 3.11+.
-- Node.js & npm.
+*   Node.js & npm
+*   Python 3.11+
+*   A Google Cloud project with Vertex AI and BigQuery enabled.
 
-### 1. Infrastructure Setup
-Initialize GCS buckets:
-```bash
-./scripts/setup_gcs.sh
-```
+### Quick Installation
 
-### 2. Backend Deployment
-Deploy the API to Cloud Run (or run locally):
-```bash
-# Local Run
-python3 -m uvicorn backend.api.main:app --host 0.0.0.0 --port 8080
+1.  **Clone the project**
+    ```bash
+    git clone https://github.com/your-repo/csrd-copilot-mvp.git
+    cd csrd-copilot-mvp
+    ```
 
-# Cloud Deployment
-./scripts/deploy_api.sh
-```
+2.  **Start the Backend**
+    ```bash
+    cd backend
+    pip install -r api/requirements.txt
+    uvicorn api.main:app --reload
+    ```
 
-### 3. Frontend Setup
-Install dependencies and run the development server:
-```bash
-cd frontend
-npm install
-npm run dev
-```
+3.  **Start the Frontend**
+    ```bash
+    cd frontend
+    npm install
+    npm run dev
+    ```
 
-## Usage
+4.  **Open your browser** at `http://localhost:5173` and start exploring!
 
-### 1. Upload Data
-- Open the Frontend (http://localhost:5173).
-- Use the **Upload Wizard** to download an E1 or G1 template.
-- Fill it out and upload it via the UI.
-- The file is sent to the API -> GCS -> Cloud Function -> BigQuery.
+---
 
-### 2. Generate Drafts (AI)
-- The API exposes `POST /generate-draft`.
-- It queries the "Dual-Core" RAG engine to produce compliant and strategic text based on your uploaded data.
+## 🔮 What's Next (Roadmap)
 
-### 3. Validation
-- Dataform runs automatically (or on schedule) to validate raw data in BigQuery.
-- Validated data is available via `GET /get-validated-data/{standard}`.
+*   [ ] **API Connectors**: Direct connection to Salesforce, SAP, and carbon accounting tools.
+*   [ ] **Multi-User**: Validation workflow with roles (Contributor, Auditor).
+*   [ ] **XBRL Export**: Automatic tagging of the final report in the European digital format.
+
+---
+
+*Made with ❤️ and lots of ☕ for a more sustainable future.*

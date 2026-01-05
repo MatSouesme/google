@@ -143,32 +143,41 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
             print(f"Vertex AI Init Error: {e}")
             return {"candidates": [], "upload_id": upload_id, "error": f"AI Initialization Failed: {str(e)}"}
 
+        # Load KPI definitions for better mapping
+        kpi_reference = ""
+        try:
+            # Path relative to this file: ../data/kpis.json
+            json_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'kpis.json')
+            with open(json_path, 'r', encoding='utf-8') as f:
+                kpis_data = json.load(f)
+                # Create a compact list: "ID: Name (Unit)"
+                kpi_lines = [f"- {k['id']}: {k['name']} (Unit: {k.get('unit', 'N/A')})" for k in kpis_data]
+                kpi_reference = "\n".join(kpi_lines)
+        except Exception as e:
+            print(f"Warning: Could not load KPI definitions: {e}")
+            kpi_reference = "- E1: Climate Change\n- S1: Own Workforce\n- G1: Business Conduct"
+
         # Use concatenation instead of f-string for content_text to avoid issues with curly braces in the document
         base_prompt = """
         You are an expert ESG Data Analyst. Analyze the following document snippet and extract potential CSRD quantitative data points.
         
         Your goal is to map the extracted data to the official ESRS (European Sustainability Reporting Standards) KPI IDs.
         
-        Reference for Mapping:
-        - E1: Climate Change (e.g., E1-1 Transition plan, E1-6 Gross Scopes 1, 2, 3 GHG emissions)
-        - E2: Pollution
-        - E3: Water and marine resources
-        - E4: Biodiversity and ecosystems
-        - E5: Resource use and circular economy
-        - S1: Own workforce (e.g., S1-1 Policies, S1-14 Health & Safety)
-        - S2: Workers in the value chain
-        - S3: Affected communities
-        - S4: Consumers and end-users
-        - G1: Business conduct (e.g., G1-1 Corporate culture, G1-3 Prevention of corruption/bribery, G1-4 Confirmed incidents of corruption)
+        Here is the OFFICIAL LIST of ESRS KPIs you must match against. 
+        Use the 'ID' from this list exactly.
+        If the data point matches a description in this list, use that ID.
+        
+        OFFICIAL KPI LIST:
+        """ + kpi_reference + """
 
         Instructions:
         1. Identify quantitative data points (values, units, dates).
-        2. Look for explicit KPI IDs (e.g., "G1-3-1") in the text/table. If found, use them.
-        3. If no ID is found, infer the most likely ESRS KPI ID based on the "Metric Name" or description.
-           - Example: "Anti-corruption training coverage" -> "G1-3" or "G1-3-1".
-           - Example: "Scope 1 Emissions" -> "E1-6".
-        4. If you are unsure, use the top-level category (e.g., "E1", "G1").
-        5. Assign a confidence score (0.0 to 1.0). If you inferred the ID without explicit mention, lower the confidence slightly (e.g., 0.8).
+        2. SEARCH the "OFFICIAL KPI LIST" above for the best semantic match based on the data point's description.
+           - Example: If text says "Carbon pricing scheme", match it to "E1-8-1: Carbon pricing scheme by type".
+           - Example: If text says "Water usage", match it to "E3-4-1".
+        3. If you find a match, use the EXACT ID from the list.
+        4. If no exact match is found, infer the most likely category (e.g., "E1", "G1") and use a generic ID like "E1-Other".
+        5. Assign a confidence score (0.0 to 1.0). High confidence (0.9+) if you matched a specific ID from the list.
 
         Return a JSON array of objects with the following keys:
         - kpi_id: The likely ESRS KPI ID.
@@ -198,6 +207,37 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
                 candidates_json = [candidates_json]
             elif not isinstance(candidates_json, list):
                 candidates_json = []
+                
+            # --- VALIDATION & CLEANING STEP ---
+            # Ensure extracted IDs match our official list
+            if 'kpis_data' in locals() and kpis_data:
+                valid_ids = {k['id'] for k in kpis_data}
+                
+                for candidate in candidates_json:
+                    raw_id = str(candidate.get('kpi_id', '')).strip()
+                    
+                    # 1. Exact match
+                    if raw_id in valid_ids:
+                        candidate['kpi_id'] = raw_id
+                        continue
+                        
+                    # 2. Try to clean common AI formatting (e.g. "E1-1-1: OpEx" or "E1- 1 - 1")
+                    # Remove spaces inside the ID if it looks like a standard ID
+                    cleaned_id = raw_id.replace(" ", "")
+                    if cleaned_id in valid_ids:
+                        candidate['kpi_id'] = cleaned_id
+                        continue
+                        
+                    # 3. Try to split by colon or space (e.g. "E1-1-1: Description")
+                    potential_id = raw_id.split(':')[0].strip()
+                    if potential_id in valid_ids:
+                        candidate['kpi_id'] = potential_id
+                        continue
+                        
+                    # 4. If still invalid, try to find by Name if possible, or leave as is
+                    # (We leave it as is, but user will see it's not mapped in UI)
+                    print(f"Warning: AI extracted ID '{raw_id}' not found in official list.")
+                    
         except json.JSONDecodeError:
             candidates_json = []
         
