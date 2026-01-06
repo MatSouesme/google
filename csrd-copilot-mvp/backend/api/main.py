@@ -3,13 +3,14 @@ import datetime
 import uuid
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, UploadFile, File
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, UploadFile, File, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import storage
 from google.cloud import bigquery
 from pydantic import BaseModel
 import sys
+import traceback
 
 # Add current directory to sys.path to fix imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -28,11 +29,26 @@ app = FastAPI(title="CSRD Copilot API")
 # Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], # In production, restrict to specific domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    error_msg = str(exc)
+    trace = traceback.format_exc()
+    print(f"Global Exception: {error_msg}\n{trace}")
+    return JSONResponse(
+        status_code=500,
+        content={"message": "Internal Server Error", "detail": error_msg},
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*"
+        }
+    )
 
 @app.get("/")
 def health_check():

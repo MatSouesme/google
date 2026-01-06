@@ -43,7 +43,19 @@ def get_gap_analysis(standard: str = "e1", user=Depends(verify_token)):
     # 1. Get available columns in BigQuery table
     # Assuming table name is {standard}_raw
     table_id = f"{project_id}.csrd_mvp.{standard}_raw"
+    manual_table_id = f"{project_id}.csrd_mvp.manual_entries"
     
+    # Get manually entered KPIs
+    manual_kpis = set()
+    try:
+        manual_query = f"SELECT DISTINCT kpi_id FROM `{manual_table_id}`"
+        manual_job = client.query(manual_query)
+        manual_results = manual_job.result()
+        for row in manual_results:
+            manual_kpis.add(row.kpi_id)
+    except Exception as e:
+        print(f"Warning: Could not query manual entries: {e}")
+
     try:
         # Check if table exists and get columns
         table = client.get_table(table_id)
@@ -69,37 +81,29 @@ def get_gap_analysis(standard: str = "e1", user=Depends(verify_token)):
         
         mandatory_kpis = [k for k in schema["kpis"] if k.get("mandatory")]
         total_mandatory = len(mandatory_kpis)
-        covered_count = 0
-        missing_kpis = []
+        covered_ids = set()
         
-        # We need to know which BQ column corresponds to which KPI
-        # For now, let's assume the 'fields' in schema match BQ columns
-        # If 'fields' is missing (narrative), we might check a 'narrative' table or just assume missing for now if not implemented
-        
-        # Let's build a query to check existence of data
-        # SELECT COUNT(scope1_gross_tco2e) as E1_6_1, COUNT(energy_total_mwh) as E1_5_1 FROM ...
-        
-        select_clauses = []
-        kpi_mapping = {} # kpi_id -> list of columns to check
-        
+        # 1. Check Manual Entries first
         for kpi in mandatory_kpis:
+            if kpi['id'] in manual_kpis:
+                covered_ids.add(kpi['id'])
+
+        select_clauses = []
+        
+        # 2. Check BigQuery Columns for extracting data
+        for kpi in mandatory_kpis:
+            # Skip if already found in manual entries (we assume manual overrides or complements)
+            if kpi['id'] in covered_ids:
+                continue
+
             if "fields" in kpi:
                 # Quantitative
                 valid_fields = [f for f in kpi["fields"] if f in bq_columns]
                 if valid_fields:
                     # If we have at least one matching column, we check if it has data
-                    # We'll sum the counts of all fields for this KPI
                     checks = [f"COUNT({f})" for f in valid_fields]
                     select_clauses.append(f"({' + '.join(checks)}) as `{kpi['id']}`")
-                    kpi_mapping[kpi['id']] = kpi
-                else:
-                    # Column doesn't exist in BQ
-                    missing_kpis.append(kpi)
-            else:
-                # Narrative - For MVP, we might not have a structured column for this yet
-                # Unless we have a 'narratives' table. 
-                # Let's mark as missing for now unless we have a specific logic
-                missing_kpis.append(kpi)
+            # Narrative fields are ignored for MVP unless in manual entries
         
         if select_clauses:
             query = f"SELECT {', '.join(select_clauses)} FROM `{table_id}`"
@@ -109,16 +113,10 @@ def get_gap_analysis(standard: str = "e1", user=Depends(verify_token)):
             for row in result:
                 for kpi_id, count in row.items():
                     if count > 0:
-                        covered_count += 1
-                    else:
-                        # Find the kpi object
-                        kpi = next((k for k in mandatory_kpis if k["id"] == kpi_id), None)
-                        if kpi:
-                            missing_kpis.append(kpi)
+                        covered_ids.add(kpi_id)
         
-        # Add the ones that had no columns to query (already in missing_kpis)
-        # But wait, I added them to missing_kpis in the loop if valid_fields was empty.
-        # So we are good.
+        covered_count = len(covered_ids)
+        missing_kpis = [k for k in mandatory_kpis if k['id'] not in covered_ids]
         
         score = int((covered_count / total_mandatory) * 100) if total_mandatory > 0 else 0
         

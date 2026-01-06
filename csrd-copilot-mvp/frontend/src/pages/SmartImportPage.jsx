@@ -496,7 +496,7 @@ const SmartImportPage = () => {
                         id="fileInput"
                         style={{ display: 'none' }}
                         onChange={handleFileSelect}
-                        accept=".pdf,.xlsx,.csv"
+                        accept=".pdf,.xlsx,.csv,.jpg,.jpeg,.png,.txt"
                     />
 
                     {analyzing ? (
@@ -511,7 +511,7 @@ const SmartImportPage = () => {
                             <h3 style={{ marginBottom: '0.5rem' }}>
                                 {file ? file.name : "Drag & Drop or Click to Upload"}
                             </h3>
-                            <p style={{ color: 'var(--text-secondary)' }}>Supports PDF, Excel, CSV</p>
+                            <p style={{ color: 'var(--text-secondary)' }}>Supports PDF, Excel, CSV, Images, Text</p>
                             {file && (
                                 <button
                                     className="btn btn-primary"
@@ -553,6 +553,7 @@ const SmartImportPage = () => {
                                         <th style={{ padding: '1rem' }}>Unit</th>
                                         <th style={{ padding: '1rem' }}>Date</th>
                                         <th style={{ padding: '1rem' }}>Confidence</th>
+                                        <th style={{ padding: '1rem' }}>Source</th>
                                         <th style={{ padding: '1rem' }}>Actions</th>
                                     </tr>
                                 </thead>
@@ -599,6 +600,14 @@ const SmartImportPage = () => {
                                                     </div>
                                                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{Math.round(row.confidence * 100)}%</span>
                                                 </div>
+                                            </td>
+                                            <td style={{ padding: '1rem', fontSize: '0.75rem', color: 'var(--text-secondary)', maxWidth: '200px' }}>
+                                                {row.snippet ? (
+                                                    <span title={row.snippet}>
+                                                        {row.snippet.length > 50 ? row.snippet.substring(0, 50) + '...' : row.snippet}
+                                                    </span>
+                                                ) : '-'}
+                                                {row.page_number && <div style={{marginTop: '4px', fontSize: '0.7rem'}}>Pg {row.page_number}</div>}
                                             </td>
                                             <td style={{ padding: '1rem' }}>
                                                 <button

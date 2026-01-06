@@ -5,12 +5,13 @@ import os
 import json
 import uuid
 import vertexai
-from google.cloud import bigquery
-from vertexai.generative_models import GenerativeModel
+from google.cloud import bigquery, storage
+from vertexai.generative_models import GenerativeModel, Part
 from pypdf import PdfReader
 from io import BytesIO, StringIO
 import csv
 import openpyxl
+import datetime
 
 # Fix import path for Docker environment
 try:
@@ -35,33 +36,67 @@ class ExtractionResponse(BaseModel):
     upload_id: str
     error: Optional[str] = None
 
+@router.get("/data/smart-extract-test")
+def test_endpoint():
+    return {"status": "ok", "message": "Smart extraction router is reachable"}
+
 @router.post("/data/smart-extract", response_model=ExtractionResponse)
 async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)):
     """
-    Analyzes an uploaded file (PDF/Excel) using Gemini (Vertex AI) to extract likely CSRD data points.
-    Also saves the document content for RAG search.
+    Analyzes an uploaded file (PDF/Excel/Images) using Gemini (Vertex AI) to extract likely CSRD data points.
+    Supports multimodal inputs (images, scanned PDFs) via native Vertex AI capabilities.
     """
+    print(f"Received smart-extract request: {file.filename}")
     
     # 1. Read File Content
     content_text = ""
+    file_part = None
+    is_multimodal = False
+    
     filename = file.filename.lower()
+    content_type = file.content_type
     upload_id = str(uuid.uuid4())
     
+    # Read raw bytes once
+    contents = await file.read()
+    
+    # 2. Upload to GCS (Native Document Storage)
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
     try:
-        if filename.endswith('.pdf'):
-            # Extract text from PDF
-            contents = await file.read()
-            pdf_file = BytesIO(contents)
-            reader = PdfReader(pdf_file)
-            for page in reader.pages:
-                content_text += page.extract_text() + "\n"
-                # Limit to first 20 pages for MVP to avoid token limits/latency
-                if len(content_text) > 50000: 
-                    break
-                    
-        elif filename.endswith('.xlsx') or filename.endswith('.csv'):
-            # Extract text from Excel/CSV (Turn into CSV string)
-            contents = await file.read()
+        storage_client = storage.Client(project=project_id)
+        bucket_name = f"{project_id}-csrd-raw-data"
+        # Ensure bucket exists (optional, or assume created by setup script)
+        # We wrap this in try-catch to avoid crashing if permissions are missing
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(f"smart_imports/{upload_id}/{filename}")
+        
+        # Determine content type safely
+        safe_content_type = content_type if content_type else "application/octet-stream"
+        
+        # Run synchronous upload in a way that doesn't block too much (fast for small files)
+        blob.upload_from_string(contents, content_type=safe_content_type)
+        print(f"Uploaded {filename} to GCS: gs://{bucket_name}/smart_imports/{upload_id}/{filename}")
+    except Exception as e:
+        print(f"GCS Upload Warning (Non-fatal): {e}")
+
+    try:
+        # --- MULTIMODAL HANDLING (Images & PDFs) ---
+        if filename.endswith('.pdf') or content_type == 'application/pdf' or \
+           filename.endswith(('.png', '.jpg', '.jpeg', '.webp')) or \
+           content_type.startswith('image/'):
+            
+            is_multimodal = True
+            mime_type = "application/pdf" if filename.endswith('.pdf') else content_type or "image/jpeg"
+            
+            # Create a Part object for Gemini
+            file_part = Part.from_data(data=contents, mime_type=mime_type)
+            content_text = f"[Multimodal File Uploaded: {filename}]" 
+            
+            # For RAG purely based on text, we might still want traditional extraction as backup
+            # But for "Smart Extraction", we rely on Vision.
+            
+        # --- TEXT/DATA HANDLING (Excel, CSV, txt) ---
+        elif filename.endswith('.xlsx') or filename.endswith('.csv') or filename.endswith('.txt'):
             
             if filename.endswith('.xlsx'):
                 # Use openpyxl for Excel
@@ -87,6 +122,12 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
                             
                 content_text = output.getvalue()
                 
+            elif filename.endswith('.txt'):
+                 content_text = contents.decode('utf-8', errors='replace')
+                 # Ensure content is not empty
+                 if not content_text.strip():
+                     content_text = "[Empty Text File]"
+
             else:
                 # Use csv module for CSV
                 # Try to decode with utf-8, fallback to latin-1 (common in Europe)
@@ -123,7 +164,7 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
 
         else:
             # Return error instead of raising HTTPException to avoid CORS masking
-            return {"candidates": [], "upload_id": upload_id, "error": "Unsupported file format. Please upload PDF, XLSX, or CSV."}
+            return {"candidates": [], "upload_id": upload_id, "error": "Unsupported file format. Please upload PDF, XLSX, CSV, PNG, JPG, or TXT."}
 
     except Exception as e:
         print(f"Error reading file: {str(e)}")
@@ -194,10 +235,18 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
         Document Snippet:
         """
         
-        prompt = base_prompt + content_text[:10000]
-        # Limit prompt context for speed/cost in MVP
-
-        response = model.generate_content(prompt)
+        if is_multimodal and file_part:
+             # Multimodal Request (Text + Image/PDF)
+             print(f"Sending Multimodal Request for {filename}...")
+             prompt_parts = [base_prompt, file_part]
+             response = model.generate_content(prompt_parts)
+        else:
+             # Text Only Request
+             # Ensure content_text is treated safely
+             safe_content = content_text[:10000] if content_text else "[No Content]"
+             prompt = base_prompt + "\nDocument Content:\n" + safe_content
+             # Limit prompt context for speed/cost in MVP
+             response = model.generate_content(prompt)
         
         # Clean response (remove markdown code blocks if any)
         text_response = response.text.replace('```json', '').replace('```', '').strip()
@@ -207,6 +256,27 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
                 candidates_json = [candidates_json]
             elif not isinstance(candidates_json, list):
                 candidates_json = []
+            
+            # --- TYPE NORMALIZATION STEP ---
+            # Ensure all fields match expected types (Gemini sometimes returns int instead of str)
+            for candidate in candidates_json:
+                # Convert date to string if it's an int (e.g., 2024 -> "2024")
+                if 'date' in candidate and candidate['date'] is not None:
+                    candidate['date'] = str(candidate['date'])
+                # Convert page_number to int if it's a string
+                if 'page_number' in candidate and candidate['page_number'] is not None:
+                    try:
+                        candidate['page_number'] = int(candidate['page_number'])
+                    except (ValueError, TypeError):
+                        candidate['page_number'] = 1
+                # Ensure confidence is a float
+                if 'confidence' in candidate and candidate['confidence'] is not None:
+                    try:
+                        candidate['confidence'] = float(candidate['confidence'])
+                    except (ValueError, TypeError):
+                        candidate['confidence'] = 0.0
+                # Ensure value is properly typed (can be str, int, or float)
+                # Leave as is since Union type accepts multiple types
                 
             # --- VALIDATION & CLEANING STEP ---
             # Ensure extracted IDs match our official list
@@ -244,19 +314,33 @@ async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)
         # 3. Save Document Content for RAG (Chat with Documents)
         try:
             bq_client = bigquery.Client(project=project_id)
-            # Ensure table exists (simple check for MVP)
-            # In prod, use a migration script. Here we just try insert.
-            
+            table_id = f"{project_id}.csrd_mvp.documents_content"
+
+            # Check if table exists, if not create it (Auto-Schema)
+            try:
+                bq_client.get_table(table_id)
+            except Exception:
+                print(f"Table {table_id} not found. Creating it...")
+                schema = [
+                    bigquery.SchemaField("document_id", "STRING"),
+                    bigquery.SchemaField("upload_id", "STRING"),
+                    bigquery.SchemaField("filename", "STRING"),
+                    bigquery.SchemaField("content_text", "STRING"),
+                    bigquery.SchemaField("ingestion_timestamp", "TIMESTAMP"),
+                ]
+                table = bigquery.Table(table_id, schema=schema)
+                bq_client.create_table(table)
+                print(f"Created table {table_id}")
+
             rows_to_insert = [{
                 "document_id": str(uuid.uuid4()),
                 "upload_id": upload_id,
                 "filename": file.filename,
-                "content_text": content_text[:50000] # Limit for BQ cell size/cost
+                "content_text": content_text[:50000], # Limit for BQ cell size/cost
+                "ingestion_timestamp": datetime.datetime.now().isoformat()
             }]
             
-            # We assume the table csrd_mvp.documents_content exists (created via SQL script)
-            # If not, we might want to create it on the fly or fail silently for MVP
-            errors = bq_client.insert_rows_json(f"{project_id}.csrd_mvp.documents_content", rows_to_insert)
+            errors = bq_client.insert_rows_json(table_id, rows_to_insert)
             if errors:
                 print(f"BQ Insert Errors: {errors}")
                 

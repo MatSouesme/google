@@ -177,7 +177,7 @@ const UploadWizard = ({ selectedScopes, onScopeChange }) => {
               <input
                 type="file"
                 id="file-upload"
-                accept=".csv"
+                accept=".csv, .xlsx, .jpg, .jpeg, .png, .pdf, .txt"
                 onChange={handleFileChange}
                 className="file-upload-input"
               />
