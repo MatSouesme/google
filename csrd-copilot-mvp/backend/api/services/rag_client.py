@@ -141,7 +141,7 @@ class RAGClient:
         1. Fetch Data
         2. Load Prompts
         3. Call Gemini
-        Language: 'fr' for French, 'en' for English
+        Language: 'fr' for French, 'en' for English, 'de' for German, 'es' for Spanish
         """
         
         # 1. Fetch Context
@@ -158,7 +158,13 @@ class RAGClient:
         
         # 3. Construct the Final Prompt (Strategist)
         # We combine the system instructions with the specific task
-        language_instruction = "Write the report in FRENCH." if language == "fr" else "Write the report in ENGLISH."
+        language_instructions = {
+            "fr": "Write the report in FRENCH.",
+            "en": "Write the report in ENGLISH.",
+            "de": "Write the report in GERMAN.",
+            "es": "Write the report in SPANISH."
+        }
+        language_instruction = language_instructions.get(language, "Write the report in ENGLISH.")
         
         full_prompt = f"""
         {system_prompt}

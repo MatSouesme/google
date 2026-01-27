@@ -1,0 +1,402 @@
+{
+    "common": {
+        "loading": "Laden...",
+        "error": "Fehler",
+        "logout": "Abmelden",
+        "toggleTheme": "Design wechseln",
+        "toggleLanguage": "Sprache wechseln"
+    },
+    "nav": {
+        "home": "Startseite",
+        "smartImport": "Datenimport",
+        "dataPoints": "Datenpunkte",
+        "dashboard": "Dashboard",
+        "chat": "Mit Daten chatten",
+        "generator": "KI-Generator",
+        "connectors": "Konnektoren",
+        "finalReport": "Abschlussbericht"
+    },
+    "login": {
+        "title": "CSRD Copilot",
+        "subtitle": "Unternehmens-Nachhaltigkeitsberichterstattung",
+        "emailLabel": "E-Mail-Adresse",
+        "passwordLabel": "Passwort",
+        "emailPlaceholder": "name@unternehmen.com",
+        "passwordPlaceholder": "••••••••",
+        "submit": "Anmelden",
+        "authenticating": "Authentifizierung...",
+        "footer": "Geschütztes System. Nur autorisiertes Personal.",
+        "errorPrefix": "Anmeldung fehlgeschlagen: "
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Übersicht über Ihren CSRD-Compliance-Status und Berichtsfortschritt.",
+        "stats": {
+            "reports": "Generierte Berichte",
+            "reportsSubtitle": "+2 diesen Monat",
+            "sources": "Datenquellen",
+            "sourcesSubtitle": "Alle verbunden",
+            "score": "Compliance-Score",
+            "scoreSubtitle": "Top 10% der Branche",
+            "tasks": "Ausstehende Aufgaben",
+            "tasksSubtitle": "Handlung erforderlich"
+        },
+        "recentActivity": {
+            "title": "Letzte Aktivität",
+            "viewAll": "Alle anzeigen",
+            "item1": "Entwurf des jährlichen Nachhaltigkeitsberichts",
+            "item1Meta": "Vor 2 Stunden von Sarah M. aktualisiert"
+        },
+        "quickActions": {
+            "title": "Schnellaktionen",
+            "newReport": "Neuer Bericht",
+            "connectSource": "Datenquelle verbinden",
+            "reviewTasks": "Aufgaben prüfen"
+        }
+    },
+    "generator": {
+        "title": "KI-Generator",
+        "subtitle": "Laden Sie Ihre Dokumente hoch und generieren Sie CSRD-Berichte mit KI.",
+        "nextStep": "Nächster Schritt: Abschlussbericht",
+        "language": "Berichtssprache",
+        "languages": {
+            "fr": "Französisch",
+            "en": "Englisch",
+            "de": "Deutsch",
+            "es": "Spanisch"
+        }
+    },
+    "connectors": {
+        "title": "Daten-Konnektoren",
+        "subtitle": "Verbinden Sie Ihre Datenquellen zur automatischen Datenerfassung."
+    },
+    "home": {
+        "hero": {
+            "title": "CSRD-Compliance, Vereinfacht.",
+            "subtitle": "Ecoply ist Ihr intelligenter Copilot für die Einhaltung der Corporate Sustainability Reporting Directive (CSRD). Wir kombinieren fortschrittliche KI mit sicherer Datenintegration, um Ihre Nachhaltigkeitsberichterstattung zu optimieren.",
+            "startBtn": "Berichte generieren starten",
+            "connectBtn": "Datenquellen verbinden"
+        },
+        "cta": {
+            "viewDemo": "Demo ansehen",
+            "configureDataPoints": "Datenpunkte konfigurieren",
+            "importMoreData": "Mehr Daten importieren",
+            "viewReport": "Ihren Bericht ansehen",
+            "dashboard": "Dashboard"
+        },
+        "features": {
+            "ingestion": {
+                "title": "Automatisierte Datenaufnahme",
+                "text": "Verbinden Sie sich direkt mit Ihren ERP-, CRM- und HR-Systemen (Salesforce, SAP, etc.) oder laden Sie CSV-Dateien hoch. Wir ordnen Ihre Rohdaten automatisch den ESRS-Datenpunkten zu und sparen Ihnen Hunderte von Stunden manueller Eingabe."
+            },
+            "generation": {
+                "title": "KI-Entwurfsgenerierung",
+                "text": "Unser fortschrittliches LLM (Gemini Pro) analysiert Ihre Daten anhand der offiziellen ESRS-Standards (E1, G1, etc.), um in Sekunden konforme, prüfungsbereite Entwürfe zu erstellen."
+            },
+            "audit": {
+                "title": "Audit-Trail & Wachsamkeit",
+                "text": "Jeder generierte Satz ist mit seiner Datenquelle verknüpft. Unser 'Prüfer-Wachsamkeitssystem' kennzeichnet potenzielle Inkonsistenzen oder fehlende Datenpunkte vor der Veröffentlichung."
+            }
+        },
+        "howItWorks": {
+            "title": "So funktioniert es",
+            "step1": {
+                "title": "Daten verbinden",
+                "text": "Nutzen Sie unsere sicheren Konnektoren oder den Upload-Assistenten, um Ihre operativen Daten in die Plattform zu bringen."
+            },
+            "step2": {
+                "title": "Standard auswählen",
+                "text": "Wählen Sie den ESRS-Standard (z.B. E1 Klimawandel) und die spezifische Offenlegungsanforderung, über die Sie berichten müssen."
+            },
+            "step3": {
+                "title": "Generieren & Prüfen",
+                "text": "Lassen Sie die KI Ihren Bericht entwerfen. Überprüfen Sie die zitierten Quellen, prüfen Sie die Hinweise des Prüfers und genehmigen Sie den endgültigen Text."
+            }
+        }
+    },
+    "uploadWizard": {
+        "title": "Geführter Daten-Upload",
+        "subtitle": "Folgen Sie den nachstehenden Schritten, um Ihre CSRD-Daten in Ecoply zu importieren.",
+        "stepScope": {
+            "title": "Schritt 1: Umfang & Wesentlichkeit",
+            "subtitle": "Wählen Sie die für Ihre Organisation wesentlichen ESRS-Standards aus.",
+            "e1": "ESRS E1: Klimawandel",
+            "e2": "ESRS E2: Umweltverschmutzung",
+            "s1": "ESRS S1: Eigene Belegschaft",
+            "g1": "ESRS G1: Geschäftsgebaren",
+            "confirm": "Umfang bestätigen & Fortfahren"
+        },
+        "step1": {
+            "title": "Schritt 2: Vorlage herunterladen",
+            "downloadE1": "⬇️ E1 herunterladen (Klima)",
+            "downloadG1": "⬇️ G1 herunterladen (Geschäftsgebaren)"
+        },
+        "step2": {
+            "title": "Schritt 3: Daten hochladen",
+            "changeFile": "📂 Datei ändern",
+            "chooseFile": "📂 CSV-Datei auswählen",
+            "selected": "✅ Ausgewählt: "
+        },
+        "uploadBtn": {
+            "uploading": "⏳ Hochladen...",
+            "default": "🚀 CSV hochladen"
+        },
+        "success": "Erfolg! Datei hochgeladen. ID: ",
+        "errorPrefix": "Upload fehlgeschlagen: "
+    },
+    "copilot": {
+        "title": "KI-Entwurfsgenerator",
+        "subtitle": "Bitten Sie Ecoply, einen Abschnitt Ihres Berichts basierend auf Ihren Daten und den offiziellen ESRS-Standards zu erstellen.",
+        "standardLabel": "Standard",
+        "topicLabel": "Thema / Offenlegungsanforderung",
+        "topicPlaceholder": "z.B. Scope-1-Emissionsanalyse",
+        "generateBtn": {
+            "loading": "Entwurf wird generiert (PDFs & Daten werden gelesen)...",
+            "default": "Entwurf generieren"
+        },
+        "result": {
+            "title": "Generierter Entwurf",
+            "saveBtn": {
+                "saving": "Speichern...",
+                "default": "💾 Entwurf speichern"
+            },
+            "approveBtn": {
+                "approving": "Genehmigen...",
+                "default": "✅ Genehmigen & Senden"
+            },
+            "toggleSources": {
+                "hide": "Quellen ausblenden",
+                "show": "Quellen anzeigen"
+            },
+            "download": ".MD herunterladen",
+            "successSaved": "Entwurf im Verlauf gespeichert!",
+            "successApproved": "✅ Entwurf genehmigt & an offiziellen Bericht gesendet!",
+            "sourcesTitle": "📚 Quellen & Kontext",
+            "dataSource": "📄 Unternehmensdaten",
+            "legalSource": "⚖️ Rechtlicher Rahmen",
+            "rawData": "Rohdaten anzeigen (JSON)",
+            "auditTitle": "⚠️ Wachsamkeitspunkte des Prüfers"
+        },
+        "errors": {
+            "loginRequired": "Sie müssen angemeldet sein, um einen Entwurf zu generieren.",
+            "saveFailed": "Speichern fehlgeschlagen",
+            "approveFailed": "Genehmigung fehlgeschlagen"
+        }
+    },
+    "connectorsComponent": {
+        "title": "Daten-Konnektoren",
+        "subtitle": "Verbinden Sie sich direkt mit Ihren operativen Systemen zur automatischen Datenerfassung.",
+        "salesforce": "☁️ Salesforce",
+        "sap": "🏗️ SAP (Demnächst)",
+        "aws": "⚡ AWS (Demnächst)",
+        "configTitle": "Salesforce-Konfiguration",
+        "username": "Benutzername",
+        "password": "Passwort",
+        "token": "Sicherheits-Token",
+        "demoBtn": "🪄 Mit Testdaten füllen (MVP)",
+        "syncBtn": {
+            "loading": "Synchronisierung...",
+            "default": "Jetzt synchronisieren"
+        },
+        "success": "✅ Erfolg! {{count}} Zeilen aus {{source}} importiert.",
+        "errorAuth": "Nicht authentifiziert",
+        "errorSync": "Synchronisierung fehlgeschlagen"
+    },
+    "alerts": {
+        "home": {
+            "noData": {
+                "title": "🚀 Beginnen Sie mit dem Importieren Ihrer Daten",
+                "message": "Um Ihre CSRD-Berichte zu generieren, importieren Sie zunächst Ihre Daten über die Seite 'Datenimport'. Dies ermöglicht Ihnen, Ihre Datenpunkte zu überwachen und Ihren Abschlussbericht zu erstellen.",
+                "action": "Zum Import →"
+            },
+            "noDataPoints": {
+                "title": "⚠️ Konfiguration der Datenpunkte empfohlen",
+                "message": "Ihre Daten sind importiert! Konfigurieren Sie nun Ihre Datenpunkte für eine optimale Verfolgung Ihrer CSRD-Indikatoren.",
+                "action": "Datenpunkte konfigurieren →"
+            },
+            "ready": {
+                "title": "✅ Alles bereit!",
+                "message": "Ihre Daten sind importiert und Ihre Datenpunkte konfiguriert. Sie können nun Ihren Abschlussbericht erstellen.",
+                "action": "Abschlussbericht ansehen →"
+            }
+        },
+        "generator": {
+            "noData": {
+                "title": "⚠️ Keine Daten importiert",
+                "message": "Sie müssen zuerst Ihre Daten importieren, bevor Sie Berichte generieren können. Ohne Daten kann der Generator keine relevanten Inhalte erstellen.",
+                "action": "Jetzt Daten importieren →"
+            }
+        },
+        "dataPoints": {
+            "noData": {
+                "title": "⚠️ Importieren Sie zuerst Ihre Daten",
+                "message": "Bevor Sie Ihre Datenpunkte konfigurieren, müssen Sie Ihre Daten über die Smart Import-Seite importieren.",
+                "action": "Zum Import →"
+            },
+            "noConfigured": {
+                "title": "ℹ️ Beginnen Sie mit der Konfiguration Ihrer Datenpunkte",
+                "message": "Wählen Sie die relevanten Indikatoren für Ihre Organisation aus und konfigurieren Sie sie für eine optimale Verfolgung."
+            }
+        },
+        "finalReport": {
+            "noData": {
+                "title": "❌ Fehlende Daten",
+                "message": "Sie müssen zuerst Ihre Daten importieren, um Ihren CSRD-Bericht erstellen und anzeigen zu können.",
+                "action": "Daten importieren →"
+            },
+            "noDataPoints": {
+                "title": "⚠️ Datenpunkte nicht konfiguriert",
+                "message": "Für einen vollständigen Bericht konfigurieren Sie Ihre Datenpunkte vor der Erstellung des Abschlussberichts.",
+                "action": "Datenpunkte konfigurieren →"
+            },
+            "noDrafts": {
+                "title": "ℹ️ Keine Entwürfe generiert",
+                "message": "Verwenden Sie den KI-Generator, um Entwurfsabschnitte für Ihren Bericht zu erstellen.",
+                "action": "Zum Generator →"
+            }
+        },
+        "smartImport": {
+            "success": {
+                "title": "✅ Import erfolgreich!",
+                "message": "Ihre Daten wurden erfolgreich importiert. Sie können nun Ihre Datenpunkte konfigurieren."
+            },
+            "firstTime": {
+                "title": "ℹ️ Willkommen bei Smart Import",
+                "message": "Laden Sie Ihre CSV-Dateien hoch oder verbinden Sie Ihre Datenquellen, um Ihre CSRD-Analyse zu starten."
+            }
+        }
+    },
+    "sharepoint": {
+        "title": "📁 SharePoint-Verbindung",
+        "subtitle": "Verbinden Sie sich mit SharePoint, um Ihre Dateien automatisch zu importieren",
+        "siteUrl": "SharePoint-Website-URL",
+        "siteUrlPlaceholder": "https://ihr-unternehmen.sharepoint.com/sites/csrd",
+        "folderPath": "Ordnerpfad",
+        "folderPathPlaceholder": "/Freigegebene Dokumente/CSRD-Daten",
+        "clientId": "Client-ID (Azure AD)",
+        "clientIdPlaceholder": "Ihre Anwendungs-Client-ID",
+        "clientSecret": "Client-Secret",
+        "clientSecretPlaceholder": "Ihr Anwendungs-Secret",
+        "testConnection": "Verbindung testen",
+        "connecting": "Verbindung wird hergestellt...",
+        "connected": "✅ Verbunden",
+        "connectionFailed": "❌ Verbindung fehlgeschlagen",
+        "listFiles": "Dateien auflisten",
+        "loadingFiles": "Dateien werden geladen...",
+        "noFiles": "Keine Dateien gefunden",
+        "downloadAndIngest": "Herunterladen & Importieren",
+        "downloading": "Herunterladen...",
+        "filesFound": "{{count}} Dateien gefunden",
+        "selectFiles": "Dateien zum Import auswählen",
+        "fileName": "Dateiname",
+        "fileSize": "Größe",
+        "modified": "Geändert",
+        "actions": "Aktionen"
+    },
+    "navigation": {
+        "nextStep": {
+            "configureDataPoints": "Nächster Schritt: Datenpunkte konfigurieren",
+            "viewFinalReport": "Nächster Schritt: Abschlussbericht ansehen",
+            "viewReport": "Abschlussbericht ansehen",
+            "viewDashboard": "Dashboard ansehen"
+        },
+        "sections": {
+            "readyToGenerate": {
+                "title": "Bereit, Ihren Bericht zu generieren?",
+                "message": "Ihre Datenpunkte sind konfiguriert. Fahren Sie fort, um Ihren CSRD-Bericht zu erstellen."
+            },
+            "viewComplete": {
+                "title": "Ihren vollständigen Bericht ansehen",
+                "message": "Überprüfen und verwalten Sie Ihren finalisierten CSRD-Bericht."
+            },
+            "exploreData": {
+                "title": "Ihre Daten erkunden",
+                "message": "Visualisieren Sie die Statistiken und Indikatoren Ihres Berichts im Dashboard."
+            }
+        }
+    },
+    "smartImport": {
+        "title": "Datenimport",
+        "subtitle": "Laden Sie Ihre Berichte (PDF, Excel) hoch und lassen Sie die KI automatisch Ihre CSRD-Datenpunkte extrahieren.",
+        "nextStep": "Nächster Schritt: Datenpunkte",
+        "manualUpload": "Manueller Upload",
+        "sharepointConnection": "SharePoint-Verbindung",
+        "importSuccess": {
+            "title": "✅ Import erfolgreich!",
+            "message": "Ihre Daten wurden erfolgreich importiert. Sie können nun Ihre Datenpunkte konfigurieren und Ihren Bericht erstellen."
+        },
+        "firstTime": {
+            "title": "📤 Erster Schritt: Daten importieren",
+            "message": "Hier beginnt alles! Importieren Sie Ihre Excel-, CSV- oder PDF-Dateien mit Ihren ESG-Daten. Unsere KI extrahiert automatisch die relevanten Datenpunkte für Ihren CSRD-Bericht."
+        },
+        "successfullyIngested": "{{count}} Datenpunkte erfolgreich importiert!",
+        "confirmIngest": "Bestätigen & {{count}} Datenpunkte importieren"
+    },
+    "dataPoints": {
+        "title": "Datenpunkt-Bibliothek",
+        "subtitle": "Erkunden, filtern und SQL-Abfragen für alle CSRD-Datenpunkte generieren.",
+        "nextStep": "Nächster Schritt: KI-Generator",
+        "stats": {
+            "overallProgress": "Gesamtfortschritt",
+            "dataCollected": "Daten gesammelt",
+            "missingDataPoints": "Fehlende Datenpunkte"
+        },
+        "search": {
+            "placeholder": "Nach ID, Name oder Beschreibung suchen..."
+        },
+        "filters": {
+            "allCategories": "Alle Kategorien",
+            "allStandards": "Alle Standards",
+            "allStatuses": "Alle Status"
+        },
+        "categories": {
+            "Environmental": "🌍 Umwelt",
+            "Social": "👥 Soziales",
+            "Governance": "⚖️ Governance",
+            "General": "📊 Allgemein"
+        },
+        "kpiCount": "{{count}} Indikatoren",
+        "generateSQL": "🤖 SQL generieren",
+        "generatingSQL": "Generierung...",
+        "sqlGenerated": "SQL generiert",
+        "copySQL": "SQL kopieren",
+        "status": {
+            "collected": "Erfasst",
+            "missing": "Fehlend",
+            "pending": "Ausstehend"
+        },
+        "completed": "abgeschlossen",
+        "dataPoints": "Datenpunkte",
+        "unit": "Einheit",
+        "showing": "Anzeige von {{count}} von {{total}} Datenpunkten",
+        "noResults": "Keine Datenpunkte entsprechen Ihren Filtern.",
+        "regenerateSQL": "SQL neu generieren",
+        "getSQL": "SQL abrufen",
+        "description": "Beschreibung",
+        "generatedSQLQuery": "Generierte SQL-Abfrage",
+        "clearFilters": "Filter löschen",
+        "resetFilters": "Filter zurücksetzen"
+    },
+    "finalReport": {
+        "title": "Status des Abschlussberichts",
+        "subtitle": "Verfolgen Sie Ihren Fortschritt und sehen Sie den konsolidierten Bericht.",
+        "completionProgress": "Abschlussfortschritt",
+        "approvedTopics": "Genehmigte Themen",
+        "standard": "Standard",
+        "topic": "Thema",
+        "approvedAt": "Genehmigt am",
+        "viewDraft": "Entwurf ansehen",
+        "noTopics": "Noch keine genehmigten Themen für diesen Standard."
+    },
+    "chat": {
+        "title": "Mit Daten chatten",
+        "subtitle": "Stellen Sie natürlichsprachliche Fragen zu Ihren CSRD-Metriken.",
+        "welcome": "Hallo! Ich bin Ihr CSRD-Datenassistent. Sie können mir Fragen zu Ihren Umweltdaten stellen, wie z.B.:\n\n* \"Wie hoch waren die gesamten CO2-Emissionen im Jahr 2024?\"\n* \"Welche Anlage hat am meisten Energie verbraucht?\"\n* \"Vergleiche den Wasserverbrauch zwischen Paris und London.\"",
+        "thinking": "Überlege...",
+        "error": "Entschuldigung, bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "notAuthenticated": "Nicht authentifiziert",
+        "placeholder": "Stellen Sie eine Frage zu Ihren Daten...",
+        "send": "Senden",
+        "generatedSQL": "Generiertes SQL:"
+    }
+}

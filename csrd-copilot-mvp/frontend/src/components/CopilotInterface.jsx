@@ -325,6 +325,8 @@ const CopilotInterface = ({ enabledScopes }) => {
           >
             <option value="fr">{t('generator.languages.fr')}</option>
             <option value="en">{t('generator.languages.en')}</option>
+            <option value="de">{t('generator.languages.de')}</option>
+            <option value="es">{t('generator.languages.es')}</option>
           </select>
         </div>
         <div>

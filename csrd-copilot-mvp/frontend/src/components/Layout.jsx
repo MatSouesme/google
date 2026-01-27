@@ -20,8 +20,10 @@ const Layout = ({ user }) => {
     };
 
     const toggleLanguage = () => {
-        const newLang = i18n.language === 'en' ? 'fr' : 'en';
-        i18n.changeLanguage(newLang);
+        const languages = ['en', 'fr', 'de', 'es'];
+        const currentIndex = languages.indexOf(i18n.language);
+        const nextIndex = (currentIndex + 1) % languages.length;
+        i18n.changeLanguage(languages[nextIndex]);
     };
 
     const handleLogout = async () => {
