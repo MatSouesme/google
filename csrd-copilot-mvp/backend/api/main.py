@@ -17,12 +17,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis
+    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin
 except ImportError:
     try:
-        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis
+        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin
     except ImportError:
-        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis
+        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin
 
 app = FastAPI(title="CSRD Copilot API")
 
@@ -239,3 +239,9 @@ def export_xbrl(report_id: str):
         media_type="application/zip", 
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
+
+app.include_router(admin.router)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8080)

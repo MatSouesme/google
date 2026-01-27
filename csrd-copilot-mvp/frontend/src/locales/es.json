@@ -14,7 +14,8 @@
         "chat": "Chat con datos",
         "generator": "Generador IA",
         "connectors": "Conectores",
-        "finalReport": "Informe final"
+        "finalReport": "Informe final",
+        "settings": "Configuración"
     },
     "login": {
         "title": "CSRD Copilot",
@@ -398,5 +399,19 @@
         "placeholder": "Haz una pregunta sobre tus datos...",
         "send": "Enviar",
         "generatedSQL": "SQL generado:"
+    },
+    "settings": {
+        "title": "Configuración y Seguridad",
+        "subtitle": "Gestione la seguridad y el ciclo de vida de los datos.",
+        "audit_logging_enabled": "El registro de auditoría está activo.",
+        "danger_zone": "Zona de Peligro",
+        "right_to_erasure": "Derecho al olvido / Purga de datos",
+        "collapse": "Contraer",
+        "expand": "Expandir",
+        "purge_title": "Restablecer datos",
+        "purge_description": "Seleccione los datos para eliminar permanentemente. Esta acción es irreversible. Solo se conservará el registro de auditoría.",
+        "confirmation_prompt": "Para confirmar, escriba \"DELETE\" a continuación:",
+        "purging": "Eliminando...",
+        "confirm_purge": "Eliminar datos permanentemente"
     }
 }

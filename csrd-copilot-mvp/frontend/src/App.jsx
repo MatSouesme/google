@@ -19,6 +19,7 @@ import FinalReportPage from './pages/FinalReportPage';
 import DataPointsPage from './pages/DataPointsPage';
 import SmartImportPage from './pages/SmartImportPage';
 import EcovadisPage from './pages/EcovadisPage';
+import Settings from './pages/Settings';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -77,6 +78,7 @@ function App() {
                     <Route path="final-report" element={<FinalReportPage />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
                     <Route path="ecovadis" element={<EcovadisPage />} />
+                    <Route path="settings" element={<Settings />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />

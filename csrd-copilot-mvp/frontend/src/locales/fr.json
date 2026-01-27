@@ -14,7 +14,8 @@
         "chat": "Discuter avec les Données",
         "generator": "Générateur IA",
         "connectors": "Connecteurs",
-        "finalReport": "Rapport Final"
+        "finalReport": "Rapport Final",
+        "settings": "Paramètres"
     },
     "login": {
         "title": "CSRD Copilot",
@@ -396,5 +397,19 @@
         "placeholder": "Posez une question sur vos données...",
         "send": "Envoyer",
         "generatedSQL": "SQL Généré :"
+    },
+    "settings": {
+        "title": "Paramètres & Sécurité",
+        "subtitle": "Gérez la sécurité et le cycle de vie de vos données.",
+        "audit_logging_enabled": "La journalisation sécurisée (Audit Logging) est active.",
+        "danger_zone": "Zone de Danger",
+        "right_to_erasure": "Droit à l'oubli / Purge des données",
+        "collapse": "Masquer",
+        "expand": "Afficher",
+        "purge_title": "Réinitialiser les données",
+        "purge_description": "Sélectionnez les données à supprimer définitivement. Cette action est irréversible. Seul le journal d'audit sera conservé.",
+        "confirmation_prompt": "Pour confirmer, tapez \"DELETE\" ci-dessous :",
+        "purging": "Suppression en cours...",
+        "confirm_purge": "Supprimer définitivement les données"
     }
 }

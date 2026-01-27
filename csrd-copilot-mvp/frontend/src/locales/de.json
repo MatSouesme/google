@@ -14,7 +14,8 @@
         "chat": "Mit Daten chatten",
         "generator": "KI-Generator",
         "connectors": "Konnektoren",
-        "finalReport": "Abschlussbericht"
+        "finalReport": "Abschlussbericht",
+        "settings": "Einstellungen"
     },
     "login": {
         "title": "CSRD Copilot",
@@ -398,5 +399,19 @@
         "placeholder": "Stellen Sie eine Frage zu Ihren Daten...",
         "send": "Senden",
         "generatedSQL": "Generiertes SQL:"
+    },
+    "settings": {
+        "title": "Einstellungen & Sicherheit",
+        "subtitle": "Verwalten Sie Sicherheit und Datenlebenszyklus.",
+        "audit_logging_enabled": "Audit-Protokollierung ist aktiv.",
+        "danger_zone": "Gefahrenzone",
+        "right_to_erasure": "Recht auf Vergessenwerden / Datenbereinigung",
+        "collapse": "Einklappen",
+        "expand": "Ausklappen",
+        "purge_title": "Daten zurücksetzen",
+        "purge_description": "Wählen Sie die Daten aus, die dauerhaft gelöscht werden sollen. Diese Aktion ist irreversibel. Nur das Audit-Protokoll bleibt erhalten.",
+        "confirmation_prompt": "Zur Bestätigung geben Sie unten \"DELETE\" ein:",
+        "purging": "Löschen...",
+        "confirm_purge": "Daten dauerhaft löschen"
     }
 }

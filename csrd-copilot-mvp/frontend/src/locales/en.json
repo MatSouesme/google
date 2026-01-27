@@ -14,7 +14,8 @@
         "chat": "Chat with Data",
         "generator": "IA Generator",
         "connectors": "Connectors",
-        "finalReport": "Final Report"
+        "finalReport": "Final Report",
+        "settings": "Settings"
     },
     "login": {
         "title": "CSRD Copilot",
@@ -396,5 +397,19 @@
         "placeholder": "Ask a question about your data...",
         "send": "Send",
         "generatedSQL": "Generated SQL:"
+    },
+    "settings": {
+        "title": "Settings & Security",
+        "subtitle": "Manage security and data lifecycle.",
+        "audit_logging_enabled": "Audit Logging is active.",
+        "danger_zone": "Danger Zone",
+        "right_to_erasure": "Right to Erasure / Data Purge",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "purge_title": "Reset Data",
+        "purge_description": "Select data to permanently delete. This action is irreversible. Only the audit log will be retained.",
+        "confirmation_prompt": "To confirm, type \"DELETE\" below:",
+        "purging": "Purging...",
+        "confirm_purge": "Permanently Delete Data"
     }
 }
