@@ -109,6 +109,70 @@ class RAGClient:
         print(f"Warning: Compliance PDF for {standard} not found.")
         return "(Official text not found. Relying on internal knowledge.)"
 
+    def _get_strategist_context(self, standard: str) -> str:
+        """
+        Retrieves "Strategist" context: A-rated reports and best practices.
+        Sources:
+        1. ai/rag_strategist/extracts/{standard}_good_examples.txt
+        2. ai/rag_strategist/reports/*.pdf
+        """
+        context = ""
+        standard_lower = standard.lower()
+        
+        # 1. Load specific extracts if they exist
+        # Check standard definitions paths first as they are most likely root relative in docker
+        paths_to_check = [
+            f"ai/rag_strategist/extracts/{standard_lower}_good_examples.txt",
+            f"../../ai/rag_strategist/extracts/{standard_lower}_good_examples.txt"
+        ]
+        
+        for path in paths_to_check:
+            if os.path.exists(path):
+                try:
+                    with open(path, "r", encoding="utf-8") as f:
+                        content = f.read()
+                        if content.strip():
+                            context += f"--- BEST PRACTICE EXTRACTS ({standard.upper()}) ---\n{content}\n\n"
+                except Exception as e:
+                    print(f"Error reading strategist extract {path}: {e}")
+
+        # 2. Load PDF Reports (A-rated examples)
+        reports_dir_options = [
+            "ai/rag_strategist/reports", 
+            "../../ai/rag_strategist/reports"
+        ]
+        
+        target_dir = None
+        for d in reports_dir_options:
+            if os.path.exists(d):
+                target_dir = d
+                break
+            
+        if target_dir:
+            try:
+                pdf_files = [f for f in os.listdir(target_dir) if f.lower().endswith('.pdf')]
+                # Limit to 3 reports to keep context manageable but rich
+                for pdf_file in pdf_files[:3]: 
+                    pdf_path = os.path.join(target_dir, pdf_file)
+                    print(f"Loading Strategist Report: {pdf_path}")
+                    try:
+                        # Extract text
+                        text = self._extract_text_from_pdf(pdf_path)
+                        if text:
+                            # Use a reasonable chunk. Gemini 1.5/2.0 can handle huge context, 
+                            # but let's be efficient. 50k chars is ~20 pages of dense text.
+                            truncated_text = text[:50000] 
+                            context += f"--- REFERENCE REPORT: {pdf_file} ---\n{truncated_text}\n\n"
+                    except Exception as e:
+                        print(f"Error processing strategist report {pdf_file}: {e}")
+            except Exception as e:
+                print(f"Error accessing reports directory: {e}")
+
+        if not context:
+            return "(No specific strategist examples found. Relying on general best practices in the prompt.)"
+            
+        return context
+
     def get_company_data(self, standard: str) -> str:
         """Fetches the latest company data for the standard from BigQuery."""
         table_id = f"{self.project_id}.csrd_mvp.{standard}_raw" # Using raw for MVP if validated is empty
@@ -147,8 +211,11 @@ class RAGClient:
         # 1. Fetch Context
         company_data = self.get_company_data(standard)
         
-        # 1b. Fetch Legal Context (PDF)
+        # 1b. Fetch Legal Context (PDF) - CORE 1 (GENDARME)
         legal_context = self._get_compliance_context(standard)
+
+        # 1c. Fetch Strategist Context (PDF/Extracts) - CORE 2 (STRATEGIST)
+        strategist_context = self._get_strategist_context(standard)
         
         # 2. Load Prompts
         system_prompt = self._load_prompt("base_system_prompt.txt")
@@ -183,8 +250,24 @@ class RAGClient:
         COMPANY DATA (BigQuery):
         {company_data}
         
+        ---
+        DUAL-CORE RAG CONTEXT:
+
+        CORE 1: COMPLIANCE (GENDARME)
         LEGAL CONTEXT (Official ESRS {standard.upper()} Text):
         {legal_context}
+
+        CORE 2: STRATEGY (BENCHMARKING) - STYLE REFERENCE ONLY
+        ⚠️ LEGAL & PRIVACY WARNING:
+        The text below comes from external companies (e.g. competitors or leaders).
+        - DO NOT USE any data, KPIs, specific numbers, company names, or location names from these examples.
+        - DO NOT mention these companies in the output.
+        - USE ONLY: The tone of voice, sentence structure, narrative flow, and professional phrasing.
+        - Your goal is to mimic the *structure* and *quality* of the writing, NOT the content.
+
+        STRATEGIST CONTEXT (A-Rated Reports & Best Practices):
+        {strategist_context}
+        ---
         
         Please generate the draft now in the specified language.
         """
