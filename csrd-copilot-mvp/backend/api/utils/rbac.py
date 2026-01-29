@@ -73,6 +73,28 @@ def update_user_role(email: str, role: Role, scopes: List[Scope]):
     }
     save_rbac_db(db)
 
+def get_all_users():
+    """Returns all users from the RBAC database, including hardcoded admins."""
+    users = load_rbac_db()
+    
+    # Add hardcoded admins if not already in the database
+    hardcoded_admins = {
+        "msouesme@albertschool.com": {
+            "role": "admin",
+            "scopes": ["global"]
+        },
+        "admin@csrd.demo": {
+            "role": "admin",
+            "scopes": ["global"]
+        }
+    }
+    
+    for email, data in hardcoded_admins.items():
+        if email not in users:
+            users[email] = data
+    
+    return users
+
 def get_user_profile(decoded_token: dict) -> UserProfile:
     uid = decoded_token.get("uid")
     email = decoded_token.get("email", "")

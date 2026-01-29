@@ -9,11 +9,11 @@ import datetime
 # Fix import path for Docker environment
 try:
     from backend.api.utils.auth import get_current_user
-    from backend.api.utils.rbac import UserProfile, Scope, Role, update_user_role
+    from backend.api.utils.rbac import UserProfile, Scope, Role, update_user_role, get_all_users
     from backend.api.services.audit_trail import AuditTrailService
 except ImportError:
     from utils.auth import get_current_user
-    from utils.rbac import UserProfile, Scope, Role, update_user_role
+    from utils.rbac import UserProfile, Scope, Role, update_user_role, get_all_users
     from services.audit_trail import AuditTrailService
 
 router = APIRouter()
@@ -23,6 +23,18 @@ class UserUpdatePayload(BaseModel):
     email: str
     role: Role
     scopes: List[Scope]
+
+@router.get("/users/list")
+async def list_users(user: UserProfile = Depends(get_current_user)):
+    """
+    Returns the list of all users with their roles and scopes.
+    Requires ADMIN privileges.
+    """
+    if user.role != Role.ADMIN:
+        raise HTTPException(status_code=403, detail="Only Admins can view user list.")
+    
+    users_db = get_all_users()
+    return {"users": users_db}
 
 @router.post("/users/update")
 async def update_user(

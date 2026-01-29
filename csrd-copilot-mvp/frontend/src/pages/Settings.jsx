@@ -18,8 +18,39 @@ const Settings = ({ user }) => {
     const [targetScopes, setTargetScopes] = useState(['global']);
     const [isUpdatingUser, setIsUpdatingUser] = useState(false);
     const [userUpdateMsg, setUserUpdateMsg] = useState('');
+    const [usersList, setUsersList] = useState({});
+    const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
     const isAdmin = user?.rbac?.role === 'admin';
+
+    // Fetch users list on mount if admin
+    React.useEffect(() => {
+        if (isAdmin) {
+            fetchUsersList();
+        }
+    }, [isAdmin]);
+
+    const fetchUsersList = async () => {
+        setIsLoadingUsers(true);
+        try {
+            const currentUser = auth.currentUser;
+            if (!currentUser) return;
+            const token = await currentUser.getIdToken();
+
+            const response = await fetch(`${API_BASE_URL}/users/list`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                setUsersList(data.users || {});
+            }
+        } catch (e) {
+            console.error("Failed to load users list", e);
+        } finally {
+            setIsLoadingUsers(false);
+        }
+    };
 
     const handleUpdateRole = async () => {
         setIsUpdatingUser(true);
@@ -45,6 +76,7 @@ const Settings = ({ user }) => {
             const data = await response.json();
             if (response.ok) {
                 setUserUpdateMsg("Rôle mis à jour avec succès.");
+                fetchUsersList(); // Refresh the list
             } else {
                 setUserUpdateMsg("Erreur: " + data.detail);
             }
@@ -203,6 +235,47 @@ const Settings = ({ user }) => {
                     {isUpdatingUser ? 'Enregistrer' : t('settings.update_role', 'Mettre à jour le rôle')}
                 </button>
                  {userUpdateMsg && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: userUpdateMsg.startsWith('Erreur') ? 'red' : 'lightgreen' }}>{userUpdateMsg}</p>}
+                
+                {/* Users List */}
+                <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                        {t('settings.current_users', 'Utilisateurs actuels')}
+                    </h3>
+                    {isLoadingUsers ? (
+                        <p style={{ color: 'var(--text-secondary)' }}>Chargement...</p>
+                    ) : Object.keys(usersList).length === 0 ? (
+                        <p style={{ color: 'var(--text-secondary)' }}>Aucun utilisateur configuré</p>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {Object.entries(usersList).map(([email, userData]) => (
+                                <div key={email} style={{ 
+                                    display: 'flex', 
+                                    justifyContent: 'space-between', 
+                                    alignItems: 'center',
+                                    padding: '0.75rem 1rem',
+                                    backgroundColor: 'var(--bg-color)',
+                                    borderRadius: '0.5rem',
+                                    border: '1px solid var(--border-color)'
+                                }}>
+                                    <div>
+                                        <div style={{ fontWeight: '500', color: 'var(--text-color)' }}>{email}</div>
+                                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                                            <span style={{ 
+                                                textTransform: 'uppercase', 
+                                                fontWeight: '600',
+                                                color: userData.role === 'admin' ? '#ef4444' : userData.role === 'editor' ? '#3b82f6' : '#6b7280'
+                                            }}>
+                                                {userData.role}
+                                            </span>
+                                            {' · '}
+                                            <span>{userData.scopes?.join(', ') || 'no scopes'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
             )}
 
