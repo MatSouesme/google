@@ -83,6 +83,10 @@ def get_all_users():
             "role": "admin",
             "scopes": ["global"]
         },
+        "aarroyo@albertschool.com": {
+            "role": "admin",
+            "scopes": ["global"]
+        },
         "admin@csrd.demo": {
             "role": "admin",
             "scopes": ["global"]
@@ -126,7 +130,7 @@ def get_user_profile(decoded_token: dict) -> UserProfile:
 
     # 3. Fallback logic
     # Hardcoded Admins for MVP/Dev logic
-    if email == "msouesme@albertschool.com" or email.startswith("demo") or uid == "demo123":
+    if email in ["msouesme@albertschool.com", "aarroyo@albertschool.com"] or email.startswith("demo") or uid == "demo123":
          return UserProfile(uid=uid, email=email, role=Role.ADMIN, scopes=[Scope.GLOBAL])
 
     # Default to Reader/Global if unknown (or restrict access)
