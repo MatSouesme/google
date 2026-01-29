@@ -102,6 +102,11 @@ const Layout = ({ user }) => {
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                             <span className="user-email">{user?.email}</span>
+                            {user?.rbac && (
+                                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                    {user.rbac.role} {user.rbac.scopes?.includes('global') ? '' : `(${user.rbac.scopes?.[0] || ''})`}
+                                </span>
+                            )}
                         </div>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>

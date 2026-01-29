@@ -15,9 +15,11 @@ import datetime
 
 # Fix import path for Docker environment
 try:
-    from backend.api.utils.auth import verify_token
+    from backend.api.utils.auth import get_current_user
+    from backend.api.utils.rbac import UserProfile, Role
 except ImportError:
-    from utils.auth import verify_token
+    from utils.auth import get_current_user
+    from utils.rbac import UserProfile, Role
 
 router = APIRouter()
 
@@ -41,11 +43,14 @@ def test_endpoint():
     return {"status": "ok", "message": "Smart extraction router is reachable"}
 
 @router.post("/data/smart-extract", response_model=ExtractionResponse)
-async def smart_extract(file: UploadFile = File(...), user=Depends(verify_token)):
+async def smart_extract(file: UploadFile = File(...), user: UserProfile = Depends(get_current_user)):
     """
     Analyzes an uploaded file (PDF/Excel/Images) using Gemini (Vertex AI) to extract likely CSRD data points.
     Supports multimodal inputs (images, scanned PDFs) via native Vertex AI capabilities.
     """
+    if user.role not in [Role.ADMIN, Role.EDITOR]:
+         raise HTTPException(status_code=403, detail="Insufficient permissions. Only Editors and Admins can perform smart extraction.")
+
     print(f"Received smart-extract request: {file.filename}")
     
     # 1. Read File Content

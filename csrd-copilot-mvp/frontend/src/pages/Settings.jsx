@@ -4,13 +4,56 @@ import { Trash2, AlertTriangle, CheckCircle, Shield } from 'lucide-react';
 import { API_BASE_URL } from '../api/apiClient';
 import { auth } from '../firebase-config';
 
-const Settings = () => {
+const Settings = ({ user }) => {
     const { t } = useTranslation();
     const [confirmation, setConfirmation] = useState('');
     const [selectedScope, setSelectedScope] = useState('global');
     const [isPurging, setIsPurging] = useState(false);
     const [purgeResult, setPurgeResult] = useState(null);
     const [showDangerZone, setShowDangerZone] = useState(false);
+    
+    // User Management State
+    const [targetEmail, setTargetEmail] = useState('');
+    const [targetRole, setTargetRole] = useState('reader');
+    const [targetScopes, setTargetScopes] = useState(['global']);
+    const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+    const [userUpdateMsg, setUserUpdateMsg] = useState('');
+
+    const isAdmin = user?.rbac?.role === 'admin';
+
+    const handleUpdateRole = async () => {
+        setIsUpdatingUser(true);
+        setUserUpdateMsg('');
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error("Authentication required");
+            const token = await user.getIdToken();
+
+            const response = await fetch(`${API_BASE_URL}/users/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    email: targetEmail,
+                    role: targetRole,
+                    scopes: targetScopes
+                })
+            });
+            
+            const data = await response.json();
+            if (response.ok) {
+                setUserUpdateMsg("Rôle mis à jour avec succès.");
+            } else {
+                setUserUpdateMsg("Erreur: " + data.detail);
+            }
+        } catch (e) {
+            setUserUpdateMsg("Erreur: " + e.message);
+        } finally {
+            setIsUpdatingUser(false);
+        }
+    };
 
     const handlePurge = async () => {
         if (confirmation !== 'DELETE') return;
@@ -80,6 +123,90 @@ const Settings = () => {
                 </div>
             </div>
 
+            {/* User Management Section - Admin Only */}
+            {isAdmin && (
+            <div style={{
+                backgroundColor: 'var(--surface-color)',
+                borderRadius: '12px',
+                padding: '2rem',
+                border: '1px solid var(--border-color)',
+                marginBottom: '2rem',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                    <div style={{ padding: '0.5rem', borderRadius: '8px', backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
+                        <Shield size={24} />
+                    </div>
+                    <div>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{t('settings.user_management', 'Gestion des Utilisateurs')}</h2>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                            {t('settings.user_desc', 'Assigner des rôles et permissions aux utilisateurs')}
+                        </p>
+                    </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>{t('auth.email')}</label>
+                        <input 
+                            type="email" 
+                            style={{ width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #4b5563', backgroundColor: 'var(--bg-color)' }}
+                            value={targetEmail}
+                            onChange={(e) => setTargetEmail(e.target.value)}
+                            placeholder="user@example.com"
+                        />
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>{t('settings.role', 'Rôle')}</label>
+                        <select 
+                            style={{ width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #4b5563', backgroundColor: 'var(--bg-color)' }}
+                            value={targetRole}
+                            onChange={(e) => setTargetRole(e.target.value)}
+                        >
+                            <option value="reader">Reader</option>
+                            <option value="editor">Editor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div style={{ gridColumn: 'span 2' }}>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>{t('settings.scope', 'Périmètre')}</label>
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                           {['global', 'environment', 'social', 'governance'].map(scope => (
+                               <label key={scope} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                   <input 
+                                       type="checkbox" 
+                                       checked={targetScopes.includes(scope)}
+                                       onChange={(e) => {
+                                           if(e.target.checked) setTargetScopes([...targetScopes, scope]);
+                                           else setTargetScopes(targetScopes.filter(s => s !== scope));
+                                       }}
+                                   />
+                                   <span style={{ textTransform: 'capitalize' }}>{scope}</span>
+                               </label>
+                           ))}
+                        </div>
+                    </div>
+                </div>
+                 <button 
+                    onClick={handleUpdateRole}
+                    disabled={!targetEmail || isUpdatingUser}
+                    style={{ 
+                        marginTop: '1.5rem', 
+                        padding: '0.5rem 1rem', 
+                        backgroundColor: '#2563eb', 
+                        color: 'white', 
+                        borderRadius: '0.25rem',
+                        cursor: (!targetEmail || isUpdatingUser) ? 'not-allowed' : 'pointer',
+                        opacity: (!targetEmail || isUpdatingUser) ? 0.5 : 1
+                    }}
+                >
+                    {isUpdatingUser ? 'Enregistrer' : t('settings.update_role', 'Mettre à jour le rôle')}
+                </button>
+                 {userUpdateMsg && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: userUpdateMsg.startsWith('Erreur') ? 'red' : 'lightgreen' }}>{userUpdateMsg}</p>}
+            </div>
+            )}
+
+            {isAdmin && (
             <div style={{ 
                 border: '1px solid var(--error-color)',
                 borderRadius: '12px',
@@ -230,6 +357,7 @@ const Settings = () => {
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 };

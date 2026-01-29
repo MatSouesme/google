@@ -17,12 +17,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin
+    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes
 except ImportError:
     try:
-        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin
+        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes
     except ImportError:
-        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin
+        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes
 
 app = FastAPI(title="CSRD Copilot API")
 
@@ -70,6 +70,8 @@ app.include_router(smart_extraction.router)
 app.include_router(dispatcher.router)
 app.include_router(analytics.router)
 app.include_router(ecovadis.router)
+app.include_router(admin.router)
+app.include_router(auth_routes.router)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev
@@ -241,6 +243,7 @@ def export_xbrl(report_id: str):
     )
 
 app.include_router(admin.router)
+app.include_router(auth_routes.router)
 
 if __name__ == "__main__":
     import uvicorn

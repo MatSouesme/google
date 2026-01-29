@@ -1,0 +1,18 @@
+{
+  "admin@csrd.demo": {
+    "role": "admin",
+    "scopes": ["global"]
+  },
+  "editor-env@csrd.demo": {
+    "role": "editor",
+    "scopes": ["environment"]
+  },
+  "reader@csrd.demo": {
+    "role": "reader",
+    "scopes": ["global"]
+  },
+  "msouesme@albertschool.com": {
+    "role": "admin",
+    "scopes": ["global"]
+  }
+}

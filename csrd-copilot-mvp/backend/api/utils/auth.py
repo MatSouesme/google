@@ -36,3 +36,17 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Security(security))
             detail=f"Invalid authentication credentials: {str(e)}",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+# Fix import path for Docker environment
+try:
+    from backend.api.utils.rbac import get_user_profile, UserProfile
+except ImportError:
+    from utils.rbac import get_user_profile, UserProfile
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Security(security)) -> UserProfile:
+    """
+    Verifies token and returns a UserProfile object with roles.
+    """
+    decoded_token = verify_token(credentials)
+    return get_user_profile(decoded_token)
+

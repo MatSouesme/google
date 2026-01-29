@@ -7,9 +7,11 @@ from google.cloud import bigquery
 
 # Fix import path for Docker environment
 try:
-    from backend.api.utils.auth import verify_token
+    from backend.api.utils.auth import get_current_user
+    from backend.api.utils.rbac import UserProfile, Scope
 except ImportError:
-    from utils.auth import verify_token
+    from utils.auth import get_current_user
+    from utils.rbac import UserProfile, Scope
 
 router = APIRouter()
 
@@ -20,11 +22,30 @@ class ManualEntryRequest(BaseModel):
     comment: Optional[str] = None
     unit: Optional[str] = None
 
+def infer_scope_from_kpi(kpi_id: str) -> Scope:
+    """Helper to determine data scope from KPI ID (e.g. E1-1 -> ENVIRONMENT)."""
+    prefix = kpi_id.split('-')[0].upper() if '-' in kpi_id else kpi_id.upper()
+    
+    if prefix.startswith('E'): return Scope.ENVIRONMENT
+    if prefix.startswith('S'): return Scope.SOCIAL
+    if prefix.startswith('G'): return Scope.GOVERNANCE
+    
+    return Scope.GLOBAL # Fallback for unknown IDs
+
 @router.post("/data/manual-entry")
-def submit_manual_entry(request: ManualEntryRequest, user=Depends(verify_token)):
+def submit_manual_entry(request: ManualEntryRequest, user: UserProfile = Depends(get_current_user)):
     """
     Submits manually entered data for a KPI to BigQuery.
+    Protected by RBAC.
     """
+    # RBAC Check
+    required_scope = infer_scope_from_kpi(request.kpi_id)
+    if not user.has_permission("write", required_scope):
+        raise HTTPException(
+            status_code=403, 
+            detail=f"Permission denied. You need '{required_scope}' access to edit this KPI."
+        )
+
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
     client = bigquery.Client(project=project_id)
     table_id = f"{project_id}.csrd_mvp.manual_entries"
@@ -44,7 +65,7 @@ def submit_manual_entry(request: ManualEntryRequest, user=Depends(verify_token))
         "date": entry_date,
         "comment": request.comment,
         "unit": request.unit,
-        "user_email": user.get('email') if user else 'anonymous',
+        "user_email": user.email,
         "submission_timestamp": datetime.datetime.now().isoformat()
     }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase-config';
+import { API_BASE_URL } from './api/apiClient';
 import './App.css';
 
 // Components
@@ -29,12 +30,30 @@ function App() {
         // Check for demo mode first
         const isDemo = localStorage.getItem('ecoply_demo_mode');
         if (isDemo === 'true') {
-            setUser({ email: 'demo@ecoply.com', uid: 'demo123' });
+            setUser({ 
+                email: 'demo@ecoply.com', 
+                uid: 'demo123',
+                rbac: { role: 'admin', scopes: ['global'] }
+            });
             setLoading(false);
             return;
         }
 
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+                try {
+                    const token = await currentUser.getIdToken();
+                    const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (response.ok) {
+                        const profile = await response.json();
+                        currentUser.rbac = profile;
+                    }
+                } catch (e) {
+                    console.error("Failed to load user profile", e);
+                }
+            }
             setUser(currentUser);
             setLoading(false);
         });
@@ -78,7 +97,7 @@ function App() {
                     <Route path="final-report" element={<FinalReportPage />} />
                     <Route path="connectors" element={<ConnectorsPage />} />
                     <Route path="ecovadis" element={<EcovadisPage />} />
-                    <Route path="settings" element={<Settings />} />
+                    <Route path="settings" element={<Settings user={user} />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />
