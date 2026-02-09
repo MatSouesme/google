@@ -1,0 +1,326 @@
+import React, { useState, useEffect } from 'react';
+import { X, FileText, Download, ExternalLink, AlertCircle, CheckCircle2, Clock, MapPin } from 'lucide-react';
+import { auth } from '../firebase-config';
+import { API_BASE_URL } from '../api/apiClient';
+
+const LineagePanel = ({ kpiId, value, standard, onClose }) => {
+    const [lineageData, setLineageData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (kpiId || value) {
+            fetchLineage();
+        }
+    }, [kpiId, value, standard]);
+
+    const fetchLineage = async () => {
+        setLoading(true);
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            const token = await user.getIdToken();
+
+            let response;
+            // Try to fetch by value first (more reliable)
+            if (value && standard) {
+                // Extract numeric value from formatted string (e.g., "1,234 tCO2e" -> "1234")
+                const numericValue = value.replace(/[^\d.]/g, '');
+                response = await fetch(
+                    `${API_BASE_URL}/lineage/search?value=${encodeURIComponent(numericValue)}&standard=${encodeURIComponent(standard)}`,
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+            } else if (kpiId) {
+                // Fallback to KPI ID if provided
+                response = await fetch(`${API_BASE_URL}/lineage/kpi/${encodeURIComponent(kpiId)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+            }
+
+            if (response && response.ok) {
+                const data = await response.json();
+                setLineageData(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch lineage:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDownloadSource = async (sourceFilename) => {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            const token = await user.getIdToken();
+
+            const response = await fetch(`${API_BASE_URL}/lineage/document/${encodeURIComponent(sourceFilename)}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = sourceFilename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }
+        } catch (error) {
+            console.error('Failed to download source:', error);
+        }
+    };
+
+    const formatDate = (timestamp) => {
+        if (!timestamp) return 'N/A';
+        try {
+            return new Date(timestamp).toLocaleString('fr-FR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch {
+            return timestamp;
+        }
+    };
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            width: '500px',
+            height: '100vh',
+            backgroundColor: 'var(--surface-color)',
+            borderLeft: '1px solid var(--border-color)',
+            boxShadow: '-4px 0 12px rgba(0, 0, 0, 0.1)',
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            animation: 'slideInRight 0.3s ease-out'
+        }}>
+            {/* Header */}
+            <div style={{
+                padding: '1.5rem',
+                borderBottom: '1px solid var(--border-color)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'start'
+            }}>
+                <div>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-color)', marginBottom: '0.25rem' }}>
+                        Traçabilité des Données
+                    </h3>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                        {kpiId}
+                    </p>
+                </div>
+                <button
+                    onClick={onClose}
+                    style={{
+                        padding: '0.5rem',
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--text-secondary)',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <X size={20} />
+                </button>
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+                {loading ? (
+                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                        <p style={{ color: 'var(--text-secondary)' }}>Chargement des données de traçabilité...</p>
+                    </div>
+                ) : !lineageData || lineageData.sources.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                        <AlertCircle size={48} color="#f59e0b" style={{ margin: '0 auto 1rem' }} />
+                        <p style={{ color: 'var(--text-secondary)' }}>
+                            Aucune source de données trouvée pour ce KPI
+                        </p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Value Info */}
+                        {value && (
+                            <div style={{
+                                padding: '1rem',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                borderRadius: '8px',
+                                marginBottom: '1.5rem',
+                                border: '1px solid rgba(59, 130, 246, 0.2)'
+                            }}>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: '600' }}>
+                                    Valeur Utilisée
+                                </div>
+                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#3b82f6' }}>
+                                    {value}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Summary */}
+                        <div style={{
+                            padding: '1rem',
+                            backgroundColor: 'var(--bg-color)',
+                            borderRadius: '8px',
+                            marginBottom: '1.5rem',
+                            border: '1px solid var(--border-color)'
+                        }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+                                        Sources
+                                    </div>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-color)' }}>
+                                        {lineageData.sources.length}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+                                        Entrées
+                                    </div>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-color)' }}>
+                                        {lineageData.sources.reduce((sum, s) => sum + s.entries.length, 0)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sources */}
+                        <h4 style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--text-color)', marginBottom: '1rem', textTransform: 'uppercase' }}>
+                            Documents Sources
+                        </h4>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {lineageData.sources.map((source, idx) => (
+                                <div
+                                    key={idx}
+                                    style={{
+                                        backgroundColor: 'var(--bg-color)',
+                                        borderRadius: '8px',
+                                        border: '1px solid var(--border-color)',
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    {/* Source Header */}
+                                    <div style={{
+                                        padding: '1rem',
+                                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                                        borderBottom: '1px solid var(--border-color)'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
+                                            <FileText size={20} color="#3b82f6" style={{ flexShrink: 0, marginTop: '2px' }} />
+                                            <div style={{ flex: 1, minWidth: 0 }}>
+                                                <div style={{ fontWeight: '600', color: 'var(--text-color)', marginBottom: '0.25rem', fontSize: '0.95rem' }}>
+                                                    {source.source_filename}
+                                                </div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                                                    {source.entries.length} extraction{source.entries.length > 1 ? 's' : ''}
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => handleDownloadSource(source.source_filename)}
+                                                style={{
+                                                    padding: '0.5rem',
+                                                    backgroundColor: 'transparent',
+                                                    border: '1px solid var(--border-color)',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    color: 'var(--text-color)',
+                                                    display: 'flex',
+                                                    alignItems: 'center'
+                                                }}
+                                                title="Télécharger le document"
+                                            >
+                                                <Download size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Entries */}
+                                    <div style={{ padding: '1rem' }}>
+                                        {source.entries.map((entry, entryIdx) => (
+                                            <div
+                                                key={entryIdx}
+                                                style={{
+                                                    marginBottom: entryIdx < source.entries.length - 1 ? '1rem' : 0,
+                                                    paddingBottom: entryIdx < source.entries.length - 1 ? '1rem' : 0,
+                                                    borderBottom: entryIdx < source.entries.length - 1 ? '1px solid var(--border-color)' : 'none'
+                                                }}
+                                            >
+                                                {/* Value */}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                                                    <CheckCircle2 size={16} color="#10b981" />
+                                                    <span style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-color)' }}>
+                                                        {entry.value} {entry.unit || ''}
+                                                    </span>
+                                                    {entry.confidence && (
+                                                        <span style={{
+                                                            fontSize: '0.75rem',
+                                                            padding: '0.125rem 0.5rem',
+                                                            borderRadius: '12px',
+                                                            backgroundColor: entry.confidence > 0.8 ? 'rgba(16, 185, 129, 0.1)' : entry.confidence > 0.6 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                                            color: entry.confidence > 0.8 ? '#10b981' : entry.confidence > 0.6 ? '#f59e0b' : '#ef4444',
+                                                            fontWeight: '500'
+                                                        }}>
+                                                            {(entry.confidence * 100).toFixed(0)}% confiance
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* Metadata */}
+                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+                                                    {entry.page_number && (
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                            <MapPin size={12} />
+                                                            Page {entry.page_number}
+                                                        </div>
+                                                    )}
+                                                    {entry.ingestion_timestamp && (
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                            <Clock size={12} />
+                                                            {formatDate(entry.ingestion_timestamp)}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Snippet */}
+                                                {entry.snippet && (
+                                                    <div style={{
+                                                        padding: '0.75rem',
+                                                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                                                        borderRadius: '6px',
+                                                        fontSize: '0.8rem',
+                                                        color: 'var(--text-secondary)',
+                                                        fontStyle: 'italic',
+                                                        lineHeight: '1.4'
+                                                    }}>
+                                                        "{entry.snippet}"
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default LineagePanel;

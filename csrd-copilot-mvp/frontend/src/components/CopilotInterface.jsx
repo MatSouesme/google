@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../api/apiClient';
+import LineagePanel from './LineagePanel';
 
 const TOPICS_BY_STANDARD = {
   e1: [
@@ -78,6 +79,9 @@ const CopilotInterface = ({ enabledScopes }) => {
   const [successMsg, setSuccessMsg] = useState('');
   const [showSources, setShowSources] = useState(false);
   const [currentDraftId, setCurrentDraftId] = useState(null);
+  const [lineagePanelOpen, setLineagePanelOpen] = useState(false);
+  const [selectedKpiId, setSelectedKpiId] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -248,6 +252,12 @@ const CopilotInterface = ({ enabledScopes }) => {
     } finally {
       setXbrlLoading(false);
     }
+  };
+
+  const handleLineageClick = (kpiId, value) => {
+    setSelectedKpiId(kpiId);
+    setSelectedValue(value);
+    setLineagePanelOpen(true);
   };
 
   return (
@@ -600,17 +610,65 @@ const CopilotInterface = ({ enabledScopes }) => {
                       return <span>ℹ️</span>;
                     }
                   }
+                  // Handle lineage links
+                  if (props.href && props.href.startsWith('#lineage:')) {
+                    try {
+                      const lineageInfo = decodeURIComponent(props.href.replace('#lineage:', ''));
+                      const [kpiId, value] = lineageInfo.split('|');
+                      return (
+                        <span
+                          onClick={() => handleLineageClick(kpiId, value)}
+                          style={{
+                            color: '#3b82f6',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            fontWeight: '500',
+                            padding: '0 2px',
+                            borderRadius: '3px',
+                            transition: 'background-color 0.2s'
+                          }}
+                          onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
+                          onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                          title={`Voir la traçabilité de ${kpiId}`}
+                        >
+                          {props.children}
+                        </span>
+                      );
+                    } catch (e) {
+                      console.error("Lineage link error:", e);
+                      return <span>{props.children}</span>;
+                    }
+                  }
                   return <a {...props} style={{ color: '#64b5f6' }} target="_blank" rel="noopener noreferrer" />;
                 }
               }}
             >
-              {/* Regex explanation:
-                    \[\[           : Match literal [[
-                    \s*Source\s*:  : Match "Source" with optional spaces and colon
-                    ([\s\S]*?)     : Match any character (including newlines) non-greedily
-                    \]\]           : Match literal ]]
-                */}
-              {draft ? draft.replace(/\[\[\s*Source\s*:([\s\S]*?)\]\]/gi, (match, content) => ` [ℹ️](#audit:${encodeURIComponent(content.trim())})`) : ''}
+              {(() => {
+                if (!draft) return '';
+                let processedDraft = draft;
+                
+                // Replace [[Source: ...]] with audit tooltip
+                processedDraft = processedDraft.replace(/\[\[\s*Source\s*:([\s\S]*?)\]\]/gi, (match, content) => ` [ℹ️](#audit:${encodeURIComponent(content.trim())})`);
+                
+                // Detect and mark KPI values for lineage tracing
+                // Pattern: numbers with units followed by KPI indicators (e.g., "1,234 tCO2e", "45%", "€2.3M")
+                // We look for patterns that suggest data points: number + optional comma/space + unit
+                processedDraft = processedDraft.replace(
+                  /(\d[\d,\s]*(?:\.\d+)?\s*(?:tCO2e|MWh|GWh|kWh|m³|kg|tonnes?|%|€|\$|USD|EUR|GBP|hours?|days?|FTE|employees?))/gi,
+                  (match) => {
+                    // Try to find a KPI ID in the surrounding context (previous 200 chars)
+                    // This is a heuristic - in production, the backend should tag values with KPI IDs
+                    const kpiPattern = /([A-Z]\d+[-_][A-Z0-9_]+)/;
+                    const context = processedDraft.substring(Math.max(0, processedDraft.indexOf(match) - 200), processedDraft.indexOf(match));
+                    const kpiMatch = context.match(kpiPattern);
+                    const kpiId = kpiMatch ? kpiMatch[1] : `${standard.toUpperCase()}_UNKNOWN`;
+                    
+                    return `[${match}](#lineage:${encodeURIComponent(kpiId + '|' + match)})`;
+                  }
+                );
+                
+                return processedDraft;
+              })()}
             </ReactMarkdown>
           </div>
 
@@ -634,6 +692,16 @@ const CopilotInterface = ({ enabledScopes }) => {
             </div>
           )}
         </div>
+      )}
+
+      {/* Lineage Panel */}
+      {lineagePanelOpen && (
+        <LineagePanel
+          kpiId={selectedKpiId}
+          value={selectedValue}
+          standard={standard}
+          onClose={() => setLineagePanelOpen(false)}
+        />
       )}
     </div>
   );

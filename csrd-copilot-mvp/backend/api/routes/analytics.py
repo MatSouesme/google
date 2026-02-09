@@ -6,8 +6,10 @@ from typing import List, Dict, Any
 
 try:
     from backend.api.utils.auth import verify_token
+    from backend.api.services.compliance_progress_service import ComplianceProgressService
 except ImportError:
     from utils.auth import verify_token
+    from services.compliance_progress_service import ComplianceProgressService
 
 router = APIRouter()
 
@@ -148,3 +150,32 @@ def get_gap_analysis(standard: str = "e1", user=Depends(verify_token)):
             "error": str(e),
             "missing_kpis": []
         }
+
+@router.get("/analytics/compliance-progress")
+def get_compliance_progress(user=Depends(verify_token)):
+    """
+    Retourne la progression globale de compliance CSRD avec:
+    - Progress bars par Standard (E1, S1, G1)
+    - KPIs manquants critiques
+    - Timeline de soumission réglementaire
+    """
+    try:
+        service = ComplianceProgressService()
+        return service.get_overall_progress()
+    except Exception as e:
+        print(f"Error in compliance progress: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/analytics/regulatory-timeline")
+def get_regulatory_timeline(user=Depends(verify_token)):
+    """
+    Retourne la timeline des deadlines réglementaires CSRD
+    """
+    try:
+        service = ComplianceProgressService()
+        return {
+            "timeline": service.get_regulatory_timeline()
+        }
+    except Exception as e:
+        print(f"Error in regulatory timeline: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
@@ -87,6 +87,16 @@ const Layout = ({ user }) => {
                     <Link to="/connectors" className={`nav-item ${isActive('/connectors') ? 'active' : ''}`}>
                         <LinkIcon size={20} />
                         <span>{t('nav.connectors')}</span>
+                    </Link>
+
+                    <Link to="/lineage" className={`nav-item ${isActive('/lineage') ? 'active' : ''}`}>
+                        <TrendingUp size={20} />
+                        <span>{t('nav.lineage', 'Lineage')}</span>
+                    </Link>
+
+                    <Link to="/discussions" className={`nav-item ${isActive('/discussions') ? 'active' : ''}`}>
+                        <MessageCircle size={20} />
+                        <span>{t('nav.discussions', 'Discussions')}</span>
                     </Link>
 
                     <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`}>

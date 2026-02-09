@@ -301,3 +301,15 @@ button {
   background-color: rgba(16, 185, 129, 0.05);
   transform: scale(1.02);
 }
+
+/* Lineage Panel Animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

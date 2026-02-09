@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
+import KPIWithComments from './KPIWithComments';
 
 const GapAnalysisCard = ({ standard }) => {
     const [stats, setStats] = useState(null);
@@ -93,15 +94,22 @@ const GapAnalysisCard = ({ standard }) => {
                     ) : (
                         <div style={{ display: 'grid', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto' }}>
                             {stats.missing_kpis.map((kpi) => (
-                                <div key={kpi.id} style={{ 
-                                    padding: '0.5rem', 
-                                    backgroundColor: 'rgba(239, 68, 68, 0.1)', 
-                                    borderRadius: '4px',
-                                    borderLeft: '3px solid #ef4444',
-                                    fontSize: '0.85rem'
-                                }}>
-                                    <strong>{kpi.id}</strong>: {kpi.name}
-                                </div>
+                                <KPIWithComments
+                                    key={kpi.id}
+                                    kpiId={kpi.id}
+                                    dataSource="gap_analysis"
+                                    style={{ marginBottom: '0.5rem' }}
+                                >
+                                    <div style={{ 
+                                        padding: '0.5rem', 
+                                        backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                                        borderRadius: '4px',
+                                        borderLeft: '3px solid #ef4444',
+                                        fontSize: '0.85rem'
+                                    }}>
+                                        <strong>{kpi.id}</strong>: {kpi.name}
+                                    </div>
+                                </KPIWithComments>
                             ))}
                         </div>
                     )}

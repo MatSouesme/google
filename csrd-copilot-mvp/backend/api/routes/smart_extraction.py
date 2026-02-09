@@ -17,11 +17,14 @@ import datetime
 try:
     from backend.api.utils.auth import get_current_user
     from backend.api.utils.rbac import UserProfile, Role
+    from backend.api.services.lineage_service import LineageService
 except ImportError:
     from utils.auth import get_current_user
     from utils.rbac import UserProfile, Role
+    from services.lineage_service import LineageService
 
 router = APIRouter()
+lineage_service = LineageService()
 
 class ExtractedCandidate(BaseModel):
     kpi_id: Optional[str] = "Unknown"
@@ -316,7 +319,27 @@ async def smart_extract(file: UploadFile = File(...), user: UserProfile = Depend
         except json.JSONDecodeError:
             candidates_json = []
         
-        # 3. Save Document Content for RAG (Chat with Documents)
+        # 3. Record Lineage for each extracted candidate
+        gcs_url = f"gs://{bucket_name}/smart_imports/{upload_id}/{filename}"
+        for candidate in candidates_json:
+            lineage_id = str(uuid.uuid4())
+            lineage_service.record_lineage(
+                lineage_id=lineage_id,
+                kpi_id=candidate.get('kpi_id', 'UNKNOWN'),
+                value=str(candidate.get('value', '')),
+                source_type='pdf' if filename.endswith('.pdf') else 'excel' if filename.endswith(('.xlsx', '.xls')) else 'other',
+                user_email=user.email,
+                unit=candidate.get('unit'),
+                date=candidate.get('date'),
+                source_filename=filename,
+                source_url=gcs_url,
+                page_number=candidate.get('page_number'),
+                snippet=candidate.get('snippet'),
+                confidence=candidate.get('confidence'),
+                upload_id=upload_id,
+            )
+        
+        # 4. Save Document Content for RAG (Chat with Documents)
         try:
             bq_client = bigquery.Client(project=project_id)
             table_id = f"{project_id}.csrd_mvp.documents_content"

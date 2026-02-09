@@ -21,6 +21,9 @@ import DataPointsPage from './pages/DataPointsPage';
 import SmartImportPage from './pages/SmartImportPage';
 import EcovadisPage from './pages/EcovadisPage';
 import Settings from './pages/Settings';
+import LineagePage from './pages/LineagePage';
+import CommentsDemo from './pages/CommentsDemo';
+import Discussions from './pages/Discussions';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -98,6 +101,9 @@ function App() {
                     <Route path="connectors" element={<ConnectorsPage />} />
                     <Route path="ecovadis" element={<EcovadisPage />} />
                     <Route path="settings" element={<Settings user={user} />} />
+                    <Route path="lineage" element={<LineagePage />} />
+                    <Route path="discussions" element={<Discussions />} />
+                    <Route path="comments-demo" element={<CommentsDemo />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />
