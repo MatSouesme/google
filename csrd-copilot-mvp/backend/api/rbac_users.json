@@ -1,18 +1,32 @@
 {
   "admin@csrd.demo": {
     "role": "admin",
-    "scopes": ["global"]
+    "scopes": [
+      "global"
+    ]
   },
   "editor-env@csrd.demo": {
     "role": "editor",
-    "scopes": ["environment"]
+    "scopes": [
+      "environment"
+    ]
   },
   "reader@csrd.demo": {
     "role": "reader",
-    "scopes": ["global"]
+    "scopes": [
+      "global"
+    ]
   },
   "msouesme@albertschool.com": {
     "role": "admin",
-    "scopes": ["global"]
+    "scopes": [
+      "global"
+    ]
+  },
+  "antonin.arroyo@gmail.com": {
+    "role": "reader",
+    "scopes": [
+      "governance"
+    ]
   }
 }

@@ -15,6 +15,9 @@
         "generator": "Générateur IA",
         "connectors": "Connecteurs",
         "finalReport": "Rapport Final",
+        "lineage": "Traçabilité",
+        "discussions": "Discussions",
+        "ecovadis": "Audit EcoVadis",
         "settings": "Paramètres"
     },
     "login": {
@@ -62,7 +65,9 @@
         "language": "Langue du rapport",
         "languages": {
             "fr": "Français",
-            "en": "Anglais"
+            "en": "Anglais",
+            "de": "Allemand",
+            "es": "Espagnol"
         }
     },
     "connectors": {
@@ -410,6 +415,73 @@
         "purge_description": "Sélectionnez les données à supprimer définitivement. Cette action est irréversible. Seul le journal d'audit sera conservé.",
         "confirmation_prompt": "Pour confirmer, tapez \"DELETE\" ci-dessous :",
         "purging": "Suppression en cours...",
-        "confirm_purge": "Supprimer définitivement les données"
+        "confirm_purge": "Supprimer définitivement les données",
+        "language_title": "Langue",
+        "language_desc": "Sélectionnez votre langue préférée"
+    },
+    "lineage": {
+        "title": "Traçabilité des Données",
+        "subtitle": "Tracez chaque donnée de sa source originale à son utilisation finale dans les rapports.",
+        "panelTitle": "Traçabilité des Données",
+        "loadingData": "Chargement des données de traçabilité...",
+        "noSourcesFound": "Aucune source de données trouvée pour ce KPI",
+        "valueUsed": "Valeur Utilisée",
+        "sourcesCount": "Sources",
+        "entriesCount": "Entrées",
+        "sourceDocuments": "Documents Sources",
+        "extracts": "extraction(s)",
+        "downloadDoc": "Télécharger le document",
+        "confidence": "confiance",
+        "page": "Page",
+        "searchPlaceholder": "Rechercher une source...",
+        "sourcesListTitle": "Sources de Données",
+        "loading": "Chargement...",
+        "noSourcesList": "Aucune source trouvée",
+        "kpis": "KPIs",
+        "derivedKpis": "KPIs dérivés de cette source",
+        "download": "Télécharger",
+        "valueLabel": "Valeur :",
+        "dateLabel": "Date :",
+        "pageLabel": "Page :",
+        "confidenceLabel": "Confiance :",
+        "search": "Rechercher une source..."
+    },
+    "ecovadis": {
+        "title": "Agent d'Audit EcoVadis",
+        "subtitle": "Analysez automatiquement vos documents internes pour vérifier votre conformité aux critères EcoVadis.",
+        "errorTitle": "Erreur",
+        "timeoutError": "Délai d'attente dépassé. L'IA analyse beaucoup de documents.",
+        "metamaskError": " (Si vous avez MetaMask, désactivez-le).",
+        "readyTitle": "Prêt à auditer vos documents",
+        "readyText": "Déposez vos PDF dans le dossier",
+        "startButton": "Lancer l'Audit Automatique",
+        "analyzingTitle": "Analyse IA Expert en cours...",
+        "analyzingText": "Vérification des critères, détection des signatures et analyse cross-documents.",
+        "formalityTitle": "Hygiène Documentaire (Checklist Formelle)",
+        "tableHeaderDoc": "Document",
+        "tableHeaderLogo": "Logo/Nom",
+        "tableHeaderDate": "Date",
+        "tableHeaderSig": "Signature",
+        "tableHeaderComment": "Commentaire",
+        "docsScanned": "documents analysés.",
+        "restartButton": "Relancer l'analyse",
+        "evidenceFound": "ÉVIDENCE TROUVÉE :",
+        "suggestion": "SUGGESTION D'AMÉLIORATION :",
+        "statusCompliant": "Conforme",
+        "statusPartial": "Partiel",
+        "statusNonCompliant": "Non Conforme"
+    },
+    "discussions": {
+        "title": "Discussions & Commentaires",
+        "subtitle": "Collaborez sur les KPIs avec votre équipe",
+        "totalComments": "Commentaires Totaux",
+        "unresolved": "Non Résolus",
+        "kpisDiscussed": "KPIs Discutés",
+        "filterAll": "Tous les KPIs",
+        "filterUnresolved": "Non Résolus",
+        "kpisListTitle": "KPIs",
+        "emptyAll": "Aucun KPI disponible. Commencez par importer des données.",
+        "emptyUnresolved": "Aucune question ou alerte en attente !",
+        "unresolvedBadge": "Non Résolus"
     }
 }

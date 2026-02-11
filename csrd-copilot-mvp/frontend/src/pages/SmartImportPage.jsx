@@ -16,7 +16,7 @@ const SmartImportPage = () => {
     const [ingesting, setIngesting] = useState(false);
     const [importSuccess, setImportSuccess] = useState(false);
     const { markDataImported, hasImportedData } = useDataStatus();
-    
+
     // SharePoint states
     const [showSharePoint, setShowSharePoint] = useState(false);
     const [sharepointConfig, setSharepointConfig] = useState({
@@ -107,7 +107,7 @@ const SmartImportPage = () => {
             alert('Please connect to SharePoint first');
             return;
         }
-        
+
         setLoadingFiles(true);
         try {
             // Simuler récupération de fichiers (remplacer par vraie API Microsoft Graph)
@@ -126,8 +126,8 @@ const SmartImportPage = () => {
     };
 
     const handleToggleFileSelection = (fileId) => {
-        setSelectedFiles(prev => 
-            prev.includes(fileId) 
+        setSelectedFiles(prev =>
+            prev.includes(fileId)
                 ? prev.filter(id => id !== fileId)
                 : [...prev, fileId]
         );
@@ -138,12 +138,12 @@ const SmartImportPage = () => {
             alert('Please select at least one file');
             return;
         }
-        
+
         setDownloadingFiles(true);
         try {
             // Simuler téléchargement et ingestion (remplacer par vraie API)
             await new Promise(resolve => setTimeout(resolve, 2000));
-            
+
             // Mock des données extraites
             const mockExtracted = selectedFiles.map((fileId, idx) => ({
                 id: idx,
@@ -154,7 +154,7 @@ const SmartImportPage = () => {
                 date: '2023-12-31',
                 confidence: 0.85 + Math.random() * 0.15
             }));
-            
+
             setExtractedData(mockExtracted);
             setShowSharePoint(false);
             alert(`Downloaded and extracted ${selectedFiles.length} files!`);
@@ -212,11 +212,11 @@ const SmartImportPage = () => {
         setIngesting(false);
         setExtractedData([]);
         setFile(null);
-        
+
         // Marquer les données comme importées
         markDataImported();
         setImportSuccess(true);
-        
+
         alert(t('smartImport.successfullyIngested', { count: successCount }));
     };
 
@@ -230,15 +230,15 @@ const SmartImportPage = () => {
                 <button
                     onClick={() => navigate('/data-points')}
                     className="btn-animated btn-primary"
-                        style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: '0.5rem',
-                            padding: '0.75rem 1.5rem',
-                            fontSize: '0.95rem',
-                            fontWeight: '600',
-                            whiteSpace: 'nowrap'
-                        }}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.75rem 1.5rem',
+                        fontSize: '0.95rem',
+                        fontWeight: '600',
+                        whiteSpace: 'nowrap'
+                    }}
                 >
                     {t('smartImport.nextStep')} <ArrowRight size={18} />
                 </button>
@@ -267,21 +267,51 @@ const SmartImportPage = () => {
             {!extractedData.length && (
                 <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
                     <button
-                        className={`btn ${!showSharePoint ? 'btn-primary' : 'btn-outline'}`}
                         onClick={() => setShowSharePoint(false)}
-                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            padding: '0.75rem 1.5rem',
+                            borderRadius: '50px',
+                            fontWeight: '600',
+                            fontSize: '0.95rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            border: !showSharePoint ? 'none' : '2px solid var(--border-color)',
+                            backgroundColor: !showSharePoint ? 'var(--primary-color)' : 'transparent',
+                            color: !showSharePoint ? 'white' : 'var(--text-secondary)',
+                            boxShadow: !showSharePoint ? '0 4px 12px rgba(5, 150, 105, 0.3)' : 'none'
+                        }}
                     >
                         <UploadCloud size={20} />
                         {t('smartImport.manualUpload')}
                     </button>
                     <button
-                        className={`btn ${showSharePoint ? 'btn-primary' : 'btn-outline'}`}
                         onClick={() => setShowSharePoint(true)}
-                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            padding: '0.75rem 1.5rem',
+                            borderRadius: '50px',
+                            fontWeight: '600',
+                            fontSize: '0.95rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                            border: showSharePoint ? 'none' : '2px solid var(--border-color)',
+                            backgroundColor: showSharePoint ? 'var(--primary-color)' : 'transparent',
+                            color: showSharePoint ? 'white' : 'var(--text-secondary)',
+                            boxShadow: showSharePoint ? '0 4px 12px rgba(5, 150, 105, 0.3)' : 'none'
+                        }}
                     >
-                        <img 
-                            src="/Microsoft_Office_SharePoint_(2019–2025).svg.png" 
-                            alt="SharePoint" 
+                        <img
+                            src="/Microsoft_Office_SharePoint_(2019–2025).svg.png"
+                            alt="SharePoint"
                             style={{ width: '20px', height: '20px', objectFit: 'contain' }}
                         />
                         SharePoint
@@ -294,9 +324,9 @@ const SmartImportPage = () => {
                 <div className="card animate-fade-in" style={{ padding: '2rem', marginBottom: '2rem' }}>
                     <div style={{ marginBottom: '2rem' }}>
                         <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <img 
-                                src="/Microsoft_Office_SharePoint_(2019–2025).svg.png" 
-                                alt="SharePoint" 
+                            <img
+                                src="/Microsoft_Office_SharePoint_(2019–2025).svg.png"
+                                alt="SharePoint"
                                 style={{ width: '28px', height: '28px', objectFit: 'contain' }}
                             />
                             {t('sharepoint.title')}
@@ -312,7 +342,7 @@ const SmartImportPage = () => {
                             <input
                                 type="text"
                                 value={sharepointConfig.siteUrl}
-                                onChange={(e) => setSharepointConfig({...sharepointConfig, siteUrl: e.target.value})}
+                                onChange={(e) => setSharepointConfig({ ...sharepointConfig, siteUrl: e.target.value })}
                                 placeholder={t('sharepoint.siteUrlPlaceholder')}
                                 style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                             />
@@ -325,7 +355,7 @@ const SmartImportPage = () => {
                             <input
                                 type="text"
                                 value={sharepointConfig.folderPath}
-                                onChange={(e) => setSharepointConfig({...sharepointConfig, folderPath: e.target.value})}
+                                onChange={(e) => setSharepointConfig({ ...sharepointConfig, folderPath: e.target.value })}
                                 placeholder={t('sharepoint.folderPathPlaceholder')}
                                 style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                             />
@@ -339,7 +369,7 @@ const SmartImportPage = () => {
                                 <input
                                     type="text"
                                     value={sharepointConfig.clientId}
-                                    onChange={(e) => setSharepointConfig({...sharepointConfig, clientId: e.target.value})}
+                                    onChange={(e) => setSharepointConfig({ ...sharepointConfig, clientId: e.target.value })}
                                     placeholder={t('sharepoint.clientIdPlaceholder')}
                                     style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                                 />
@@ -351,7 +381,7 @@ const SmartImportPage = () => {
                                 <input
                                     type="password"
                                     value={sharepointConfig.clientSecret}
-                                    onChange={(e) => setSharepointConfig({...sharepointConfig, clientSecret: e.target.value})}
+                                    onChange={(e) => setSharepointConfig({ ...sharepointConfig, clientSecret: e.target.value })}
                                     placeholder={t('sharepoint.clientSecretPlaceholder')}
                                     style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}
                                 />
@@ -378,7 +408,7 @@ const SmartImportPage = () => {
                                 </>
                             )}
                         </button>
-                        
+
                         {sharepointConnected && (
                             <button
                                 className="btn btn-primary"
@@ -607,7 +637,7 @@ const SmartImportPage = () => {
                                                         {row.snippet.length > 50 ? row.snippet.substring(0, 50) + '...' : row.snippet}
                                                     </span>
                                                 ) : '-'}
-                                                {row.page_number && <div style={{marginTop: '4px', fontSize: '0.7rem'}}>Pg {row.page_number}</div>}
+                                                {row.page_number && <div style={{ marginTop: '4px', fontSize: '0.7rem' }}>Pg {row.page_number}</div>}
                                             </td>
                                             <td style={{ padding: '1rem' }}>
                                                 <button
@@ -644,7 +674,7 @@ const SmartImportPage = () => {
                                 </>
                             )}
                         </button>
-                        
+
                         {importSuccess && (
                             <button
                                 className="btn btn-primary"

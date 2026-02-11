@@ -15,6 +15,9 @@
         "generator": "IA Generator",
         "connectors": "Connectors",
         "finalReport": "Final Report",
+        "lineage": "Lineage",
+        "discussions": "Discussions",
+        "ecovadis": "EcoVadis Audit",
         "settings": "Settings"
     },
     "login": {
@@ -62,7 +65,9 @@
         "language": "Report Language",
         "languages": {
             "fr": "French",
-            "en": "English"
+            "en": "English",
+            "de": "German",
+            "es": "Spanish"
         }
     },
     "connectors": {
@@ -410,6 +415,73 @@
         "purge_description": "Select data to permanently delete. This action is irreversible. Only the audit log will be retained.",
         "confirmation_prompt": "To confirm, type \"DELETE\" below:",
         "purging": "Purging...",
-        "confirm_purge": "Permanently Delete Data"
+        "confirm_purge": "Permanently Delete Data",
+        "language_title": "Language",
+        "language_desc": "Select your preferred language"
+    },
+    "lineage": {
+        "title": "Data Lineage",
+        "subtitle": "Trace every data point from its original source to its final use in reports.",
+        "panelTitle": "Data Traceability",
+        "loadingData": "Loading traceability data...",
+        "noSourcesFound": "No data sources found for this KPI",
+        "valueUsed": "Value Used",
+        "sourcesCount": "Sources",
+        "entriesCount": "Entries",
+        "sourceDocuments": "Source Documents",
+        "extracts": "extraction(s)",
+        "downloadDoc": "Download document",
+        "confidence": "confidence",
+        "page": "Page",
+        "searchPlaceholder": "Search a source...",
+        "sourcesListTitle": "Data Sources",
+        "loading": "Loading...",
+        "noSourcesList": "No sources found",
+        "kpis": "KPIs",
+        "derivedKpis": "KPIs derived from this source",
+        "download": "Download",
+        "valueLabel": "Value:",
+        "dateLabel": "Date:",
+        "pageLabel": "Page:",
+        "confidenceLabel": "Confidence:",
+        "search": "Search a source..."
+    },
+    "ecovadis": {
+        "title": "EcoVadis Audit Agent",
+        "subtitle": "Automatically analyze your internal documents to verify compliance with EcoVadis criteria.",
+        "errorTitle": "Error",
+        "timeoutError": "Timeout exceeded. The AI is analyzing too many documents.",
+        "metamaskError": " (If you have MetaMask, disable it).",
+        "readyTitle": "Ready to audit your documents",
+        "readyText": "Drop your PDF files in the folder",
+        "startButton": "Start Automatic Audit",
+        "analyzingTitle": "AI Expert Analysis in Progress...",
+        "analyzingText": "Checking criteria, detecting signatures, and cross-document analysis.",
+        "formalityTitle": "Document Hygiene (Formal Checklist)",
+        "tableHeaderDoc": "Document",
+        "tableHeaderLogo": "Logo/Name",
+        "tableHeaderDate": "Date",
+        "tableHeaderSig": "Signature",
+        "tableHeaderComment": "Comment",
+        "docsScanned": "documents scanned.",
+        "restartButton": "Restart Analysis",
+        "evidenceFound": "EVIDENCE FOUND:",
+        "suggestion": "IMPROVEMENT SUGGESTION:",
+        "statusCompliant": "Compliant",
+        "statusPartial": "Partial",
+        "statusNonCompliant": "Non Compliant"
+    },
+    "discussions": {
+        "title": "Discussions & Comments",
+        "subtitle": "Collaborate on KPIs with your team",
+        "totalComments": "Total Comments",
+        "unresolved": "Unresolved",
+        "kpisDiscussed": "KPIs Discussed",
+        "filterAll": "All KPIs",
+        "filterUnresolved": "Unresolved",
+        "kpisListTitle": "KPIs",
+        "emptyAll": "No KPIs available. Start by importing data.",
+        "emptyUnresolved": "No questions or alerts pending!",
+        "unresolvedBadge": "Unresolved"
     }
 }

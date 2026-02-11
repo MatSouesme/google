@@ -108,10 +108,10 @@ const LineagePage = () => {
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-color)' }}>
                     <TrendingUp size={32} color="var(--primary-color)" />
-                    {t('lineage.title', 'Data Lineage')}
+                    {t('lineage.title')}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', marginTop: '0.5rem' }}>
-                    {t('lineage.subtitle', 'Tracez chaque donnée de sa source originale à son utilisation finale dans les rapports')}
+                    {t('lineage.subtitle')}
                 </p>
             </div>
 
@@ -128,7 +128,7 @@ const LineagePage = () => {
                             <Search size={18} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
                             <input
                                 type="text"
-                                placeholder={t('lineage.search', 'Rechercher une source...')}
+                                placeholder={t('lineage.searchPlaceholder')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 style={{
@@ -144,13 +144,13 @@ const LineagePage = () => {
                     </div>
 
                     <h3 style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '1rem', color: 'var(--text-color)' }}>
-                        {t('lineage.sources', 'Sources de Données')} ({filteredSources.length})
+                        {t('lineage.sourcesListTitle')} ({filteredSources.length})
                     </h3>
 
                     {loading ? (
-                        <p style={{ color: 'var(--text-secondary)' }}>Chargement...</p>
+                        <p style={{ color: 'var(--text-secondary)' }}>{t('lineage.loading')}</p>
                     ) : filteredSources.length === 0 ? (
-                        <p style={{ color: 'var(--text-secondary)' }}>Aucune source trouvée</p>
+                        <p style={{ color: 'var(--text-secondary)' }}>{t('lineage.noSourcesList')}</p>
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '600px', overflowY: 'auto' }}>
                             {filteredSources.map((source, idx) => (
@@ -175,7 +175,7 @@ const LineagePage = () => {
                                             <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                                     <Database size={12} />
-                                                    {source.kpi_count} KPIs
+                                                    {source.kpi_count} {t('lineage.kpis')}
                                                 </span>
                                                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                                     <Clock size={12} />
@@ -204,7 +204,7 @@ const LineagePage = () => {
                                     {selectedSource}
                                 </h3>
                                 <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                                    {sourceLineage.total_kpis} KPIs dérivés de cette source
+                                    {sourceLineage.total_kpis} {t('lineage.derivedKpis')}
                                 </p>
                             </div>
                             <button
@@ -224,7 +224,7 @@ const LineagePage = () => {
                                 }}
                             >
                                 <Download size={16} />
-                                Télécharger
+                                {t('lineage.download')}
                             </button>
                         </div>
 
@@ -246,22 +246,22 @@ const LineagePage = () => {
                                         <div key={idx} style={{ marginBottom: idx < entries.length - 1 ? '0.75rem' : 0, paddingBottom: idx < entries.length - 1 ? '0.75rem' : 0, borderBottom: idx < entries.length - 1 ? '1px solid var(--border-color)' : 'none' }}>
                                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem', fontSize: '0.875rem' }}>
                                                 <div>
-                                                    <span style={{ color: 'var(--text-secondary)' }}>Valeur: </span>
+                                                    <span style={{ color: 'var(--text-secondary)' }}>{t('lineage.valueLabel')} </span>
                                                     <span style={{ color: 'var(--text-color)', fontWeight: '500' }}>{entry.value} {entry.unit || ''}</span>
                                                 </div>
                                                 <div>
-                                                    <span style={{ color: 'var(--text-secondary)' }}>Date: </span>
+                                                    <span style={{ color: 'var(--text-secondary)' }}>{t('lineage.dateLabel')} </span>
                                                     <span style={{ color: 'var(--text-color)' }}>{entry.date || 'N/A'}</span>
                                                 </div>
                                                 {entry.page_number && (
                                                     <div>
-                                                        <span style={{ color: 'var(--text-secondary)' }}>Page: </span>
+                                                        <span style={{ color: 'var(--text-secondary)' }}>{t('lineage.pageLabel')} </span>
                                                         <span style={{ color: 'var(--text-color)' }}>{entry.page_number}</span>
                                                     </div>
                                                 )}
                                                 {entry.confidence && (
                                                     <div>
-                                                        <span style={{ color: 'var(--text-secondary)' }}>Confiance: </span>
+                                                        <span style={{ color: 'var(--text-secondary)' }}>{t('lineage.confidenceLabel')} </span>
                                                         <span style={{ color: entry.confidence > 0.8 ? '#10b981' : entry.confidence > 0.6 ? '#f59e0b' : '#ef4444', fontWeight: '500' }}>
                                                             {(entry.confidence * 100).toFixed(0)}%
                                                         </span>

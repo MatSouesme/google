@@ -194,10 +194,10 @@ const Connectors = () => {
                                         style={{
                                             marginTop: '1rem',
                                             padding: '10px',
-                                            backgroundColor: '#00a1e0', // Salesforce Blue
+                                            backgroundColor: 'var(--primary-color)',
                                             color: 'white',
                                             border: 'none',
-                                            borderRadius: '4px',
+                                            borderRadius: '50px',
                                             cursor: loading ? 'not-allowed' : 'pointer',
                                             fontWeight: 'bold',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'
