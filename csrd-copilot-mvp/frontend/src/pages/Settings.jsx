@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Trash2, AlertTriangle, CheckCircle, Shield } from 'lucide-react';
+import { Trash2, AlertTriangle, CheckCircle, Shield, ChevronDown } from 'lucide-react';
 import { API_BASE_URL } from '../api/apiClient';
 import { auth } from '../firebase-config';
 
@@ -11,6 +11,7 @@ const Settings = ({ user }) => {
     const [isPurging, setIsPurging] = useState(false);
     const [purgeResult, setPurgeResult] = useState(null);
     const [showDangerZone, setShowDangerZone] = useState(false);
+    const [isScopeOpen, setIsScopeOpen] = useState(false);
 
     // User Management State
     const [targetEmail, setTargetEmail] = useState('');
@@ -75,13 +76,13 @@ const Settings = ({ user }) => {
 
             const data = await response.json();
             if (response.ok) {
-                setUserUpdateMsg("Rôle mis à jour avec succès.");
+                setUserUpdateMsg(t('settings.role_update_success', "Rôle mis à jour avec succès."));
                 fetchUsersList(); // Refresh the list
             } else {
-                setUserUpdateMsg("Erreur: " + data.detail);
+                setUserUpdateMsg(t('settings.error_prefix', "Erreur: ") + data.detail);
             }
         } catch (e) {
-            setUserUpdateMsg("Erreur: " + e.message);
+            setUserUpdateMsg(t('settings.error_prefix', "Erreur: ") + e.message);
         } finally {
             setIsUpdatingUser(false);
         }
@@ -147,7 +148,7 @@ const Settings = ({ user }) => {
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
             }}>
                 <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem', color: 'var(--text-color)' }}>
-                    Audit & Traceability
+                    {t('settings.audit_title', 'Audit & Traçabilité')}
                 </h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
                     <CheckCircle size={20} color="var(--success-color)" />
@@ -155,39 +156,7 @@ const Settings = ({ user }) => {
                 </div>
             </div>
 
-            <div className="card" style={{
-                border: '1px solid var(--border-color)',
-                borderRadius: '12px',
-                padding: '2rem',
-                backgroundColor: 'var(--surface-color)',
-                marginBottom: '2rem',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
-            }}>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem', color: 'var(--text-color)' }}>
-                    {t('settings.language_title', 'Language')}
-                </h2>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>
-                    {t('settings.language_desc', 'Select your preferred language')}
-                </p>
-                <select
-                    value={i18n.language}
-                    onChange={(e) => i18n.changeLanguage(e.target.value)}
-                    style={{
-                        padding: '0.5rem',
-                        borderRadius: '6px',
-                        border: '1px solid var(--border-color)',
-                        backgroundColor: 'var(--bg-color)',
-                        color: 'var(--text-color)',
-                        fontSize: '1rem',
-                        minWidth: '200px'
-                    }}
-                >
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                    <option value="es">Español</option>
-                </select>
-            </div>
+
 
             {/* User Management Section - Admin Only */}
             {isAdmin && (
@@ -229,9 +198,9 @@ const Settings = ({ user }) => {
                                 value={targetRole}
                                 onChange={(e) => setTargetRole(e.target.value)}
                             >
-                                <option value="reader">Reader</option>
-                                <option value="editor">Editor</option>
-                                <option value="admin">Admin</option>
+                                <option value="reader">{t('settings.role_reader', 'Lecteur')}</option>
+                                <option value="editor">{t('settings.role_editor', 'Éditeur')}</option>
+                                <option value="admin">{t('settings.role_admin', 'Admin')}</option>
                             </select>
                         </div>
                         <div style={{ gridColumn: 'span 2' }}>
@@ -247,7 +216,7 @@ const Settings = ({ user }) => {
                                                 else setTargetScopes(targetScopes.filter(s => s !== scope));
                                             }}
                                         />
-                                        <span style={{ textTransform: 'capitalize' }}>{scope}</span>
+                                        <span style={{ textTransform: 'capitalize' }}>{t(`settings.scope_${scope}_label`, scope)}</span>
                                     </label>
                                 ))}
                             </div>
@@ -266,9 +235,9 @@ const Settings = ({ user }) => {
                             opacity: (!targetEmail || isUpdatingUser) ? 0.5 : 1
                         }}
                     >
-                        {isUpdatingUser ? 'Enregistrer' : t('settings.update_role', 'Mettre à jour le rôle')}
+                        {isUpdatingUser ? t('settings.save', 'Enregistrer') : t('settings.update_role', 'Mettre à jour le rôle')}
                     </button>
-                    {userUpdateMsg && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: userUpdateMsg.startsWith('Erreur') ? 'red' : 'lightgreen' }}>{userUpdateMsg}</p>}
+                    {userUpdateMsg && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: userUpdateMsg.startsWith(t('settings.error_prefix', 'Erreur')) ? 'red' : 'lightgreen' }}>{userUpdateMsg}</p>}
 
                     {/* Users List */}
                     <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
@@ -276,9 +245,9 @@ const Settings = ({ user }) => {
                             {t('settings.current_users', 'Utilisateurs actuels')}
                         </h3>
                         {isLoadingUsers ? (
-                            <p style={{ color: 'var(--text-secondary)' }}>Chargement...</p>
+                            <p style={{ color: 'var(--text-secondary)' }}>{t('settings.loading', 'Chargement...')}</p>
                         ) : Object.keys(usersList).length === 0 ? (
-                            <p style={{ color: 'var(--text-secondary)' }}>Aucun utilisateur configuré</p>
+                            <p style={{ color: 'var(--text-secondary)' }}>{t('settings.no_users', 'Aucun utilisateur configuré')}</p>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 {Object.entries(usersList).map(([email, userData]) => (
@@ -302,7 +271,7 @@ const Settings = ({ user }) => {
                                                     {userData.role}
                                                 </span>
                                                 {' · '}
-                                                <span>{userData.scopes?.join(', ') || 'no scopes'}</span>
+                                                <span>{userData.scopes?.join(', ') || t('settings.no_scopes', 'no scopes')}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -363,28 +332,74 @@ const Settings = ({ user }) => {
 
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <label style={{ display: 'block', fontSize: '0.95rem', marginBottom: '0.5rem', fontWeight: '600', color: 'var(--text-color)' }}>
-                                    Cible de la suppression :
+                                    {t('settings.target_label', 'Cible de la suppression :')}
                                 </label>
-                                <select
-                                    value={selectedScope}
-                                    onChange={(e) => setSelectedScope(e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '8px',
-                                        border: '1px solid var(--border-color)',
-                                        marginBottom: '1rem',
-                                        backgroundColor: 'var(--bg-color)',
-                                        color: 'var(--text-color)',
-                                        fontSize: '1rem'
-                                    }}
-                                >
-                                    <option value="global">💥 TOUT SUPPRIMER (Global Purge)</option>
-                                    <option value="documents">📄 Documents Sources (PDFs, Images)</option>
-                                    <option value="e1">🌍 Données Environnementales (E1)</option>
-                                    <option value="g1">⚖️ Données Gouvernance (G1)</option>
-                                    <option value="manual">✍️ Entrées Manuelles (Manual Entries)</option>
-                                </select>
+
+                                <div style={{ position: 'relative', width: '100%' }}>
+                                    <div
+                                        onClick={() => setIsScopeOpen(!isScopeOpen)}
+                                        style={{
+                                            padding: '0.75rem',
+                                            borderRadius: '8px',
+                                            border: '1px solid var(--border-color)',
+                                            backgroundColor: 'var(--bg-color)',
+                                            color: 'var(--text-color)',
+                                            fontSize: '1rem',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center'
+                                        }}
+                                    >
+                                        <span>
+                                            {selectedScope === 'global' && t('settings.target_global', "💥 TOUT SUPPRIMER (Global Purge)")}
+                                            {selectedScope === 'documents' && t('settings.target_documents', "📄 Documents Sources (PDFs, Images)")}
+                                            {selectedScope === 'e1' && t('settings.target_e1', "🌍 Données Environnementales (E1)")}
+                                            {selectedScope === 'g1' && t('settings.target_g1', "⚖️ Données Gouvernance (G1)")}
+                                            {selectedScope === 'manual' && t('settings.target_manual', "✍️ Entrées Manuelles (Manual Entries)")}
+                                        </span>
+                                        <ChevronDown size={20} />
+                                    </div>
+
+                                    {isScopeOpen && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '105%',
+                                            left: 0,
+                                            right: 0,
+                                            backgroundColor: 'var(--surface-color)',
+                                            border: '1px solid var(--border-color)',
+                                            borderRadius: '8px',
+                                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                                            zIndex: 50,
+                                            overflow: 'hidden'
+                                        }}>
+                                            {[
+                                                { value: 'global', label: t('settings.target_global', "💥 TOUT SUPPRIMER (Global Purge)") },
+                                                { value: 'documents', label: t('settings.target_documents', "📄 Documents Sources (PDFs, Images)") },
+                                                { value: 'e1', label: t('settings.target_e1', "🌍 Données Environnementales (E1)") },
+                                                { value: 'g1', label: t('settings.target_g1', "⚖️ Données Gouvernance (G1)") },
+                                                { value: 'manual', label: t('settings.target_manual', "✍️ Entrées Manuelles (Manual Entries)") }
+                                            ].map(opt => (
+                                                <div
+                                                    key={opt.value}
+                                                    onClick={() => { setSelectedScope(opt.value); setIsScopeOpen(false); }}
+                                                    style={{
+                                                        padding: '0.75rem',
+                                                        cursor: 'pointer',
+                                                        backgroundColor: selectedScope === opt.value ? 'rgba(37, 99, 235, 0.1)' : 'transparent',
+                                                        color: 'var(--text-color)',
+                                                        borderBottom: '1px solid var(--border-color)'
+                                                    }}
+                                                    onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--bg-active)'}
+                                                    onMouseLeave={(e) => e.target.style.backgroundColor = selectedScope === opt.value ? 'rgba(37, 99, 235, 0.1)' : 'transparent'}
+                                                >
+                                                    {opt.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div style={{
