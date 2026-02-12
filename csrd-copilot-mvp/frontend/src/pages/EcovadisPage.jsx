@@ -1,10 +1,13 @@
+
 import React, { useState } from 'react';
 import { Loader2, CheckCircle, AlertTriangle, XCircle, Play, FileText, Zap, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../api/apiClient';
 import Alert from '../components/Alert';
 import Markdown from 'react-markdown';
 
 const EcovadisPage = () => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [auditResults, setAuditResults] = useState(null);
     const [error, setError] = useState(null);
@@ -39,9 +42,9 @@ const EcovadisPage = () => {
 
         } catch (err) {
             if (err.name === 'AbortError') {
-                setError("Délai d'attente dépassé. L'IA analyse beaucoup de documents.");
+                setError(t('ecovadis.timeoutError'));
             } else {
-                setError(err.message + " (Si vous avez MetaMask, désactivez-le).");
+                setError(err.message + t('ecovadis.metamaskError'));
             }
         } finally {
             setLoading(false);
@@ -55,11 +58,11 @@ const EcovadisPage = () => {
     const getStatusBadge = (status) => {
         switch (status) {
             case 'Conforme':
-                return <span className="badge badge-success" style={{ backgroundColor: '#dcfce7', color: '#166534', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><CheckCircle size={14} /> Conforme</span>;
+                return <span className="badge badge-success" style={{ backgroundColor: '#dcfce7', color: '#166534', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><CheckCircle size={14} /> {t('ecovadis.statusCompliant')}</span>;
             case 'Partiel':
-                return <span className="badge badge-warning" style={{ backgroundColor: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><AlertTriangle size={14} /> Partiel</span>;
+                return <span className="badge badge-warning" style={{ backgroundColor: '#fef3c7', color: '#92400e', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><AlertTriangle size={14} /> {t('ecovadis.statusPartial')}</span>;
             case 'Non Conforme':
-                return <span className="badge badge-error" style={{ backgroundColor: '#fee2e2', color: '#b91c1c', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><XCircle size={14} /> Non Conforme</span>;
+                return <span className="badge badge-error" style={{ backgroundColor: '#fee2e2', color: '#b91c1c', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}><XCircle size={14} /> {t('ecovadis.statusNonCompliant')}</span>;
             default:
                 return <span className="badge" style={{ backgroundColor: '#f3f4f6', color: '#374151', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem' }}>{status}</span>;
         }
@@ -70,32 +73,32 @@ const EcovadisPage = () => {
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/EcoVadis-Logo-Leaf_only.png" alt="EcoVadis" style={{ height: '32px' }} onError={(e) => { e.target.style.display = 'none' }} />
-                    EcoVadis Audit Agent
+                    {t('ecovadis.title')}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)' }}>
-                    Analysez automatiquement vos documents internes pour vérifier votre conformité aux critères EcoVadis.
+                    {t('ecovadis.subtitle')}
                 </p>
             </div>
 
             {error && (
                 <div style={{ marginBottom: '1rem' }}>
-                    <Alert type="error" title="Erreur" message={error} />
+                    <Alert type="error" title={t('ecovadis.errorTitle')} message={error} />
                 </div>
             )}
 
             {!auditResults && !loading && (
                 <div className="card" style={{ padding: '3rem', textAlign: 'center', border: '1px dashed var(--border-color)', borderRadius: '8px' }}>
                     <FileText size={48} style={{ color: 'var(--text-secondary)', marginBottom: '1rem', opacity: 0.5 }} />
-                    <h3 style={{ marginBottom: '1rem' }}>Prêt à auditer vos documents</h3>
+                    <h3 style={{ marginBottom: '1rem' }}>{t('ecovadis.readyTitle')}</h3>
                     <p style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}>
-                        Déposez vos PDF dans le dossier <code>data/company_docs</code>.
+                        {t('ecovadis.readyText')} <code>data/company_docs</code>.
                     </p>
                     <button
                         className="btn btn-primary"
                         onClick={runAudit}
                         style={{ padding: '0.75rem 2rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '10px', margin: '0 auto' }}
                     >
-                        <Play size={20} /> Lancer l'Audit Automatique
+                        <Play size={20} /> {t('ecovadis.startButton')}
                     </button>
                 </div>
             )}
@@ -103,8 +106,8 @@ const EcovadisPage = () => {
             {loading && (
                 <div style={{ textAlign: 'center', padding: '4rem' }}>
                     <Loader2 size={48} className="spin" style={{ color: 'var(--primary-color)', marginBottom: '1rem' }} />
-                    <h3>Analyse IA Expert en cours...</h3>
-                    <p style={{ color: 'var(--text-secondary)' }}>Vérification des critères, détection des signatures et analyse cross-documents.</p>
+                    <h3>{t('ecovadis.analyzingTitle')}</h3>
+                    <p style={{ color: 'var(--text-secondary)' }}>{t('ecovadis.analyzingText')}</p>
                 </div>
             )}
 
@@ -116,17 +119,17 @@ const EcovadisPage = () => {
                         <div className="card" style={{ marginBottom: '2rem', padding: '1.5rem', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', color: '#0f172a' }}>
                             <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <ShieldCheck size={20} color="#475569" />
-                                Hygiène Documentaire (Checklist Formelle)
+                                {t('ecovadis.formalityTitle')}
                             </h3>
                             <div style={{ overflowX: 'auto' }}>
                                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
                                     <thead>
                                         <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left' }}>
-                                            <th style={{ padding: '0.75rem' }}>Document</th>
-                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>Logo/Nom</th>
-                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>Date</th>
-                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>Signature</th>
-                                            <th style={{ padding: '0.75rem' }}>Commentaire</th>
+                                            <th style={{ padding: '0.75rem' }}>{t('ecovadis.tableHeaderDoc')}</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>{t('ecovadis.tableHeaderLogo')}</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>{t('ecovadis.tableHeaderDate')}</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>{t('ecovadis.tableHeaderSig')}</th>
+                                            <th style={{ padding: '0.75rem' }}>{t('ecovadis.tableHeaderComment')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -153,10 +156,10 @@ const EcovadisPage = () => {
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <div>
-                            <strong>{auditResults.total_docs_scanned}</strong> documents analysés.
+                            <strong>{auditResults.total_docs_scanned}</strong> {t('ecovadis.docsScanned')}
                         </div>
                         <button className="btn btn-primary" onClick={runAudit} disabled={loading} style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '0.5rem 1rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                            <Play size={16} /> Relancer l'analyse
+                            <Play size={16} /> {t('ecovadis.restartButton')}
                         </button>
                     </div>
 
@@ -188,7 +191,7 @@ const EcovadisPage = () => {
                                 {expandedItems[item.criterion_id] && (
                                     <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
                                         <div style={{ marginBottom: '1rem' }}>
-                                            <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>EVIDENCE TROUVÉE :</h4>
+                                            <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>{t('ecovadis.evidenceFound')}</h4>
                                             <div style={{ backgroundColor: 'var(--bg-color)', padding: '1rem', borderRadius: '6px', fontSize: '0.95rem', border: '1px solid var(--border-color)' }}>
                                                 {item.evidence}
                                             </div>
@@ -197,7 +200,7 @@ const EcovadisPage = () => {
                                         {item.status !== 'Conforme' && (
                                             <div style={{ backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', padding: '1rem', borderRadius: '6px' }}>
                                                 <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#1e40af', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                    <Zap size={16} /> SUGGESTION D'AMÉLIORATION :
+                                                    <Zap size={16} /> {t('ecovadis.suggestion')}
                                                 </h4>
                                                 <div style={{ color: '#1e3a8a', fontSize: '0.95rem', lineHeight: '1.5' }}>
                                                     <Markdown>{item.suggestion}</Markdown>

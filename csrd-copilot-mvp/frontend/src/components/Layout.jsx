@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
+<<<<<<< HEAD
 import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, Calculator } from 'lucide-react';
+=======
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe } from 'lucide-react';
+>>>>>>> 26d97df2341cf4ec1ac9e7331e0ba2e74923ebde
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 const Layout = ({ user }) => {
     const location = useLocation();
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+    const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+    const langDropdownRef = useRef(null);
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
@@ -15,21 +21,34 @@ const Layout = ({ user }) => {
         localStorage.setItem('theme', theme);
     }, [theme]);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (langDropdownRef.current && !langDropdownRef.current.contains(e.target)) {
+                setLangDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     const toggleTheme = () => {
         setTheme(prev => prev === 'dark' ? 'light' : 'dark');
     };
 
-    const toggleLanguage = () => {
-        const languages = ['en', 'fr', 'de', 'es'];
-        const currentIndex = languages.indexOf(i18n.language);
-        const nextIndex = (currentIndex + 1) % languages.length;
-        i18n.changeLanguage(languages[nextIndex]);
-    };
+    const languageOptions = [
+        { code: 'en', flag: '🇬🇧', label: 'English' },
+        { code: 'fr', flag: '🇫🇷', label: 'Français' },
+        { code: 'de', flag: '🇩🇪', label: 'Deutsch' },
+        { code: 'es', flag: '🇪🇸', label: 'Español' }
+    ];
+
+    const currentLang = languageOptions.find(l => l.code === i18n.language) || languageOptions[0];
 
     const handleLogout = async () => {
         localStorage.removeItem('ecoply_demo_mode');
         await signOut(auth);
-        window.location.reload(); // Force reload to reset state
+        window.location.reload();
     };
 
     const isActive = (path) => location.pathname === path;
@@ -48,37 +67,31 @@ const Layout = ({ user }) => {
                         <span>{t('nav.home')}</span>
                     </Link>
 
-                    {/* 1. Ingestion des données */}
                     <Link to="/smart-import" className={`nav-item ${isActive('/smart-import') ? 'active' : ''}`}>
                         <UploadCloud size={20} />
                         <span>{t('nav.smartImport')}</span>
                     </Link>
 
-                    {/* 2. Monitorer les data points */}
                     <Link to="/data-points" className={`nav-item ${isActive('/data-points') ? 'active' : ''}`}>
                         <ClipboardList size={20} />
                         <span>{t('nav.dataPoints')}</span>
                     </Link>
 
-                    {/* 3. Générateur de rapports */}
                     <Link to="/generator" className={`nav-item ${isActive('/generator') ? 'active' : ''}`}>
                         <Sparkles size={20} />
                         <span>{t('nav.generator')}</span>
                     </Link>
 
-                    {/* NEW: EcoVadis Audit */}
                     <Link to="/ecovadis" className={`nav-item ${isActive('/ecovadis') ? 'active' : ''}`}>
                         <ShieldCheck size={20} />
-                        <span>EcoVadis Audit</span>
+                        <span>{t('nav.ecovadis')}</span>
                     </Link>
 
-                    {/* 4. Rapport final - Dernière étape du workflow */}
                     <Link to="/final-report" className={`nav-item ${isActive('/final-report') ? 'active' : ''}`}>
                         <FileText size={20} />
                         <span>{t('nav.finalReport')}</span>
                     </Link>
 
-                    {/* Autres fonctionnalités */}
                     <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
                         <MessageSquare size={20} />
                         <span>{t('nav.chat')}</span>
@@ -91,12 +104,12 @@ const Layout = ({ user }) => {
 
                     <Link to="/lineage" className={`nav-item ${isActive('/lineage') ? 'active' : ''}`}>
                         <TrendingUp size={20} />
-                        <span>{t('nav.lineage', 'Lineage')}</span>
+                        <span>{t('nav.lineage')}</span>
                     </Link>
 
                     <Link to="/discussions" className={`nav-item ${isActive('/discussions') ? 'active' : ''}`}>
                         <MessageCircle size={20} />
-                        <span>{t('nav.discussions', 'Discussions')}</span>
+                        <span>{t('nav.discussions')}</span>
                     </Link>
 
                     <Link to="/emission-factors" className={`nav-item ${isActive('/emission-factors') ? 'active' : ''}`}>
@@ -109,38 +122,117 @@ const Layout = ({ user }) => {
                         <span>{t('nav.settings')}</span>
                     </Link>
                 </nav>
+            </aside>
 
-                <div className="user-section">
-                    <div className="user-info">
-                        <div className="user-avatar">
+            <main className="main-content" style={{ paddingTop: '0' }}>
+                {/* Top Bar */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    padding: '0.75rem 1.5rem',
+                    borderBottom: '1px solid var(--border-color)',
+                    position: 'sticky',
+                    top: 0,
+                    backgroundColor: 'var(--bg-color)',
+                    zIndex: 10
+                }}>
+                    {/* Language Dropdown (custom, in-page) */}
+                    <div ref={langDropdownRef} style={{ position: 'relative' }}>
+                        <button
+                            onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.4rem',
+                                padding: '0.45rem 0.75rem',
+                                backgroundColor: 'transparent',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '8px',
+                                color: 'var(--text-color)',
+                                cursor: 'pointer',
+                                fontSize: '0.85rem',
+                                fontWeight: '500',
+                                transition: 'all 0.2s ease'
+                            }}
+                        >
+                            <Globe size={16} style={{ color: 'var(--text-secondary)' }} />
+                            <span>{currentLang.flag} {currentLang.label}</span>
+                            <ChevronDown size={14} style={{ color: 'var(--text-secondary)', transform: langDropdownOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s ease' }} />
+                        </button>
+
+                        {langDropdownOpen && (
+                            <div style={{
+                                position: 'absolute',
+                                top: 'calc(100% + 4px)',
+                                right: 0,
+                                backgroundColor: 'var(--surface-color, var(--bg-color))',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '10px',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                                minWidth: '170px',
+                                padding: '0.35rem',
+                                zIndex: 100
+                            }}>
+                                {languageOptions.map(lang => (
+                                    <button
+                                        key={lang.code}
+                                        onClick={() => { i18n.changeLanguage(lang.code); setLangDropdownOpen(false); }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.6rem',
+                                            width: '100%',
+                                            padding: '0.55rem 0.75rem',
+                                            border: 'none',
+                                            borderRadius: '7px',
+                                            backgroundColor: i18n.language === lang.code ? 'rgba(16, 185, 129, 0.12)' : 'transparent',
+                                            color: i18n.language === lang.code ? 'var(--primary-color)' : 'var(--text-color)',
+                                            fontWeight: i18n.language === lang.code ? '600' : '400',
+                                            cursor: 'pointer',
+                                            fontSize: '0.85rem',
+                                            transition: 'background-color 0.15s ease'
+                                        }}
+                                        onMouseEnter={(e) => { if (i18n.language !== lang.code) e.target.style.backgroundColor = 'var(--hover-bg, rgba(0,0,0,0.05))'; }}
+                                        onMouseLeave={(e) => { if (i18n.language !== lang.code) e.target.style.backgroundColor = 'transparent'; }}
+                                    >
+                                        <span style={{ fontSize: '1.1rem' }}>{lang.flag}</span>
+                                        <span>{lang.label}</span>
+                                        {i18n.language === lang.code && <span style={{ marginLeft: 'auto', fontSize: '0.75rem' }}>✓</span>}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Theme Toggle */}
+                    <button onClick={toggleTheme} className="logout-button" title={t('common.toggleTheme')} style={{ padding: '0.45rem', borderRadius: '8px' }}>
+                        {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                    </button>
+
+                    {/* User Info + Logout */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', paddingLeft: '0.75rem', borderLeft: '1px solid var(--border-color)' }}>
+                        <div className="user-avatar" style={{ width: '32px', height: '32px', fontSize: '0.8rem', flexShrink: 0 }}>
                             {user?.email?.[0].toUpperCase()}
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                            <span className="user-email">{user?.email}</span>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ fontSize: '0.8rem', fontWeight: '500', color: 'var(--text-color)', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</span>
                             {user?.rbac && (
-                                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                    {user.rbac.role} {user.rbac.scopes?.includes('global') ? '' : `(${user.rbac.scopes?.[0] || ''})`}
+                                <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                    {user.rbac.role}
                                 </span>
                             )}
                         </div>
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button onClick={toggleLanguage} className="logout-button" title={t('common.toggleLanguage')}>
-                            <Languages size={18} />
-                            <span style={{ fontSize: '0.75rem', marginLeft: '4px', fontWeight: 'bold' }}>{i18n.language.toUpperCase()}</span>
-                        </button>
-                        <button onClick={toggleTheme} className="logout-button" title={t('common.toggleTheme')}>
-                            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                        </button>
-                        <button onClick={handleLogout} className="logout-button" title={t('common.logout')}>
-                            <LogOut size={18} />
+                        <button onClick={handleLogout} className="logout-button" title={t('common.logout')} style={{ padding: '0.45rem', borderRadius: '8px' }}>
+                            <LogOut size={16} />
                         </button>
                     </div>
                 </div>
-            </aside>
 
-            <main className="main-content">
-                <Outlet />
+                <div style={{ padding: '1.5rem' }}>
+                    <Outlet />
+                </div>
             </main>
         </div>
     );

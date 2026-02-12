@@ -3,7 +3,10 @@ import { X, FileText, Download, ExternalLink, AlertCircle, CheckCircle2, Clock, 
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
 
+import { useTranslation } from 'react-i18next';
+
 const LineagePanel = ({ kpiId, value, standard, onClose }) => {
+    const { t } = useTranslation();
     const [lineageData, setLineageData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -113,7 +116,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
             }}>
                 <div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-color)', marginBottom: '0.25rem' }}>
-                        Traçabilité des Données
+                        {t('lineage.panelTitle')}
                     </h3>
                     <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                         {kpiId}
@@ -141,13 +144,13 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
             <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
                 {loading ? (
                     <div style={{ textAlign: 'center', padding: '2rem' }}>
-                        <p style={{ color: 'var(--text-secondary)' }}>Chargement des données de traçabilité...</p>
+                        <p style={{ color: 'var(--text-secondary)' }}>{t('lineage.loadingData')}</p>
                     </div>
                 ) : !lineageData || lineageData.sources.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '2rem' }}>
                         <AlertCircle size={48} color="#f59e0b" style={{ margin: '0 auto 1rem' }} />
                         <p style={{ color: 'var(--text-secondary)' }}>
-                            Aucune source de données trouvée pour ce KPI
+                            {t('lineage.noSourcesFound')}
                         </p>
                     </div>
                 ) : (
@@ -162,7 +165,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                                 border: '1px solid rgba(59, 130, 246, 0.2)'
                             }}>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: '600' }}>
-                                    Valeur Utilisée
+                                    {t('lineage.valueUsed')}
                                 </div>
                                 <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#3b82f6' }}>
                                     {value}
@@ -181,7 +184,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
                                 <div>
                                     <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
-                                        Sources
+                                        {t('lineage.sourcesCount')}
                                     </div>
                                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-color)' }}>
                                         {lineageData.sources.length}
@@ -189,7 +192,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                                 </div>
                                 <div>
                                     <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
-                                        Entrées
+                                        {t('lineage.entriesCount')}
                                     </div>
                                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-color)' }}>
                                         {lineageData.sources.reduce((sum, s) => sum + s.entries.length, 0)}
@@ -200,7 +203,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
 
                         {/* Sources */}
                         <h4 style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--text-color)', marginBottom: '1rem', textTransform: 'uppercase' }}>
-                            Documents Sources
+                            {t('lineage.sourceDocuments')}
                         </h4>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -227,7 +230,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                                                     {source.source_filename}
                                                 </div>
                                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                                                    {source.entries.length} extraction{source.entries.length > 1 ? 's' : ''}
+                                                    {source.entries.length} {t('lineage.extracts')}
                                                 </div>
                                             </div>
                                             <button
@@ -242,7 +245,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                                                     display: 'flex',
                                                     alignItems: 'center'
                                                 }}
-                                                title="Télécharger le document"
+                                                title={t('lineage.downloadDoc')}
                                             >
                                                 <Download size={16} />
                                             </button>
@@ -275,7 +278,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                                                             color: entry.confidence > 0.8 ? '#10b981' : entry.confidence > 0.6 ? '#f59e0b' : '#ef4444',
                                                             fontWeight: '500'
                                                         }}>
-                                                            {(entry.confidence * 100).toFixed(0)}% confiance
+                                                            {(entry.confidence * 100).toFixed(0)}% {t('lineage.confidence')}
                                                         </span>
                                                     )}
                                                 </div>
@@ -285,7 +288,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                                                     {entry.page_number && (
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                                             <MapPin size={12} />
-                                                            Page {entry.page_number}
+                                                            {t('lineage.page')} {entry.page_number}
                                                         </div>
                                                     )}
                                                     {entry.ingestion_timestamp && (

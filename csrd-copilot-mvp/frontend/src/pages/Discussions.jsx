@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase-config';
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../api/apiClient';
 import CommentThread from '../components/CommentThread';
 
 const DiscussionsPage = () => {
+    const { t } = useTranslation();
     const [kpis, setKpis] = useState([]);
     const [selectedKpi, setSelectedKpi] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ const DiscussionsPage = () => {
             if (!user) return;
 
             const token = await user.getIdToken();
-            
+
             // Récupérer tous les standards avec leurs KPIs
             const standards = ['e1', 'g1'];
             const allKpis = [];
@@ -95,7 +97,7 @@ const DiscussionsPage = () => {
         return (
             <div style={{ padding: '2rem', textAlign: 'center' }}>
                 <div style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>
-                    Chargement des discussions...
+                    {t('common.loading', 'Chargement...')}
                 </div>
             </div>
         );
@@ -106,10 +108,10 @@ const DiscussionsPage = () => {
             {/* Header */}
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>
-                    💬 Discussions & Commentaires
+                    💬 {t('discussions.title')}
                 </h1>
                 <p style={{ margin: '0.5rem 0 0 0', fontSize: '1rem', color: 'var(--text-secondary)' }}>
-                    Collaborez sur les KPIs avec votre équipe
+                    {t('discussions.subtitle')}
                 </p>
             </div>
 
@@ -120,7 +122,7 @@ const DiscussionsPage = () => {
                         {getTotalComments()}
                     </div>
                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        Commentaires Totaux
+                        {t('discussions.totalComments')}
                     </div>
                 </div>
                 <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
@@ -128,7 +130,7 @@ const DiscussionsPage = () => {
                         {getTotalUnresolved()}
                     </div>
                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        Non Résolus
+                        {t('discussions.unresolved')}
                     </div>
                 </div>
                 <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
@@ -136,7 +138,7 @@ const DiscussionsPage = () => {
                         {kpis.filter(k => k.commentSummary?.total_comments > 0).length}
                     </div>
                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        KPIs Discutés
+                        {t('discussions.kpisDiscussed')}
                     </div>
                 </div>
             </div>
@@ -148,14 +150,14 @@ const DiscussionsPage = () => {
                     className={filter === 'all' ? 'btn btn-primary' : 'btn btn-secondary'}
                     style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
                 >
-                    Tous les KPIs
+                    {t('discussions.filterAll')}
                 </button>
                 <button
                     onClick={() => setFilter('unresolved')}
                     className={filter === 'unresolved' ? 'btn btn-primary' : 'btn btn-secondary'}
                     style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
                 >
-                    ⚠️ Non Résolus ({getTotalUnresolved()})
+                    ⚠️ {t('discussions.filterUnresolved')} ({getTotalUnresolved()})
                 </button>
             </div>
 
@@ -164,14 +166,14 @@ const DiscussionsPage = () => {
                 {/* KPI List */}
                 <div>
                     <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem', fontWeight: 'bold' }}>
-                        KPIs ({kpis.length})
+                        {t('discussions.kpisListTitle')} ({kpis.length})
                     </h2>
-                    
+
                     {kpis.length === 0 ? (
                         <div className="card" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                            {filter === 'unresolved' 
-                                ? '🎉 Aucune question ou alerte en attente !'
-                                : '📝 Aucun KPI disponible. Commencez par importer des données.'}
+                            {filter === 'unresolved'
+                                ? t('discussions.emptyUnresolved')
+                                : t('discussions.emptyAll')}
                         </div>
                     ) : (
                         <div style={{ display: 'grid', gap: '0.75rem' }}>

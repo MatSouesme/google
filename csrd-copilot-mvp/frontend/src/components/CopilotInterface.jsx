@@ -263,8 +263,8 @@ const CopilotInterface = ({ enabledScopes }) => {
   return (
     <div className="copilot-interface">
       <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h2 style={{ 
-          marginTop: 0, 
+        <h2 style={{
+          marginTop: 0,
           fontSize: '1.75rem',
           color: 'var(--success-color)',
           fontWeight: 'bold',
@@ -275,10 +275,10 @@ const CopilotInterface = ({ enabledScopes }) => {
         </p>
       </div>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '1fr 1fr 2fr', 
-        gap: '1rem', 
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 2fr',
+        gap: '1rem',
         marginBottom: '1.5rem',
         padding: '1.5rem',
         backgroundColor: 'var(--bg-secondary)',
@@ -290,12 +290,12 @@ const CopilotInterface = ({ enabledScopes }) => {
           <select
             value={standard}
             onChange={(e) => setStandard(e.target.value)}
-            style={{ 
-              width: '100%', 
-              padding: '0.75rem', 
-              backgroundColor: 'var(--bg-color)', 
-              border: '2px solid var(--border-color)', 
-              color: 'var(--text-color)', 
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              backgroundColor: 'var(--bg-color)',
+              border: '2px solid var(--border-color)',
+              color: 'var(--text-color)',
               borderRadius: '6px',
               fontSize: '0.95rem',
               fontWeight: '500',
@@ -320,12 +320,12 @@ const CopilotInterface = ({ enabledScopes }) => {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            style={{ 
-              width: '100%', 
-              padding: '0.75rem', 
-              backgroundColor: 'var(--bg-color)', 
-              border: '2px solid var(--border-color)', 
-              color: 'var(--text-color)', 
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              backgroundColor: 'var(--bg-color)',
+              border: '2px solid var(--border-color)',
+              color: 'var(--text-color)',
               borderRadius: '6px',
               fontSize: '0.95rem',
               fontWeight: '500',
@@ -344,12 +344,12 @@ const CopilotInterface = ({ enabledScopes }) => {
           <select
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            style={{ 
-              width: '100%', 
-              padding: '0.75rem', 
-              backgroundColor: 'var(--bg-color)', 
-              border: '2px solid var(--border-color)', 
-              color: 'var(--text-color)', 
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              backgroundColor: 'var(--bg-color)',
+              border: '2px solid var(--border-color)',
+              color: 'var(--text-color)',
               borderRadius: '6px',
               fontSize: '0.95rem',
               fontWeight: '500',
@@ -369,7 +369,7 @@ const CopilotInterface = ({ enabledScopes }) => {
           onClick={handleGenerate}
           disabled={loading || !topic}
           className="btn-animated btn-primary"
-          style={{ 
+          style={{
             padding: '1rem 3rem',
             fontSize: '1.15rem',
             fontWeight: '700',
@@ -377,16 +377,16 @@ const CopilotInterface = ({ enabledScopes }) => {
             opacity: (loading || !topic) ? 0.6 : 1,
             cursor: (loading || !topic) ? 'not-allowed' : 'pointer',
             minWidth: '320px',
-            background: (loading || !topic) ? 'var(--primary-color)' : 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+            background: (loading || !topic) ? 'var(--primary-color)' : 'linear-gradient(135deg, var(--primary-color) 0%, #047857 100%)',
             border: 'none',
-            boxShadow: (loading || !topic) ? 'none' : '0 4px 15px rgba(59, 130, 246, 0.3)',
+            boxShadow: (loading || !topic) ? 'none' : '0 4px 15px rgba(5, 150, 105, 0.35)',
             transform: (loading || !topic) ? 'none' : 'translateY(0)',
             transition: 'all 0.3s ease'
           }}
           aria-label={loading ? 'Generating draft' : 'Generate CSRD draft'}
           aria-busy={loading}
-          onMouseEnter={(e) => !loading && !topic || (e.target.style.transform = 'translateY(-2px)', e.target.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.4)')}
-          onMouseLeave={(e) => (e.target.style.transform = 'translateY(0)', e.target.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)')}
+          onMouseEnter={(e) => !loading && !topic || (e.target.style.transform = 'translateY(-2px)', e.target.style.boxShadow = '0 6px 20px rgba(5, 150, 105, 0.45)')}
+          onMouseLeave={(e) => (e.target.style.transform = 'translateY(0)', e.target.style.boxShadow = '0 4px 15px rgba(5, 150, 105, 0.35)')}
         >
           {loading ? '⏳ ' + t('copilot.generateBtn.loading') : '✨ ' + t('copilot.generateBtn.default')}
         </button>
@@ -399,9 +399,9 @@ const CopilotInterface = ({ enabledScopes }) => {
       )}
 
       {draft && (
-        <div className="draft-result" style={{ 
-          display: 'flex', 
-          gap: '2rem', 
+        <div className="draft-result" style={{
+          display: 'flex',
+          gap: '2rem',
           flexDirection: 'column',
           padding: '2rem',
           backgroundColor: 'var(--bg-secondary)',
@@ -412,9 +412,9 @@ const CopilotInterface = ({ enabledScopes }) => {
 
           {/* Toolbar */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-            <h3 style={{ 
-              fontSize: '1.3rem', 
-              color: 'var(--success-color)', 
+            <h3 style={{
+              fontSize: '1.3rem',
+              color: 'var(--success-color)',
               margin: 0,
               fontWeight: 'bold',
               display: 'flex',
@@ -424,13 +424,13 @@ const CopilotInterface = ({ enabledScopes }) => {
               ✅ {t('copilot.result.title')}
             </h3>
             <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap' }}>
-              <button 
-                onClick={handleSaveDraft} 
-                disabled={saving} 
+              <button
+                onClick={handleSaveDraft}
+                disabled={saving}
                 className="btn-animated btn-secondary"
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  fontSize: '0.9rem', 
+                style={{
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.9rem',
                   fontWeight: '600',
                   opacity: saving ? 0.6 : 1,
                   cursor: saving ? 'not-allowed' : 'pointer'
@@ -440,17 +440,17 @@ const CopilotInterface = ({ enabledScopes }) => {
               >
                 💾 {saving ? t('copilot.result.saveBtn.saving') : t('copilot.result.saveBtn.default')}
               </button>
-              <button 
-                onClick={handleApprove} 
-                disabled={approving} 
+              <button
+                onClick={handleApprove}
+                disabled={approving}
                 className="btn-animated"
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  fontSize: '0.9rem', 
+                style={{
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.9rem',
                   fontWeight: '600',
-                  backgroundColor: '#1565c0', 
-                  color: 'white', 
-                  border: 'none', 
+                  backgroundColor: '#1565c0',
+                  color: 'white',
+                  border: 'none',
                   borderRadius: '6px',
                   opacity: approving ? 0.6 : 1,
                   cursor: approving ? 'not-allowed' : 'pointer',
@@ -461,12 +461,12 @@ const CopilotInterface = ({ enabledScopes }) => {
               >
                 ✓ {approving ? t('copilot.result.approveBtn.approving') : t('copilot.result.approveBtn.default')}
               </button>
-              <button 
-                onClick={() => setShowSources(!showSources)} 
+              <button
+                onClick={() => setShowSources(!showSources)}
                 className="btn-animated btn-secondary"
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  fontSize: '0.9rem', 
+                style={{
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.9rem',
                   fontWeight: '600'
                 }}
                 aria-label={showSources ? 'Hide sources' : 'Show sources'}
@@ -474,16 +474,16 @@ const CopilotInterface = ({ enabledScopes }) => {
               >
                 📊 {showSources ? t('copilot.result.toggleSources.hide') : t('copilot.result.toggleSources.show')}
               </button>
-              <button 
-                onClick={handleDownload} 
+              <button
+                onClick={handleDownload}
                 className="btn-animated"
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  fontSize: '0.9rem', 
+                style={{
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.9rem',
                   fontWeight: '600',
-                  backgroundColor: 'var(--success-color)', 
-                  color: 'white', 
-                  border: 'none', 
+                  backgroundColor: 'var(--success-color)',
+                  color: 'white',
+                  border: 'none',
                   borderRadius: '6px',
                   transition: 'all 0.2s ease'
                 }}
@@ -491,20 +491,20 @@ const CopilotInterface = ({ enabledScopes }) => {
               >
                 ⬇️ {t('copilot.result.download')}
               </button>
-              <button 
-                onClick={handleExportXBRL} 
-                disabled={xbrlLoading} 
+              <button
+                onClick={handleExportXBRL}
+                disabled={xbrlLoading}
                 className="btn-animated"
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  fontSize: '0.9rem', 
+                style={{
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.9rem',
                   fontWeight: '600',
-                  backgroundColor: '#e65100', 
-                  color: 'white', 
-                  border: 'none', 
+                  backgroundColor: '#e65100',
+                  color: 'white',
+                  border: 'none',
                   borderRadius: '6px',
-                  display: 'flex', 
-                  alignItems: 'center', 
+                  display: 'flex',
+                  alignItems: 'center',
                   gap: '0.375rem',
                   opacity: xbrlLoading ? 0.6 : 1,
                   cursor: xbrlLoading ? 'not-allowed' : 'pointer',
@@ -646,10 +646,10 @@ const CopilotInterface = ({ enabledScopes }) => {
               {(() => {
                 if (!draft) return '';
                 let processedDraft = draft;
-                
+
                 // Replace [[Source: ...]] with audit tooltip
                 processedDraft = processedDraft.replace(/\[\[\s*Source\s*:([\s\S]*?)\]\]/gi, (match, content) => ` [ℹ️](#audit:${encodeURIComponent(content.trim())})`);
-                
+
                 // Detect and mark KPI values for lineage tracing
                 // Pattern: numbers with units followed by KPI indicators (e.g., "1,234 tCO2e", "45%", "€2.3M")
                 // We look for patterns that suggest data points: number + optional comma/space + unit
@@ -662,11 +662,11 @@ const CopilotInterface = ({ enabledScopes }) => {
                     const context = processedDraft.substring(Math.max(0, processedDraft.indexOf(match) - 200), processedDraft.indexOf(match));
                     const kpiMatch = context.match(kpiPattern);
                     const kpiId = kpiMatch ? kpiMatch[1] : `${standard.toUpperCase()}_UNKNOWN`;
-                    
+
                     return `[${match}](#lineage:${encodeURIComponent(kpiId + '|' + match)})`;
                   }
                 );
-                
+
                 return processedDraft;
               })()}
             </ReactMarkdown>

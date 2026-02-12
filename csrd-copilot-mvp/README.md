@@ -40,6 +40,28 @@ Need to draft the "G1 - Business Conduct" section?
 ### 📈 Impact Dashboard -> A way to understand quickly what you have
 Visualize your carbon emissions (Scope 1, 2, 3) and other key metrics via interactive charts.
 
+### ⚡ Data Traceability (Lineage)
+Full transparency on your data.
+*   Click on any figure to see its origin.
+*   View the source document (PDF), the exact page, and the extraction confidence score.
+*   Download the original proof.
+
+### 🌍 EcoVadis Audit
+Prepare for your EcoVadis assessment.
+*   Upload your internal policies and reports.
+*   The AI checks your documents against EcoVadis criteria (Ethics, Environment, Labor...).
+*   Get a gap analysis and improvement suggestions.
+
+### 💬 Collaboration
+Discuss KPIs with your team directly in the app.
+*   Add comments on specific data points.
+*   Resolve questions and track data validation status.
+
+### 🌐 Internationalization
+Full multi-language support.
+*   Available in English, French, German, and Spanish.
+*   Seamless language switching.
+
 ---
 
 ## 🛠️ Under the Hood (Tech Stack) -> How did we build that? 
