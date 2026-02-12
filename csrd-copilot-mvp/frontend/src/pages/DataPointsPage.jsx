@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { kpis as initialKpis } from '../data/kpis';
-import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Database, Code, Bot, Loader2, ArrowRight, Folder, FolderOpen } from 'lucide-react';
+import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Database, Code, Bot, Loader2, ArrowRight, Folder, FolderOpen, ClipboardList } from 'lucide-react';
 import { auth } from '../firebase-config';
 import Alert from '../components/Alert';
 import { useDataStatus } from '../hooks/useDataStatus';
@@ -30,7 +30,7 @@ const DataPointsPage = () => {
                 const token = user ? await user.getIdToken() : null;
                 // If no token yet, it might be loading, but we can try. 
                 // Better to wait for auth state, but for MVP this is okay if triggered on mount/auth change.
-                
+
                 if (token) {
                     const response = await fetch(`${API_BASE_URL}/data/status`, {
                         headers: {
@@ -43,14 +43,14 @@ const DataPointsPage = () => {
                             setKpis(prev => prev.map(k => {
                                 const isCompleted = data.completed_kpis.includes(k.id);
                                 const valueData = data.kpi_values ? data.kpi_values[k.id] : null;
-                                
-                                return isCompleted 
-                                    ? { 
-                                        ...k, 
+
+                                return isCompleted
+                                    ? {
+                                        ...k,
                                         status: 'completed',
                                         value: valueData ? valueData.value : k.value,
                                         unit: valueData && valueData.unit ? valueData.unit : k.unit
-                                      } 
+                                    }
                                     : k;
                             }));
                         }
@@ -60,7 +60,7 @@ const DataPointsPage = () => {
                 console.error("Failed to fetch status:", error);
             }
         };
-        
+
         fetchStatus();
     }, [auth.currentUser]); // Re-run when user auth state changes
 
@@ -202,29 +202,29 @@ const DataPointsPage = () => {
         try {
             const user = auth.currentUser;
             const token = user ? await user.getIdToken() : null;
-            
+
             const response = await fetch(`${API_BASE_URL}/data/dispatch`, {
                 method: 'POST',
                 headers: {
                     'Authorization': token ? `Bearer ${token}` : ''
                 }
             });
-            
+
             if (!response.ok) throw new Error("Dispatch failed");
-            
+
             const data = await response.json();
-            
+
             // Update KPIs status based on response
             if (data.stats && data.stats.completed_kpis) {
-                setKpis(prev => prev.map(k => 
-                    data.stats.completed_kpis.includes(k.id) 
-                        ? { ...k, status: 'completed' } 
+                setKpis(prev => prev.map(k =>
+                    data.stats.completed_kpis.includes(k.id)
+                        ? { ...k, status: 'completed' }
                         : k
                 ));
             }
-            
+
             alert("Data dispatched and progress updated!");
-            
+
         } catch (error) {
             console.error("Dispatch error:", error);
             alert("Failed to update progress.");
@@ -250,7 +250,7 @@ const DataPointsPage = () => {
         missing: kpis.filter(k => k.status === 'missing').length
     };
     const progressPercentage = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
-    
+
     // Category stats
     const categoryStats = {
         Environmental: {
@@ -270,7 +270,7 @@ const DataPointsPage = () => {
             completed: kpis.filter(k => k.category === 'General' && k.status === 'completed').length
         }
     };
-    
+
     const getCategoryIcon = (category) => {
         const icons = {
             Environmental: '🌍',
@@ -280,7 +280,7 @@ const DataPointsPage = () => {
         };
         return icons[category] || '📁';
     };
-    
+
     const getCategoryColor = (category) => {
         const colors = {
             Environmental: '#10B981',
@@ -295,21 +295,24 @@ const DataPointsPage = () => {
         <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
             <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                 <div style={{ flex: 1 }}>
-                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('dataPoints.title')}</h1>
+                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <ClipboardList size={32} color="#10b981" />
+                        {t('dataPoints.title')}
+                    </h1>
                     <p style={{ color: 'var(--text-secondary)' }}>{t('dataPoints.subtitle')}</p>
                 </div>
                 <button
                     onClick={() => navigate('/generator')}
                     className="btn-animated btn-primary"
-                        style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: '0.5rem',
-                            padding: '0.75rem 1.5rem',
-                            fontSize: '0.95rem',
-                            fontWeight: '600',
-                            whiteSpace: 'nowrap'
-                        }}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.75rem 1.5rem',
+                        fontSize: '0.95rem',
+                        fontWeight: '600',
+                        whiteSpace: 'nowrap'
+                    }}
                 >
                     {t('dataPoints.nextStep')} <ArrowRight size={18} />
                 </button>
@@ -337,8 +340,8 @@ const DataPointsPage = () => {
             )}
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-                <button 
-                    onClick={handleDispatch} 
+                <button
+                    onClick={handleDispatch}
                     disabled={dispatching}
                     className="btn btn-primary"
                     style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
@@ -457,7 +460,7 @@ const DataPointsPage = () => {
                     <button
                         onClick={() => { setSearchQuery(''); setCategoryFilter('all'); setStatusFilter('all'); setStandardFilter('all'); }}
                         className="btn-animated"
-                        style={{ 
+                        style={{
                             fontSize: '0.9rem',
                             padding: '0.5rem 1rem',
                             backgroundColor: 'transparent',
@@ -490,14 +493,14 @@ const DataPointsPage = () => {
                 {categories.map(category => {
                     const categoryKPIs = groupedKPIs[category] || [];
                     if (categoryKPIs.length === 0) return null;
-                    
+
                     const isExpanded = expandedFolders[category];
                     const catStats = categoryStats[category];
-                    
+
                     return (
                         <div key={category} className="animate-fade-in">
                             {/* Folder Header */}
-                            <div 
+                            <div
                                 className="card"
                                 style={{
                                     padding: '1.5rem',
@@ -517,8 +520,8 @@ const DataPointsPage = () => {
                                             <Folder size={32} style={{ color: getCategoryColor(category) }} />
                                         )}
                                         <div>
-                                            <h3 style={{ 
-                                                fontSize: '1.5rem', 
+                                            <h3 style={{
+                                                fontSize: '1.5rem',
                                                 fontWeight: 'bold',
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -567,179 +570,179 @@ const DataPointsPage = () => {
                                                     transition: 'background-color 0.2s'
                                                 }}
                                                 onClick={() => toggleKPI(kpi.id)}
-                        >
-                            <div style={{ display: 'flex', flex: 1, alignItems: 'center', gap: '1.5rem', overflow: 'hidden' }}>
-                                {/* Status Icon */}
-                                <div title={kpi.status === 'completed' ? 'Completed' : 'Missing'} style={{
-                                    flexShrink: 0,
-                                    width: '32px', height: '32px', borderRadius: '50%',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    backgroundColor: kpi.status === 'completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'
-                                }}>
-                                    {kpi.status === 'completed' ? <CheckCircle size={18} color="#10B981" /> : <AlertCircle size={18} color="#EF4444" />}
-                                </div>
-
-                                {/* ID & Name */}
-                                <div style={{ minWidth: 0, flex: 1 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
-                                        <span style={{
-                                            fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 'bold',
-                                            padding: '2px 6px', borderRadius: '4px',
-                                            backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-                                            color: 'var(--text-color)'
-                                        }}>
-                                            {kpi.id}
-                                        </span>
-                                        <h3 style={{ margin: 0, fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{kpi.name}</h3>
-                                    </div>
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', gap: '1rem' }}>
-                                        <span>{kpi.category}</span>
-                                        <span>•</span>
-                                        <span>{kpi.standard}</span>
-                                        <span>•</span>
-                                        <span>{t('dataPoints.unit')}: {kpi.unit}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Actions */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={(e) => handleGenerateSQL(e, kpi)}
-                                    disabled={sqlLoading[kpi.id]}
-                                    style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                                >
-                                    {sqlLoading[kpi.id] ? <Loader2 size={16} className="spin" /> : <Database size={16} />}
-                                    <span>{generatedSql[kpi.id] ? t('dataPoints.regenerateSQL') : t('dataPoints.getSQL')}</span>
-                                </button>
-                                {expandedKPI === kpi.id ? <ChevronUp size={20} color="var(--text-secondary)" /> : <ChevronDown size={20} color="var(--text-secondary)" />}
-                            </div>
-                        </div>
-
-                        {/* Expanded Content */}
-                        {expandedKPI === kpi.id && (
-                            <div style={{ padding: '2rem', borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 3fr) 2fr', gap: '2rem' }}>
-
-                                    {/* Left: Description & SQL */}
-                                    <div>
-                                        <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>{t('dataPoints.description')}</h4>
-                                        <p style={{ marginBottom: '1.5rem', lineHeight: '1.6' }}>{kpi.description}</p>
-
-                                        {generatedSql[kpi.id] && (
-                                            <div className="animate-fade-in" style={{ marginTop: '1rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                                    <h4 style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
-                                                        <Code size={16} color="var(--primary-color)" /> {t('dataPoints.generatedSQLQuery')}
-                                                    </h4>
-                                                </div>
-                                                <div style={{ position: 'relative' }}>
-                                                    <pre style={{
-                                                        backgroundColor: '#1E1E1E', padding: '1rem', borderRadius: '8px',
-                                                        overflowX: 'auto', fontSize: '0.9rem', color: '#E0E0E0',
-                                                        border: '1px solid #333'
+                                            >
+                                                <div style={{ display: 'flex', flex: 1, alignItems: 'center', gap: '1.5rem', overflow: 'hidden' }}>
+                                                    {/* Status Icon */}
+                                                    <div title={kpi.status === 'completed' ? 'Completed' : 'Missing'} style={{
+                                                        flexShrink: 0,
+                                                        width: '32px', height: '32px', borderRadius: '50%',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        backgroundColor: kpi.status === 'completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'
                                                     }}>
-                                                        <code>{generatedSql[kpi.id]}</code>
-                                                    </pre>
+                                                        {kpi.status === 'completed' ? <CheckCircle size={18} color="#10B981" /> : <AlertCircle size={18} color="#EF4444" />}
+                                                    </div>
+
+                                                    {/* ID & Name */}
+                                                    <div style={{ minWidth: 0, flex: 1 }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
+                                                            <span style={{
+                                                                fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 'bold',
+                                                                padding: '2px 6px', borderRadius: '4px',
+                                                                backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
+                                                                color: 'var(--text-color)'
+                                                            }}>
+                                                                {kpi.id}
+                                                            </span>
+                                                            <h3 style={{ margin: 0, fontSize: '1rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{kpi.name}</h3>
+                                                        </div>
+                                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', gap: '1rem' }}>
+                                                            <span>{kpi.category}</span>
+                                                            <span>•</span>
+                                                            <span>{kpi.standard}</span>
+                                                            <span>•</span>
+                                                            <span>{t('dataPoints.unit')}: {kpi.unit}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Actions */}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    <button
+                                                        className="btn btn-secondary"
+                                                        onClick={(e) => handleGenerateSQL(e, kpi)}
+                                                        disabled={sqlLoading[kpi.id]}
+                                                        style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                                                    >
+                                                        {sqlLoading[kpi.id] ? <Loader2 size={16} className="spin" /> : <Database size={16} />}
+                                                        <span>{generatedSql[kpi.id] ? t('dataPoints.regenerateSQL') : t('dataPoints.getSQL')}</span>
+                                                    </button>
+                                                    {expandedKPI === kpi.id ? <ChevronUp size={20} color="var(--text-secondary)" /> : <ChevronDown size={20} color="var(--text-secondary)" />}
                                                 </div>
                                             </div>
-                                        )}
-                                    </div>
 
-                                    {/* Right: Metadata, Status & Manual Entry */}
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        {/* Status Card */}
-                                        <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                                            <h5 style={{ marginTop: 0, marginBottom: '1rem' }}>Data Status</h5>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: kpi.status === 'completed' ? '#10B981' : '#EF4444' }}>
-                                                {kpi.status === 'completed' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
-                                                <span style={{ fontWeight: '500' }}>{kpi.status === 'completed' ? 'Completed' : 'Missing Data'}</span>
-                                            </div>
-                                            
-                                            {kpi.status === 'completed' && kpi.value && (
-                                                <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                                                    <div style={{ fontSize: '0.8rem', color: '#065F46', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: '600' }}>Current Value</div>
-                                                    <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#065F46' }}>
-                                                        {kpi.value} <span style={{ fontSize: '1rem', fontWeight: 'normal', color: '#047857' }}>{kpi.unit}</span>
+                                            {/* Expanded Content */}
+                                            {expandedKPI === kpi.id && (
+                                                <div style={{ padding: '2rem', borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)' }}>
+                                                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 3fr) 2fr', gap: '2rem' }}>
+
+                                                        {/* Left: Description & SQL */}
+                                                        <div>
+                                                            <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>{t('dataPoints.description')}</h4>
+                                                            <p style={{ marginBottom: '1.5rem', lineHeight: '1.6' }}>{kpi.description}</p>
+
+                                                            {generatedSql[kpi.id] && (
+                                                                <div className="animate-fade-in" style={{ marginTop: '1rem' }}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                                                        <h4 style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                                                                            <Code size={16} color="var(--primary-color)" /> {t('dataPoints.generatedSQLQuery')}
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div style={{ position: 'relative' }}>
+                                                                        <pre style={{
+                                                                            backgroundColor: '#1E1E1E', padding: '1rem', borderRadius: '8px',
+                                                                            overflowX: 'auto', fontSize: '0.9rem', color: '#E0E0E0',
+                                                                            border: '1px solid #333'
+                                                                        }}>
+                                                                            <code>{generatedSql[kpi.id]}</code>
+                                                                        </pre>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Right: Metadata, Status & Manual Entry */}
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                            {/* Status Card */}
+                                                            <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                                                                <h5 style={{ marginTop: 0, marginBottom: '1rem' }}>Data Status</h5>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: kpi.status === 'completed' ? '#10B981' : '#EF4444' }}>
+                                                                    {kpi.status === 'completed' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+                                                                    <span style={{ fontWeight: '500' }}>{kpi.status === 'completed' ? 'Completed' : 'Missing Data'}</span>
+                                                                </div>
+
+                                                                {kpi.status === 'completed' && kpi.value && (
+                                                                    <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                                                                        <div style={{ fontSize: '0.8rem', color: '#065F46', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: '600' }}>Current Value</div>
+                                                                        <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#065F46' }}>
+                                                                            {kpi.value} <span style={{ fontSize: '1rem', fontWeight: 'normal', color: '#047857' }}>{kpi.unit}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {kpi.status === 'missing' && (
+                                                                    <button className="btn btn-outline" style={{ width: '100%' }} onClick={() => {
+                                                                        setKpis(prev => prev.map(p => p.id === kpi.id ? { ...p, status: 'completed' } : p));
+                                                                    }}>
+                                                                        Simulate Complete
+                                                                    </button>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Manual Entry Form */}
+                                                            <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                                                                <h5 style={{ marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                                    <Filter size={16} /> Manual Data Entry
+                                                                </h5>
+                                                                <form onSubmit={(e) => handleManualSubmit(e, kpi)}>
+                                                                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                                                                        <div style={{ flex: 1 }}>
+                                                                            <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Value ({kpi.unit})</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                required
+                                                                                placeholder="0.00"
+                                                                                value={manualEntry[kpi.id]?.value || ''}
+                                                                                onChange={(e) => handleManualEntryChange(kpi.id, 'value', e.target.value)}
+                                                                                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)' }}
+                                                                            />
+                                                                        </div>
+                                                                        <div style={{ flex: 1 }}>
+                                                                            <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Date</label>
+                                                                            <input
+                                                                                type="date"
+                                                                                required
+                                                                                value={manualEntry[kpi.id]?.date || ''}
+                                                                                onChange={(e) => handleManualEntryChange(kpi.id, 'date', e.target.value)}
+                                                                                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)' }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style={{ marginBottom: '1rem' }}>
+                                                                        <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Commentary (Optional)</label>
+                                                                        <textarea
+                                                                            rows="2"
+                                                                            value={manualEntry[kpi.id]?.comment || ''}
+                                                                            onChange={(e) => handleManualEntryChange(kpi.id, 'comment', e.target.value)}
+                                                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)', resize: 'vertical' }}
+                                                                        />
+                                                                    </div>
+                                                                    <button
+                                                                        type="submit"
+                                                                        className="btn btn-primary"
+                                                                        style={{ width: '100%' }}
+                                                                        disabled={submitting[kpi.id]}
+                                                                    >
+                                                                        {submitting[kpi.id] ? (
+                                                                            <>
+                                                                                <Loader2 size={16} className="spin" style={{ marginRight: '0.5rem' }} />
+                                                                                Submitting...
+                                                                            </>
+                                                                        ) : 'Submit Data'}
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             )}
-
-                                            {kpi.status === 'missing' && (
-                                                <button className="btn btn-outline" style={{ width: '100%' }} onClick={() => {
-                                                    setKpis(prev => prev.map(p => p.id === kpi.id ? { ...p, status: 'completed' } : p));
-                                                }}>
-                                                    Simulate Complete
-                                                </button>
-                                            )}
                                         </div>
-
-                                        {/* Manual Entry Form */}
-                                        <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                                            <h5 style={{ marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <Filter size={16} /> Manual Data Entry
-                                            </h5>
-                                            <form onSubmit={(e) => handleManualSubmit(e, kpi)}>
-                                                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                                                    <div style={{ flex: 1 }}>
-                                                        <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Value ({kpi.unit})</label>
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            placeholder="0.00"
-                                                            value={manualEntry[kpi.id]?.value || ''}
-                                                            onChange={(e) => handleManualEntryChange(kpi.id, 'value', e.target.value)}
-                                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)' }}
-                                                        />
-                                                    </div>
-                                                    <div style={{ flex: 1 }}>
-                                                        <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Date</label>
-                                                        <input
-                                                            type="date"
-                                                            required
-                                                            value={manualEntry[kpi.id]?.date || ''}
-                                                            onChange={(e) => handleManualEntryChange(kpi.id, 'date', e.target.value)}
-                                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)' }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div style={{ marginBottom: '1rem' }}>
-                                                    <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Commentary (Optional)</label>
-                                                    <textarea
-                                                        rows="2"
-                                                        value={manualEntry[kpi.id]?.comment || ''}
-                                                        onChange={(e) => handleManualEntryChange(kpi.id, 'comment', e.target.value)}
-                                                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', color: 'var(--text-color)', resize: 'vertical' }}
-                                                    />
-                                                </div>
-                                                <button
-                                                    type="submit"
-                                                    className="btn btn-primary"
-                                                    style={{ width: '100%' }}
-                                                    disabled={submitting[kpi.id]}
-                                                >
-                                                    {submitting[kpi.id] ? (
-                                                        <>
-                                                            <Loader2 size={16} className="spin" style={{ marginRight: '0.5rem' }} />
-                                                            Submitting...
-                                                        </>
-                                                    ) : 'Submit Data'}
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-
+                                    ))}
                                 </div>
-                            </div>
-                        )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                            )}
+                        </div>
+                    );
+                })}
 
                 {filteredKPIs.length === 0 && (
                     <div className="card" style={{ textAlign: 'center', padding: '4rem' }}>

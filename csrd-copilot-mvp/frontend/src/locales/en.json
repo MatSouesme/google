@@ -86,7 +86,12 @@
             "configureDataPoints": "Configure Data Points",
             "importMoreData": "Import More Data",
             "viewReport": "View Your Report",
-            "dashboard": "Dashboard"
+            "dashboard": "Dashboard",
+            "import": "Import Data",
+            "generate": "Generate Report",
+            "manual": "Manual Input",
+            "traceability": "Data Traceability",
+            "ecovadis": "EcoVadis Audit"
         },
         "features": {
             "ingestion": {
@@ -508,5 +513,75 @@
         "emptyAll": "No KPIs available. Start by importing data.",
         "emptyUnresolved": "No questions or alerts pending!",
         "unresolvedBadge": "Unresolved"
+    },
+    "emissionFactors": {
+        "title": "Emission Factors",
+        "subtitle": "Calculate your GHG emissions from your activity data",
+        "betaWarning": "ℹ️ Beta Version - Emission factors displayed are dummy values. Real values will be integrated from the ADEME Carbon Database soon.",
+        "step1": {
+            "title": "1. Select your data",
+            "sourceType": "Source Data Type",
+            "placeholderSource": "-- Choose a data type --",
+            "quantity": "Quantity",
+            "placeholderValue": "Enter value",
+            "category": "Emission Category",
+            "placeholderCategory": "-- Choose a category --",
+            "emissionFactor": "Emission Factor"
+        },
+        "step2": {
+            "title": "2. Calculation Result",
+            "totalEmissions": "Total Emissions",
+            "detail": "📊 Calculation Detail",
+            "conversion": "💡 That is {{tonnes}} tonnes CO₂e",
+            "emptyState": "Select a data source, enter a value, and choose a category to see the calculation"
+        },
+        "guide": {
+            "title": "📖 Quick Guide",
+            "step1": "✓ Choose data type (electricity, fuel, distance...)",
+            "step2": "✓ Enter measured quantity",
+            "step3": "✓ Select appropriate emission category",
+            "step4": "✓ Calculation happens automatically"
+        },
+        "examples": {
+            "title": "💡 Usage Examples",
+            "elec": "⚡ Electricity Emissions",
+            "car": "🚗 Vehicle Travel",
+            "heating": "🏢 Building Heating"
+        },
+        "sources": {
+            "electricity_kwh": "Electricity Consumption (kWh)",
+            "gas_m3": "Gas Consumption (m³)",
+            "fuel_liters": "Fuel (liters)",
+            "distance_km": "Distance Traveled (km)",
+            "surface_m2": "Building Surface (m²)",
+            "production_units": "Units Produced"
+        },
+        "categories": {
+            "elec_france": "Electricity Mix France",
+            "elec_europe": "Electricity Mix Europe",
+            "elec_renewable": "Renewable Electricity",
+            "elec_coal": "Coal Electricity",
+            "gas_natural": "Natural Gas",
+            "gas_propane": "Propane",
+            "gas_butane": "Butane",
+            "fuel_diesel": "Diesel",
+            "fuel_gasoline": "Gasoline",
+            "fuel_bioethanol": "Bioethanol",
+            "fuel_kerosene": "Kerosene",
+            "car_petrol": "Petrol Car",
+            "car_diesel": "Diesel Car",
+            "car_electric": "Electric Car",
+            "truck_heavy": "Heavy Truck",
+            "plane_short": "Short-haul Plane",
+            "plane_long": "Long-haul Plane",
+            "train": "Train",
+            "building_office": "Office",
+            "building_residential": "Residential",
+            "building_industrial": "Industrial",
+            "prod_steel": "Steel",
+            "prod_cement": "Cement",
+            "prod_plastic": "Plastic",
+            "prod_paper": "Paper"
+        }
     }
 }

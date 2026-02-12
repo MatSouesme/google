@@ -3,6 +3,7 @@ import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../api/apiClient';
 import CommentThread from '../components/CommentThread';
+import { MessageCircle } from 'lucide-react';
 
 const DiscussionsPage = () => {
     const { t } = useTranslation();
@@ -107,8 +108,9 @@ const DiscussionsPage = () => {
         <div style={{ padding: '2rem', maxWidth: '1600px', margin: '0 auto' }}>
             {/* Header */}
             <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>
-                    💬 {t('discussions.title')}
+                <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <MessageCircle size={32} color="#10b981" />
+                    {t('discussions.title')}
                 </h1>
                 <p style={{ margin: '0.5rem 0 0 0', fontSize: '1rem', color: 'var(--text-secondary)' }}>
                     {t('discussions.subtitle')}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import UploadWizard from '../components/UploadWizard';
 import CopilotInterface from '../components/CopilotInterface';
 import Alert from '../components/Alert';
@@ -29,7 +29,8 @@ const Generator = () => {
         <div className="generator-page" style={{ padding: '1.5rem 2rem', maxWidth: '1400px', margin: '0 auto' }}>
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                 <div style={{ flex: 1 }}>
-                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <Sparkles size={32} color="#10b981" />
                         {t('generator.title')}
                     </h1>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>{t('generator.subtitle')}</p>
@@ -37,9 +38,9 @@ const Generator = () => {
                 <button
                     onClick={() => navigate('/final-report')}
                     className="btn-animated btn-primary"
-                    style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: '0.5rem',
                         padding: '0.75rem 1.5rem',
                         fontSize: '0.95rem',
@@ -52,8 +53,8 @@ const Generator = () => {
             </div>
 
             {!hasImportedData && (
-                <div 
-                    style={{ 
+                <div
+                    style={{
                         marginBottom: '1.5rem',
                         backgroundColor: 'rgba(251, 191, 36, 0.1)',
                         border: '2px solid rgba(251, 191, 36, 0.5)',
@@ -63,9 +64,9 @@ const Generator = () => {
                         transition: 'all 0.3s ease'
                     }}
                 >
-                    <div 
+                    <div
                         onClick={() => setAlertCollapsed(!alertCollapsed)}
-                        style={{ 
+                        style={{
                             padding: '1rem 1.5rem',
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -87,7 +88,7 @@ const Generator = () => {
                         </div>
                     </div>
                     {!alertCollapsed && (
-                        <div style={{ 
+                        <div style={{
                             padding: '0 1.5rem 1rem 1.5rem',
                             borderTop: '1px solid rgba(251, 191, 36, 0.2)',
                             paddingTop: '1rem'
@@ -101,8 +102,8 @@ const Generator = () => {
                                     navigate('/smart-import');
                                 }}
                                 className="btn-animated"
-                                style={{ 
-                                    fontSize: '0.9rem', 
+                                style={{
+                                    fontSize: '0.9rem',
                                     padding: '0.5rem 1rem',
                                     backgroundColor: '#f97316',
                                     color: 'white',
@@ -116,13 +117,13 @@ const Generator = () => {
                 </div>
             )}
 
-            <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'minmax(400px, 1fr) minmax(600px, 2fr)', 
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(400px, 1fr) minmax(600px, 2fr)',
                 gap: '2rem',
                 alignItems: 'start'
             }}>
-                <div className="card" style={{ 
+                <div className="card" style={{
                     padding: '2rem',
                     background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)',
                     border: '2px solid var(--border-color)',
@@ -137,7 +138,7 @@ const Generator = () => {
                     />
                 </div>
 
-                <div className="card" style={{ 
+                <div className="card" style={{
                     padding: '2rem',
                     background: 'var(--surface-color)',
                     border: '2px solid var(--border-color)',

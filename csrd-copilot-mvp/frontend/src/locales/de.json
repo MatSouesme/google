@@ -18,6 +18,7 @@
         "lineage": "Rückverfolgbarkeit",
         "discussions": "Diskussionen",
         "ecovadis": "EcoVadis-Audit",
+        "emissionFactors": "Emissionsfaktoren",
         "settings": "Einstellungen"
     },
     "login": {
@@ -508,5 +509,75 @@
         "emptyAll": "Keine KPIs verfügbar. Beginnen Sie mit dem Datenimport.",
         "emptyUnresolved": "Keine offenen Fragen oder Warnungen!",
         "unresolvedBadge": "Ungelöst"
+    },
+    "emissionFactors": {
+        "title": "Emissionsfaktoren",
+        "subtitle": "Berechnen Sie Ihre THG-Emissionen aus Ihren Aktivitätsdaten",
+        "betaWarning": "ℹ️ Beta-Version - Die angezeigten Emissionsfaktoren sind fiktive Werte. Reale Werte aus der ADEME Carbon Database werden in Kürze integriert.",
+        "step1": {
+            "title": "Schritt 1: Aktivitätsdaten",
+            "sourceType": "Art der Quelldaten",
+            "placeholderSource": "Wählen Sie eine Quelle...",
+            "quantity": "Menge / Wert",
+            "placeholderValue": "z.B. 1000",
+            "category": "Emissionskategorie",
+            "placeholderCategory": "Wählen Sie eine Kategorie...",
+            "emissionFactor": "Genutzter Emissionsfaktor"
+        },
+        "step2": {
+            "title": "Schritt 2: Ergebnisse",
+            "totalEmissions": "Geschätzte Gesamtemissionen",
+            "detail": "Berechnungsdetail",
+            "conversion": "Das entspricht {{tonnes}} Tonnen CO₂e",
+            "emptyState": "Füllen Sie das Formular links aus, um Ihre Emissionen zu schätzen."
+        },
+        "guide": {
+            "title": "Schnellanleitung",
+            "step1": "1. Wählen Sie die Art der Daten (Strom, Gas, Kraftstoff...)",
+            "step2": "2. Geben Sie die verbrauchte Menge ein.",
+            "step3": "3. Geben Sie die Kategorie an (z.B. Ländermix, Fahrzeugtyp).",
+            "step4": "4. Ecoply wendet automatisch den richtigen Faktor an."
+        },
+        "examples": {
+            "title": "Berechnungsbeispiele",
+            "elec": "Elektrizität",
+            "car": "Dienstwagen",
+            "heating": "Heizung"
+        },
+        "sources": {
+            "electricity_kwh": "Elektrizität",
+            "gas_m3": "Erdgas",
+            "fuel_liters": "Kraftstoff",
+            "distance_km": "Entfernung",
+            "surface_m2": "Gebäudefläche",
+            "production_units": "Produktion"
+        },
+        "categories": {
+            "elec_france": "Strommix - Frankreich",
+            "elec_europe": "Strommix - Europa",
+            "elec_renewable": "Strom - 100% Erneuerbar",
+            "elec_coal": "Strom - Kohle",
+            "gas_natural": "Erdgas",
+            "gas_propane": "Propan",
+            "gas_butane": "Butan",
+            "fuel_diesel": "Diesel",
+            "fuel_gasoline": "Benzin",
+            "fuel_bioethanol": "Bioethanol (E85)",
+            "fuel_kerosene": "Kerosin (Flugzeug)",
+            "car_petrol": "Auto - Benzin",
+            "car_diesel": "Auto - Diesel",
+            "car_electric": "Auto - Elektrisch",
+            "truck_heavy": "LKW - Schwergut",
+            "plane_short": "Flugzeug - Kurzstrecke",
+            "plane_long": "Flugzeug - Langstrecke",
+            "train": "Zug (TGV/Intercity)",
+            "building_office": "Büro (Durchschnitt)",
+            "building_residential": "Wohngebäude",
+            "building_industrial": "Industriegebäude",
+            "prod_steel": "Stahl",
+            "prod_cement": "Zement",
+            "prod_plastic": "Kunststoff (Durchschnitt)",
+            "prod_paper": "Papier/Karton"
+        }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Send, Bot, User, Database, FileText } from 'lucide-react';
+import { Send, Bot, User, Database, FileText, MessageSquare } from 'lucide-react';
 import { auth } from '../firebase-config';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -90,12 +90,15 @@ const ChatPage = () => {
     return (
         <div className="chat-page" style={{ height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
             <div className="page-header">
-                <h1 className="page-title">{t('chat.title')}</h1>
+                <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <MessageSquare size={32} color="#10b981" />
+                    {t('chat.title')}
+                </h1>
                 <p className="page-subtitle">{t('chat.subtitle')}</p>
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', padding: '0 1rem' }}>
-                <button 
+                <button
                     onClick={() => setMode('data')}
                     className={`btn-animated ${mode === 'data' ? 'btn-primary' : 'btn-secondary'}`}
                     style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: mode === 'data' ? 'var(--primary-color)' : 'var(--surface-color)', color: mode === 'data' ? 'white' : 'var(--text-color)' }}
@@ -103,7 +106,7 @@ const ChatPage = () => {
                     <Database size={16} />
                     <span>Data (SQL)</span>
                 </button>
-                <button 
+                <button
                     onClick={() => setMode('docs')}
                     className={`btn-animated ${mode === 'docs' ? 'btn-primary' : 'btn-secondary'}`}
                     style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', backgroundColor: mode === 'docs' ? 'var(--primary-color)' : 'var(--surface-color)', color: mode === 'docs' ? 'white' : 'var(--text-color)' }}

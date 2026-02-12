@@ -71,8 +71,8 @@ const EcovadisPage = () => {
     return (
         <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
             <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/EcoVadis-Logo-Leaf_only.png" alt="EcoVadis" style={{ height: '32px' }} onError={(e) => { e.target.style.display = 'none' }} />
+                <h1 style={{ fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <ShieldCheck size={32} color="#10b981" />
                     {t('ecovadis.title')}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)' }}>

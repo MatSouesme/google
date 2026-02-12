@@ -59,7 +59,10 @@ const FinalReportPage = () => {
         <div className="page-container">
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                    <h1 className="page-title">{t('finalReport.title')}</h1>
+                    <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <FileText size={32} color="#10b981" />
+                        {t('finalReport.title')}
+                    </h1>
                     <p className="page-subtitle">{t('finalReport.subtitle')}</p>
                 </div>
             </div>

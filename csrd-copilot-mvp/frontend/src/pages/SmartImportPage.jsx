@@ -224,7 +224,10 @@ const SmartImportPage = () => {
         <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                 <div style={{ flex: 1 }}>
-                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('smartImport.title')}</h1>
+                    <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <UploadCloud size={32} color="#10b981" />
+                        {t('smartImport.title')}
+                    </h1>
                     <p style={{ color: 'var(--text-secondary)' }}>{t('smartImport.subtitle')}</p>
                 </div>
                 <button

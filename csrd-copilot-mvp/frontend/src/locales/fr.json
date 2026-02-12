@@ -86,7 +86,12 @@
             "configureDataPoints": "Configurer les Data Points",
             "importMoreData": "Importer plus de données",
             "viewReport": "Voir votre rapport",
-            "dashboard": "Tableau de bord"
+            "dashboard": "Tableau de bord",
+            "import": "Importer des Données",
+            "generate": "Générer un Rapport",
+            "manual": "Saisie Manuelle",
+            "traceability": "Traçabilité des Données",
+            "ecovadis": "Audit EcoVadis"
         },
         "features": {
             "ingestion": {
@@ -508,5 +513,75 @@
         "emptyAll": "Aucun KPI disponible. Commencez par importer des données.",
         "emptyUnresolved": "Aucune question ou alerte en attente !",
         "unresolvedBadge": "Non Résolus"
+    },
+    "emissionFactors": {
+        "title": "Facteurs d'Émissions",
+        "subtitle": "Calculez vos émissions GES à partir de vos données d'activité",
+        "betaWarning": "ℹ️ Version bêta - Les facteurs d'émission affichés sont des valeurs fictives. Les valeurs réelles seront intégrées depuis la Base Carbone ADEME prochainement.",
+        "step1": {
+            "title": "1. Sélectionnez vos données",
+            "sourceType": "Type de donnée source",
+            "placeholderSource": "-- Choisir un type de donnée --",
+            "quantity": "Quantité",
+            "placeholderValue": "Entrez la valeur",
+            "category": "Catégorie d'émission",
+            "placeholderCategory": "-- Choisir une catégorie --",
+            "emissionFactor": "Facteur d'émission"
+        },
+        "step2": {
+            "title": "2. Résultat du calcul",
+            "totalEmissions": "Émissions totales",
+            "detail": "📊 Détail du calcul",
+            "conversion": "💡 Soit {{tonnes}} tonnes CO₂e",
+            "emptyState": "Sélectionnez une source de données, entrez une valeur et choisissez une catégorie pour voir le calcul"
+        },
+        "guide": {
+            "title": "📖 Guide rapide",
+            "step1": "✓ Choisissez le type de donnée (électricité, carburant, distance...)",
+            "step2": "✓ Entrez la quantité mesurée",
+            "step3": "✓ Sélectionnez la catégorie d'émission appropriée",
+            "step4": "✓ Le calcul se fait automatiquement"
+        },
+        "examples": {
+            "title": "💡 Exemples d'utilisation",
+            "elec": "⚡ Émissions électriques",
+            "car": "🚗 Déplacements véhicule",
+            "heating": "🏢 Chauffage bâtiment"
+        },
+        "sources": {
+            "electricity_kwh": "Consommation électrique (kWh)",
+            "gas_m3": "Consommation gaz (m³)",
+            "fuel_liters": "Carburant (litres)",
+            "distance_km": "Distance parcourue (km)",
+            "surface_m2": "Surface bâtiment (m²)",
+            "production_units": "Unités produites"
+        },
+        "categories": {
+            "elec_france": "Mix électrique France",
+            "elec_europe": "Mix électrique Europe",
+            "elec_renewable": "Électricité renouvelable",
+            "elec_coal": "Électricité charbon",
+            "gas_natural": "Gaz naturel",
+            "gas_propane": "Propane",
+            "gas_butane": "Butane",
+            "fuel_diesel": "Diesel",
+            "fuel_gasoline": "Essence",
+            "fuel_bioethanol": "Bioéthanol",
+            "fuel_kerosene": "Kérosène",
+            "car_petrol": "Voiture essence",
+            "car_diesel": "Voiture diesel",
+            "car_electric": "Voiture électrique",
+            "truck_heavy": "Camion lourd",
+            "plane_short": "Avion court-courrier",
+            "plane_long": "Avion long-courrier",
+            "train": "Train",
+            "building_office": "Bureau",
+            "building_residential": "Résidentiel",
+            "building_industrial": "Industriel",
+            "prod_steel": "Acier",
+            "prod_cement": "Ciment",
+            "prod_plastic": "Plastique",
+            "prod_paper": "Papier"
+        }
     }
 }

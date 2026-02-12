@@ -18,6 +18,7 @@
         "lineage": "Trazabilidad",
         "discussions": "Discusiones",
         "ecovadis": "Auditoría EcoVadis",
+        "emissionFactors": "Factores de Emisión",
         "settings": "Configuración"
     },
     "login": {
@@ -508,5 +509,75 @@
         "emptyAll": "No hay KPIs disponibles. Comience importando datos.",
         "emptyUnresolved": "¡No hay preguntas o alertas pendientes!",
         "unresolvedBadge": "Sin Resolver"
+    },
+    "emissionFactors": {
+        "title": "Factores de Emisión",
+        "subtitle": "Calcule sus emisiones de GEI a partir de sus datos de actividad",
+        "betaWarning": "ℹ️ Versión beta: los factores de emisión mostrados son valores ficticios. Los valores reales de la Base de Carbono de ADEME se integrarán pronto.",
+        "step1": {
+            "title": "Paso 1: Datos de Actividad",
+            "sourceType": "Tipo de dato fuente",
+            "placeholderSource": "Seleccione una fuente...",
+            "quantity": "Cantidad / Valor",
+            "placeholderValue": "ej. 1000",
+            "category": "Categoría de emisión",
+            "placeholderCategory": "Seleccione una categoría...",
+            "emissionFactor": "Factor de emisión utilizado"
+        },
+        "step2": {
+            "title": "Paso 2: Resultados",
+            "totalEmissions": "Emisiones totales estimadas",
+            "detail": "Detalle del cálculo",
+            "conversion": "Eso es equivalente a {{tonnes}} toneladas de CO₂e",
+            "emptyState": "Complete el formulario de la izquierda para estimar sus emisiones."
+        },
+        "guide": {
+            "title": "Guía rápida",
+            "step1": "1. Seleccione el tipo de dato (Electricidad, Gas, Combustible...)",
+            "step2": "2. Ingrese la cantidad consumida.",
+            "step3": "3. Especifique la categoría (ej. Mix país, Tipo de vehículo).",
+            "step4": "4. Ecoply aplica automáticamente el factor correcto."
+        },
+        "examples": {
+            "title": "Ejemplos de cálculo",
+            "elec": "Electricidad",
+            "car": "Coche de empresa",
+            "heating": "Calefacción"
+        },
+        "sources": {
+            "electricity_kwh": "Electricidad",
+            "gas_m3": "Gas natural",
+            "fuel_liters": "Combustible",
+            "distance_km": "Distancia",
+            "surface_m2": "Superficie",
+            "production_units": "Producción"
+        },
+        "categories": {
+            "elec_france": "Mix eléctrico - Francia",
+            "elec_europe": "Mix eléctrico - Europa",
+            "elec_renewable": "Electricidad - 100% Renovable",
+            "elec_coal": "Electricidad - Carbón",
+            "gas_natural": "Gas natural",
+            "gas_propane": "Propano",
+            "gas_butane": "Butano",
+            "fuel_diesel": "Diésel",
+            "fuel_gasoline": "Gasolina",
+            "fuel_bioethanol": "Bioetanol (E85)",
+            "fuel_kerosene": "Queroseno (Avión)",
+            "car_petrol": "Coche - Gasolina",
+            "car_diesel": "Coche - Diésel",
+            "car_electric": "Coche - Eléctrico",
+            "truck_heavy": "Camión - Carga pesada",
+            "plane_short": "Avión - Corta distancia",
+            "plane_long": "Avión - Larga distancia",
+            "train": "Tren (Alta velocidad/Intercity)",
+            "building_office": "Oficina (Promedio)",
+            "building_residential": "Residencial",
+            "building_industrial": "Industrial",
+            "prod_steel": "Acero",
+            "prod_cement": "Cemento",
+            "prod_plastic": "Plástico (Promedio)",
+            "prod_paper": "Papel/Cartón"
+        }
     }
 }

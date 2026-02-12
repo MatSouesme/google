@@ -107,7 +107,7 @@ const LineagePage = () => {
         <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-color)' }}>
-                    <TrendingUp size={32} color="var(--primary-color)" />
+                    <TrendingUp size={32} color="#10b981" />
                     {t('lineage.title')}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', marginTop: '0.5rem' }}>

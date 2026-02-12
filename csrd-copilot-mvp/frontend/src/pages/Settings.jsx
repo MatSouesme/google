@@ -131,7 +131,7 @@ const Settings = ({ user }) => {
         <div className="settings-page" style={{ padding: '1.5rem 2rem', maxWidth: '1400px', margin: '0 auto' }}>
             <div className="page-header" style={{ marginBottom: '2rem' }}>
                 <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-color)' }}>
-                    <Shield size={32} color="var(--primary-color)" />
+                    <Shield size={32} color="#10b981" />
                     {t('settings.title', 'Paramètres & Sécurité')}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>
