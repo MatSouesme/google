@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, Calculator } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
@@ -97,6 +97,11 @@ const Layout = ({ user }) => {
                     <Link to="/discussions" className={`nav-item ${isActive('/discussions') ? 'active' : ''}`}>
                         <MessageCircle size={20} />
                         <span>{t('nav.discussions', 'Discussions')}</span>
+                    </Link>
+
+                    <Link to="/emission-factors" className={`nav-item ${isActive('/emission-factors') ? 'active' : ''}`}>
+                        <Calculator size={20} />
+                        <span>{t('nav.emissionFactors', 'Facteurs d\'émissions')}</span>
                     </Link>
 
                     <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`}>

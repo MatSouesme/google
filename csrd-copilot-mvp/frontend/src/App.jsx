@@ -24,6 +24,7 @@ import Settings from './pages/Settings';
 import LineagePage from './pages/LineagePage';
 import CommentsDemo from './pages/CommentsDemo';
 import Discussions from './pages/Discussions';
+import EmissionFactors from './pages/EmissionFactors';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -103,6 +104,7 @@ function App() {
                     <Route path="settings" element={<Settings user={user} />} />
                     <Route path="lineage" element={<LineagePage />} />
                     <Route path="discussions" element={<Discussions />} />
+                    <Route path="emission-factors" element={<EmissionFactors />} />
                     <Route path="comments-demo" element={<CommentsDemo />} />
                 </Route>
 
