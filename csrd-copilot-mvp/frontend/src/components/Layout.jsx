@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-<<<<<<< HEAD
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, Languages, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, Calculator } from 'lucide-react';
-=======
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe } from 'lucide-react';
->>>>>>> 26d97df2341cf4ec1ac9e7331e0ba2e74923ebde
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe, Calculator } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
