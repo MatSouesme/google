@@ -25,6 +25,7 @@ import LineagePage from './pages/LineagePage';
 import CommentsDemo from './pages/CommentsDemo';
 import Discussions from './pages/Discussions';
 import EmissionFactors from './pages/EmissionFactors';
+import DataSourcesPage from './pages/DataSourcesPage';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -103,6 +104,7 @@ function App() {
                     <Route path="ecovadis" element={<EcovadisPage />} />
                     <Route path="settings" element={<Settings user={user} />} />
                     <Route path="lineage" element={<LineagePage />} />
+                    <Route path="data-sources" element={<DataSourcesPage />} />
                     <Route path="discussions" element={<Discussions />} />
                     <Route path="emission-factors" element={<EmissionFactors />} />
                     <Route path="comments-demo" element={<CommentsDemo />} />

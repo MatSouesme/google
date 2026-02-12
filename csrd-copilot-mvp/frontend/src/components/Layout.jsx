@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe, Calculator } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe, Calculator, Database } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
@@ -101,6 +101,11 @@ const Layout = ({ user }) => {
                     <Link to="/lineage" className={`nav-item ${isActive('/lineage') ? 'active' : ''}`}>
                         <TrendingUp size={20} />
                         <span>{t('nav.lineage')}</span>
+                    </Link>
+
+                    <Link to="/data-sources" className={`nav-item ${isActive('/data-sources') ? 'active' : ''}`}>
+                        <Database size={20} />
+                        <span>{t('nav.dataSources', 'Sources de données')}</span>
                     </Link>
 
                     <Link to="/discussions" className={`nav-item ${isActive('/discussions') ? 'active' : ''}`}>

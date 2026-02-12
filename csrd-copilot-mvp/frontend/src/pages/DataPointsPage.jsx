@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { kpis as initialKpis } from '../data/kpis';
-import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Database, Code, Bot, Loader2, ArrowRight, Folder, FolderOpen, ClipboardList } from 'lucide-react';
+import { CheckCircle, AlertCircle, ChevronDown, ChevronUp, Search, Filter, Database, Code, Bot, Loader2, ArrowRight, Folder, FolderOpen, ClipboardList, Eye } from 'lucide-react';
 import { auth } from '../firebase-config';
 import Alert from '../components/Alert';
 import { useDataStatus } from '../hooks/useDataStatus';
 import { API_BASE_URL } from '../api/apiClient';
+import LineagePanel from '../components/LineagePanel';
 
 const DataPointsPage = () => {
     const { t } = useTranslation();
@@ -22,6 +23,7 @@ const DataPointsPage = () => {
     const [standardFilter, setStandardFilter] = useState('all');
     const [sqlLoading, setSqlLoading] = useState({}); // { [kpiId]: boolean }
     const [generatedSql, setGeneratedSql] = useState({}); // { [kpiId]: string }
+    const [lineagePanel, setLineagePanel] = useState(null); // { kpiId, value, standard } || null
 
     useEffect(() => {
         const fetchStatus = async () => {
@@ -607,6 +609,23 @@ const DataPointsPage = () => {
 
                                                 {/* Actions */}
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    {kpi.status === 'completed' && kpi.value && (
+                                                        <button
+                                                            className="btn btn-outline"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setLineagePanel({
+                                                                    kpiId: kpi.id,
+                                                                    value: kpi.value,
+                                                                    standard: kpi.standard.split(' ')[0] // "E1" from "E1 - Climate Change"
+                                                                });
+                                                            }}
+                                                            style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                                                        >
+                                                            <Eye size={16} />
+                                                            <span>{t('dataPoints.viewSources', 'Voir sources')}</span>
+                                                        </button>
+                                                    )}
                                                     <button
                                                         className="btn btn-secondary"
                                                         onClick={(e) => handleGenerateSQL(e, kpi)}
@@ -763,6 +782,16 @@ const DataPointsPage = () => {
                 <div style={{ marginTop: '3rem', padding: '2rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)', textAlign: 'center' }}>
                     <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)' }}>{t('navigation.sections.readyToGenerate.title')}</h3>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>{t('navigation.sections.readyToGenerate.message')}</p>
+
+            {/* Lineage Panel */}
+            {lineagePanel && (
+                <LineagePanel
+                    kpiId={lineagePanel.kpiId}
+                    value={lineagePanel.value}
+                    standard={lineagePanel.standard}
+                    onClose={() => setLineagePanel(null)}
+                />
+            )}
                     <button
                         className="btn btn-primary"
                         onClick={() => navigate('/final-report')}

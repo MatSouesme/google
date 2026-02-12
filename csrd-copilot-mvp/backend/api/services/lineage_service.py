@@ -77,11 +77,12 @@ class LineageService:
         try:
             errors = self.bq_client.insert_rows_json(self.lineage_table, [row])
             if errors:
-                print(f"Lineage insert error: {errors}")
+                print(f"[LINEAGE] ❌ BigQuery insert errors: {errors}")
                 return False
+            print(f"[LINEAGE] ✅ Recorded lineage: KPI={kpi_id}, value={value}, file={source_filename}")
             return True
         except Exception as e:
-            print(f"Failed to record lineage: {e}")
+            print(f"[LINEAGE] ❌ Exception recording lineage: {e}")
             return False
 
     def get_lineage_by_kpi(self, kpi_id: str, limit: int = 50) -> List[Dict[str, Any]]:

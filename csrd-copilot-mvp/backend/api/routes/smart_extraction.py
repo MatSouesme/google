@@ -320,24 +320,29 @@ async def smart_extract(file: UploadFile = File(...), user: UserProfile = Depend
             candidates_json = []
         
         # 3. Record Lineage for each extracted candidate
+        print(f"[LINEAGE] Processing {len(candidates_json)} candidates for lineage recording")
         gcs_url = f"gs://{bucket_name}/smart_imports/{upload_id}/{filename}"
-        for candidate in candidates_json:
+        for idx, candidate in enumerate(candidates_json):
             lineage_id = str(uuid.uuid4())
-            lineage_service.record_lineage(
-                lineage_id=lineage_id,
-                kpi_id=candidate.get('kpi_id', 'UNKNOWN'),
-                value=str(candidate.get('value', '')),
-                source_type='pdf' if filename.endswith('.pdf') else 'excel' if filename.endswith(('.xlsx', '.xls')) else 'other',
-                user_email=user.email,
-                unit=candidate.get('unit'),
-                date=candidate.get('date'),
-                source_filename=filename,
-                source_url=gcs_url,
-                page_number=candidate.get('page_number'),
-                snippet=candidate.get('snippet'),
-                confidence=candidate.get('confidence'),
-                upload_id=upload_id,
-            )
+            try:
+                lineage_service.record_lineage(
+                    lineage_id=lineage_id,
+                    kpi_id=candidate.get('kpi_id', 'UNKNOWN'),
+                    value=str(candidate.get('value', '')),
+                    source_type='pdf' if filename.endswith('.pdf') else 'excel' if filename.endswith(('.xlsx', '.xls')) else 'other',
+                    user_email=user.email,
+                    unit=candidate.get('unit'),
+                    date=candidate.get('date'),
+                    source_filename=filename,
+                    source_url=gcs_url,
+                    page_number=candidate.get('page_number'),
+                    snippet=candidate.get('snippet'),
+                    confidence=candidate.get('confidence'),
+                    upload_id=upload_id,
+                )
+                print(f"[LINEAGE] ✓ Recorded lineage {idx+1}/{len(candidates_json)}: KPI={candidate.get('kpi_id')}, value={candidate.get('value')}")
+            except Exception as lineage_error:
+                print(f"[LINEAGE] ✗ Failed to record lineage for candidate {idx+1}: {lineage_error}")
         
         # 4. Save Document Content for RAG (Chat with Documents)
         try:
