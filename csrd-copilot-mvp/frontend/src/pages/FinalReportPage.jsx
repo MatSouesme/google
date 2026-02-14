@@ -8,6 +8,7 @@ import { FileText, CheckCircle, Circle, ArrowRight } from 'lucide-react';
 import Alert from '../components/Alert';
 import { useDataStatus } from '../hooks/useDataStatus';
 import { API_BASE_URL } from '../api/apiClient';
+import EnhancedMarkdownReport from '../components/EnhancedMarkdownReport';
 
 const FinalReportPage = () => {
     const navigate = useNavigate();
@@ -167,9 +168,11 @@ const FinalReportPage = () => {
                                 </div>
                             </div>
                             <div className="markdown-content">
-                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                    {section.content}
-                                </ReactMarkdown>
+                                <EnhancedMarkdownReport 
+                                    content={section.content}
+                                    kpiId={section.topic}
+                                    standard={section.standard}
+                                />
                             </div>
                         </div>
                     ))

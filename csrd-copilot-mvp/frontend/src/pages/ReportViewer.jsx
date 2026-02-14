@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { auth } from '../firebase-config';
+import EnhancedMarkdownReport from '../components/EnhancedMarkdownReport';
 
 const ReportViewer = () => {
   const location = useLocation();
@@ -94,9 +95,11 @@ const ReportViewer = () => {
         </div>
 
         <div className="markdown-content" style={{ lineHeight: '1.6' }}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {draft}
-          </ReactMarkdown>
+          <EnhancedMarkdownReport 
+            content={draft}
+            kpiId={topic}
+            standard={standard}
+          />
         </div>
       </div>
     </div>

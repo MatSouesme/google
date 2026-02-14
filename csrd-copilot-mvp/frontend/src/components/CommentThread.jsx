@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
 
-const CommentThread = ({ kpiId, dataSource, referenceId }) => {
+const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointValue }) => {
     const [comments, setComments] = useState([]);
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -92,7 +92,9 @@ const CommentThread = ({ kpiId, dataSource, referenceId }) => {
                     comment_type: commentType,
                     parent_comment_id: replyTo?.comment_id || null,
                     data_source: dataSource,
-                    reference_id: referenceId
+                    reference_id: referenceId,
+                    datapoint_id: datapointId,
+                    datapoint_value: datapointValue
                 })
             });
 
