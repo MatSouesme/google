@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, Database, Search, Download, Eye, TrendingUp, Clock, User, Package } from 'lucide-react';
+import { FileText, Database, Search, Download, Eye, TrendingUp, Clock, User, Package, History, Loader2 } from 'lucide-react';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
 
@@ -15,6 +15,9 @@ const DataSourcesPage = () => {
     const [sourceDetails, setSourceDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [kpiHistory, setKpiHistory] = useState({}); // { [kpiId]: [{value, date, comment, user_email, submission_timestamp}] }
+    const [loadingHistory, setLoadingHistory] = useState({}); // { [kpiId]: boolean }
+    const [expandedKpis, setExpandedKpis] = useState(new Set()); // Set of expanded KPI IDs
 
     useEffect(() => {
         fetchAllSources();
@@ -33,6 +36,7 @@ const DataSourcesPage = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                console.log('Sources fetched:', data.sources.length, 'documents'); // DEBUG
                 setSources(data.sources || []);
             }
         } catch (error) {
@@ -56,6 +60,16 @@ const DataSourcesPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 setSourceDetails(data);
+                
+                // Charger automatiquement l'historique pour tous les KPIs
+                const kpiIds = Object.keys(data.kpis || {});
+                const allExpanded = new Set(kpiIds);
+                setExpandedKpis(allExpanded);
+                
+                // Charger l'historique de tous les KPIs en parallèle
+                kpiIds.forEach(kpiId => {
+                    handleLoadHistory(kpiId);
+                });
             }
         } catch (error) {
             console.error('Failed to fetch source details:', error);
@@ -65,6 +79,50 @@ const DataSourcesPage = () => {
     const handleSourceSelect = (source) => {
         setSelectedSource(source.source_filename);
         fetchSourceDetails(source.source_filename);
+        setKpiHistory({}); // Reset history when changing source
+        setExpandedKpis(new Set()); // Reset expanded KPIs
+    };
+
+    const handleLoadHistory = async (kpiId) => {
+        setLoadingHistory(prev => ({ ...prev, [kpiId]: true }));
+        
+        try {
+            const user = auth.currentUser;
+            const token = await user.getIdToken();
+
+            const response = await fetch(`${API_BASE_URL}/data/history?kpi_id=${kpiId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error("Failed to load history");
+
+            const data = await response.json();
+            
+            // Filter entries for this specific KPI and sort by timestamp
+            const kpiEntries = data.entries.filter(e => e.kpi_id === kpiId);
+            setKpiHistory(prev => ({ ...prev, [kpiId]: kpiEntries }));
+
+        } catch (error) {
+            console.error("Failed to load history:", error);
+        } finally {
+            setLoadingHistory(prev => ({ ...prev, [kpiId]: false }));
+        }
+    };
+
+    const toggleKpiHistory = (kpiId) => {
+        const newExpanded = new Set(expandedKpis);
+        if (newExpanded.has(kpiId)) {
+            newExpanded.delete(kpiId);
+        } else {
+            newExpanded.add(kpiId);
+            // Load history if not already loaded
+            if (!kpiHistory[kpiId]) {
+                handleLoadHistory(kpiId);
+            }
+        }
+        setExpandedKpis(newExpanded);
     };
 
     const handleDownloadSource = async (sourceFilename) => {
@@ -341,19 +399,117 @@ const DataSourcesPage = () => {
                                             <TrendingUp size={18} color="#10b981" />
                                             {kpiId}
                                         </div>
-                                        <span style={{
-                                            fontSize: '0.75rem',
-                                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                            color: '#10b981',
-                                            padding: '0.25rem 0.75rem',
-                                            borderRadius: '12px',
-                                            fontWeight: '500'
-                                        }}>
-                                            {entries.length} {entries.length > 1 ? t('dataSources.extractions', 'extractions') : t('dataSources.extraction', 'extraction')}
-                                        </span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                            <button
+                                                onClick={() => toggleKpiHistory(kpiId)}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.5rem',
+                                                    padding: '0.4rem 0.8rem',
+                                                    backgroundColor: expandedKpis.has(kpiId) ? '#3b82f6' : 'transparent',
+                                                    color: expandedKpis.has(kpiId) ? 'white' : '#3b82f6',
+                                                    border: '1px solid #3b82f6',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: '500'
+                                                }}
+                                            >
+                                                <History size={14} />
+                                                {expandedKpis.has(kpiId) ? t('dataSources.hideHistory', 'Masquer') : t('dataSources.showHistory', 'Afficher')}
+                                            </button>
+                                            <span style={{
+                                                fontSize: '0.75rem',
+                                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                                color: '#10b981',
+                                                padding: '0.25rem 0.75rem',
+                                                borderRadius: '12px',
+                                                fontWeight: '500'
+                                            }}>
+                                                {entries.length} {entries.length > 1 ? t('dataSources.extractions', 'extractions') : t('dataSources.extraction', 'extraction')}
+                                            </span>
+                                        </div>
                                     </div>
 
-                                    {/* Entries */}
+                                    {/* History Section */}
+                                    {expandedKpis.has(kpiId) && kpiHistory[kpiId] && kpiHistory[kpiId].length > 0 && (
+                                        <div style={{ 
+                                            marginBottom: '1.5rem', 
+                                            padding: '1rem', 
+                                            backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                                            borderRadius: '8px',
+                                            border: '1px solid rgba(59, 130, 246, 0.2)'
+                                        }}>
+                                            <h5 style={{ 
+                                                fontSize: '0.9rem', 
+                                                marginBottom: '0.75rem',
+                                                color: '#3b82f6',
+                                                fontWeight: '600',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '0.5rem'
+                                            }}>
+                                                <History size={16} />
+                                                Historique complet ({kpiHistory[kpiId].length} entrée{kpiHistory[kpiId].length > 1 ? 's' : ''})
+                                            </h5>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                {kpiHistory[kpiId].map((histEntry, histIdx) => (
+                                                    <div key={histIdx} style={{ 
+                                                        padding: '0.75rem', 
+                                                        backgroundColor: histIdx === 0 ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-color)', 
+                                                        borderRadius: '6px',
+                                                        border: histIdx === 0 ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-color)',
+                                                        display: 'grid',
+                                                        gridTemplateColumns: '80px 1fr auto',
+                                                        gap: '0.75rem',
+                                                        alignItems: 'center',
+                                                        fontSize: '0.85rem'
+                                                    }}>
+                                                        <div>
+                                                            {histIdx === 0 && (
+                                                                <span style={{ 
+                                                                    fontSize: '0.7rem', 
+                                                                    backgroundColor: '#10b981', 
+                                                                    color: 'white', 
+                                                                    padding: '0.2rem 0.5rem', 
+                                                                    borderRadius: '4px',
+                                                                    fontWeight: 'bold'
+                                                                }}>
+                                                                    ACTUEL
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <div style={{ fontWeight: 'bold', color: 'var(--text-color)', marginBottom: '0.25rem' }}>
+                                                                {histEntry.value} {histEntry.unit}
+                                                            </div>
+                                                            <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                                                {histEntry.date ? `Date: ${new Date(histEntry.date).toLocaleDateString('fr-FR')}` : ''}
+                                                                {histEntry.comment && ` • ${histEntry.comment}`}
+                                                            </div>
+                                                        </div>
+                                                        <div style={{ textAlign: 'right', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                                                            <div>{histEntry.user_email}</div>
+                                                            <div>{new Date(histEntry.submission_timestamp).toLocaleString('fr-FR')}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Extractions from Smart Import */}
+                                    <div style={{ marginBottom: '0.5rem' }}>
+                                        <h5 style={{ 
+                                            fontSize: '0.85rem', 
+                                            color: 'var(--text-secondary)', 
+                                            fontWeight: '500',
+                                            marginBottom: '0.75rem'
+                                        }}>
+                                            Extractions Smart Import:
+                                        </h5>
+                                    </div>
                                     {entries.map((entry, idx) => (
                                         <div 
                                             key={idx}

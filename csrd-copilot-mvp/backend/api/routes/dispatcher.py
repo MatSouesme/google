@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+from typing import Optional
 from google.cloud import bigquery
 import os
 import json
@@ -271,3 +272,55 @@ def get_data_status(user=Depends(verify_token)):
     except Exception as e:
         print(f"Error fetching status: {e}")
         return {"completed_count": 0, "completed_kpis": [], "kpi_values": {}}
+
+
+@router.get("/data/history")
+def get_data_history(kpi_id: Optional[str] = None, user=Depends(verify_token)):
+    """
+    Retourne l'historique complet de toutes les entrées (pas seulement la dernière par KPI)
+    Si kpi_id est fourni, filtre uniquement pour ce KPI
+    """
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot")
+    client = bigquery.Client(project=project_id)
+    
+    # Get ALL entries with history
+    where_clause = ""
+    if kpi_id:
+        where_clause = f"WHERE kpi_id = '{kpi_id}'"
+    
+    query = f"""
+        SELECT 
+            kpi_id, 
+            value, 
+            unit, 
+            date,
+            comment,
+            user_email,
+            submission_timestamp
+        FROM `{project_id}.csrd_mvp.manual_entries`
+        {where_clause}
+        ORDER BY submission_timestamp DESC
+    """
+    
+    try:
+        query_job = client.query(query)
+        entries = []
+        
+        for row in query_job:
+            entries.append({
+                "kpi_id": row['kpi_id'],
+                "value": row['value'],
+                "unit": row['unit'],
+                "date": row['date'].isoformat() if row['date'] else None,
+                "comment": row['comment'],
+                "user_email": row['user_email'],
+                "submission_timestamp": row['submission_timestamp'].isoformat() if row['submission_timestamp'] else None
+            })
+            
+        return {
+            "total_entries": len(entries),
+            "entries": entries
+        }
+    except Exception as e:
+        print(f"Error fetching history: {e}")
+        return {"total_entries": 0, "entries": []}

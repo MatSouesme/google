@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { UploadCloud, FileText, CheckCircle, AlertTriangle, X, Loader2, ArrowRight, Save, Share2, Download, Folder } from 'lucide-react';
 import { auth } from '../firebase-config';
 import Alert from '../components/Alert';
+import ConflictResolutionModal from '../components/ConflictResolutionModal';
 import { useDataStatus } from '../hooks/useDataStatus';
 import { API_BASE_URL } from '../api/apiClient';
 
@@ -16,6 +17,12 @@ const SmartImportPage = () => {
     const [ingesting, setIngesting] = useState(false);
     const [importSuccess, setImportSuccess] = useState(false);
     const { markDataImported, hasImportedData } = useDataStatus();
+
+    // Duplicate detection states
+    const [conflicts, setConflicts] = useState([]);
+    const [noConflicts, setNoConflicts] = useState([]);
+    const [showConflictModal, setShowConflictModal] = useState(false);
+    const [checkingDuplicates, setCheckingDuplicates] = useState(false);
 
     // SharePoint states
     const [showSharePoint, setShowSharePoint] = useState(false);
@@ -70,6 +77,9 @@ const SmartImportPage = () => {
             // Add local ID for UI handling
             setExtractedData(result.candidates.map((item, index) => ({ ...item, id: index })));
 
+            // Automatically check for duplicates after extraction
+            await handleCheckDuplicates(result.candidates);
+
         } catch (error) {
             console.error("Analysis Error:", error);
             alert("Failed to analyze file. Please try again.");
@@ -85,6 +95,115 @@ const SmartImportPage = () => {
 
     const handleUpdateRow = (id, field, value) => {
         setExtractedData(prev => prev.map(row => row.id === id ? { ...row, [field]: value } : row));
+    };
+
+    const handleCheckDuplicates = async (candidates) => {
+        setCheckingDuplicates(true);
+        try {
+            const user = auth.currentUser;
+            const token = user ? await user.getIdToken() : null;
+
+            // Prepare datapoints for duplicate check (exclude id and name fields)
+            const datapointsToCheck = candidates.map(c => ({
+                kpi_id: c.kpi_id,
+                value: String(c.value),
+                date: c.date,
+                unit: c.unit,
+                comment: `Smart Import from ${file ? file.name : 'file'} (Confidence: ${c.confidence})`
+            }));
+
+            const response = await fetch(`${API_BASE_URL}/data/check-duplicates`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+                body: JSON.stringify({ datapoints: datapointsToCheck })
+            });
+
+            if (!response.ok) throw new Error('Duplicate check failed');
+
+            const result = await response.json();
+            
+            setConflicts(result.conflicts || []);
+            setNoConflicts(result.no_conflicts || []);
+
+            // If conflicts found, show modal
+            if (result.conflicts && result.conflicts.length > 0) {
+                setShowConflictModal(true);
+            } else {
+                // No conflicts, proceed directly to ingestion
+                if (result.no_conflicts && result.no_conflicts.length > 0) {
+                    await handleIngestWithDecisions(result.no_conflicts.map(dp => ({
+                        action: 'add',
+                        kpi_id: dp.kpi_id,
+                        date: dp.date || new Date().toISOString().split('T')[0], // Ensure date is always provided
+                        new_value: dp.value,
+                        new_unit: dp.unit,
+                        new_comment: dp.comment,
+                        replace_timestamp: null
+                    })));
+                }
+            }
+
+        } catch (error) {
+            console.error("Duplicate check error:", error);
+            alert("Failed to check for duplicates. Data will not be ingested.");
+        } finally {
+            setCheckingDuplicates(false);
+        }
+    };
+
+    const handleResolveConflicts = async (resolutions) => {
+        setShowConflictModal(false);
+        await handleIngestWithDecisions(resolutions);
+    };
+
+    const handleIngestWithDecisions = async (resolutions) => {
+        setIngesting(true);
+
+        try {
+            const user = auth.currentUser;
+            const token = user ? await user.getIdToken() : null;
+
+            const response = await fetch(`${API_BASE_URL}/data/upsert-entries`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+                body: JSON.stringify({ decisions: resolutions })
+            });
+
+            if (!response.ok) throw new Error('Ingestion failed');
+
+            const result = await response.json();
+            console.log("Upsert response:", result); // DEBUG
+            
+            setIngesting(false);
+            setExtractedData([]);
+            setFile(null);
+            setConflicts([]);
+            setNoConflicts([]);
+
+            // Marquer les données comme importées
+            markDataImported();
+            setImportSuccess(true);
+
+            const added = result.added || 0;
+            const replaced = result.replaced || 0;
+            const skipped = result.skipped || 0;
+            const totalProcessed = added + replaced + skipped;
+            
+            alert(t('smartImport.successfullyIngested', { 
+                count: added + replaced 
+            }) + `\n(Ajoutés: ${added}, Remplacés: ${replaced}, Ignorés: ${skipped})`);
+
+        } catch (error) {
+            console.error("Ingestion error:", error);
+            alert("Failed to ingest data. Please try again.");
+            setIngesting(false);
+        }
     };
 
     const handleTestSharePointConnection = async () => {
@@ -166,58 +285,13 @@ const SmartImportPage = () => {
     };
 
     const handleIngest = async () => {
-        if (extractedData.length === 0) return;
-
-        // Group by Standard (E1, S1, G1)
-        const standards = [...new Set(extractedData.map(item => {
-            if (!item.kpi_id) return 'Unknown';
-            const parts = item.kpi_id.split('-');
-            return parts[0] ? parts[0].toUpperCase() : 'Unknown';
-        }))].filter(s => s !== 'Unknown');
-
-        // Ask for confirmation
-        const message = `Do you want to ingest ${extractedData.length} data points into the following standards: ${standards.join(', ')}?`;
-        if (!window.confirm(message)) return;
-
-        setIngesting(true);
-
-        // Ingest each row one by one (or batch if API supports it, here Reuse manual entry logic loop)
-        const user = auth.currentUser;
-        const token = user ? await user.getIdToken() : null;
-
-        let successCount = 0;
-
-        for (const row of extractedData) {
-            try {
-                await fetch(`${API_BASE_URL}/data/manual-entry`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token ? `Bearer ${token}` : ''
-                    },
-                    body: JSON.stringify({
-                        kpi_id: row.kpi_id,
-                        value: String(row.value), // Ensure string
-                        date: row.date,
-                        unit: row.unit,
-                        comment: `Files Import from ${file ? file.name : 'Unknown File'} (Confidence: ${row.confidence})`
-                    })
-                });
-                successCount++;
-            } catch (err) {
-                console.error(`Failed to ingest ${row.kpi_id}`, err);
-            }
+        if (!extractedData || extractedData.length === 0) {
+            alert("No data to ingest");
+            return;
         }
 
-        setIngesting(false);
-        setExtractedData([]);
-        setFile(null);
-
-        // Marquer les données comme importées
-        markDataImported();
-        setImportSuccess(true);
-
-        alert(t('smartImport.successfullyIngested', { count: successCount }));
+        // Check for duplicates before ingesting
+        await handleCheckDuplicates(extractedData);
     };
 
     return (
@@ -690,6 +764,16 @@ const SmartImportPage = () => {
                         )}
                     </div>
                 </div>
+            )}
+
+            {/* Conflict Resolution Modal */}
+            {showConflictModal && (
+                <ConflictResolutionModal
+                    conflicts={conflicts}
+                    noConflicts={noConflicts}
+                    onResolve={handleResolveConflicts}
+                    onCancel={() => setShowConflictModal(false)}
+                />
             )}
         </div>
     );

@@ -24,6 +24,8 @@ const DataPointsPage = () => {
     const [sqlLoading, setSqlLoading] = useState({}); // { [kpiId]: boolean }
     const [generatedSql, setGeneratedSql] = useState({}); // { [kpiId]: string }
     const [lineagePanel, setLineagePanel] = useState(null); // { kpiId, value, standard } || null
+    const [kpiHistory, setKpiHistory] = useState({}); // { [kpiId]: [{value, date, comment, user_email, submission_timestamp}] }
+    const [loadingHistory, setLoadingHistory] = useState({}); // { [kpiId]: boolean }
 
     useEffect(() => {
         const fetchStatus = async () => {
@@ -198,6 +200,35 @@ const DataPointsPage = () => {
     };
 
     const [dispatching, setDispatching] = useState(false);
+
+    const handleLoadHistory = async (kpiId) => {
+        setLoadingHistory(prev => ({ ...prev, [kpiId]: true }));
+        
+        try {
+            const user = auth.currentUser;
+            const token = user ? await user.getIdToken() : null;
+
+            const response = await fetch(`${API_BASE_URL}/data/history?kpi_id=${kpiId}`, {
+                headers: {
+                    'Authorization': token ? `Bearer ${token}` : ''
+                }
+            });
+
+            if (!response.ok) throw new Error("Failed to load history");
+
+            const data = await response.json();
+            
+            // Filter entries for this specific KPI and sort by timestamp
+            const kpiEntries = data.entries.filter(e => e.kpi_id === kpiId);
+            setKpiHistory(prev => ({ ...prev, [kpiId]: kpiEntries }));
+
+        } catch (error) {
+            console.error("Failed to load history:", error);
+            alert("Impossible de charger l'historique");
+        } finally {
+            setLoadingHistory(prev => ({ ...prev, [kpiId]: false }));
+        }
+    };
 
     const handleDispatch = async () => {
         setDispatching(true);
@@ -610,21 +641,35 @@ const DataPointsPage = () => {
                                                 {/* Actions */}
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                                     {kpi.status === 'completed' && kpi.value && (
-                                                        <button
-                                                            className="btn btn-outline"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setLineagePanel({
-                                                                    kpiId: kpi.id,
-                                                                    value: kpi.value,
-                                                                    standard: kpi.standard.split(' ')[0] // "E1" from "E1 - Climate Change"
-                                                                });
-                                                            }}
-                                                            style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                                                        >
-                                                            <Eye size={16} />
-                                                            <span>{t('dataPoints.viewSources', 'Voir sources')}</span>
-                                                        </button>
+                                                        <>
+                                                            <button
+                                                                className="btn btn-outline"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setLineagePanel({
+                                                                        kpiId: kpi.id,
+                                                                        value: kpi.value,
+                                                                        standard: kpi.standard.split(' ')[0] // "E1" from "E1 - Climate Change"
+                                                                    });
+                                                                }}
+                                                                style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                                                            >
+                                                                <Eye size={16} />
+                                                                <span>{t('dataPoints.viewSources', 'Voir sources')}</span>
+                                                            </button>
+                                                            <button
+                                                                className="btn btn-outline"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleLoadHistory(kpi.id);
+                                                                }}
+                                                                disabled={loadingHistory[kpi.id]}
+                                                                style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                                                            >
+                                                                {loadingHistory[kpi.id] ? <Loader2 size={16} className="spin" /> : <ClipboardList size={16} />}
+                                                                <span>{t('dataPoints.viewHistory', 'Historique')}</span>
+                                                            </button>
+                                                        </>
                                                     )}
                                                     <button
                                                         className="btn btn-secondary"
@@ -642,6 +687,59 @@ const DataPointsPage = () => {
                                             {/* Expanded Content */}
                                             {expandedKPI === kpi.id && (
                                                 <div style={{ padding: '2rem', borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)' }}>
+                                                    
+                                                    {/* History Section */}
+                                                    {kpiHistory[kpi.id] && kpiHistory[kpi.id].length > 0 && (
+                                                        <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                                                            <h4 style={{ fontSize: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                                <ClipboardList size={18} color="var(--primary-color)" />
+                                                                Historique des valeurs ({kpiHistory[kpi.id].length})
+                                                            </h4>
+                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                                {kpiHistory[kpi.id].map((entry, idx) => (
+                                                                    <div key={idx} style={{ 
+                                                                        padding: '0.75rem 1rem', 
+                                                                        backgroundColor: idx === 0 ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-secondary)', 
+                                                                        borderRadius: '6px',
+                                                                        border: idx === 0 ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-color)',
+                                                                        display: 'grid',
+                                                                        gridTemplateColumns: 'auto 1fr auto',
+                                                                        gap: '1rem',
+                                                                        alignItems: 'center'
+                                                                    }}>
+                                                                        <div>
+                                                                            {idx === 0 && (
+                                                                                <span style={{ 
+                                                                                    fontSize: '0.75rem', 
+                                                                                    backgroundColor: 'var(--success-color)', 
+                                                                                    color: 'white', 
+                                                                                    padding: '0.25rem 0.5rem', 
+                                                                                    borderRadius: '4px',
+                                                                                    fontWeight: 'bold'
+                                                                                }}>
+                                                                                    ACTUEL
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
+                                                                        <div>
+                                                                            <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-color)', marginBottom: '0.25rem' }}>
+                                                                                {entry.value} {entry.unit}
+                                                                            </div>
+                                                                            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                                                                                {entry.date ? `Date: ${new Date(entry.date).toLocaleDateString('fr-FR')}` : ''} 
+                                                                                {entry.comment && ` • ${entry.comment}`}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                                                            <div>{entry.user_email}</div>
+                                                                            <div>{new Date(entry.submission_timestamp).toLocaleString('fr-FR')}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
                                                     <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 3fr) 2fr', gap: '2rem' }}>
 
                                                         {/* Left: Description & SQL */}

@@ -17,12 +17,12 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments
+    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check
 except ImportError:
     try:
-        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments
+        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check
     except ImportError:
-        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments
+        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check
 
 app = FastAPI(title="CSRD Copilot API")
 
@@ -74,6 +74,7 @@ app.include_router(admin.router)
 app.include_router(auth_routes.router)
 app.include_router(lineage.router)
 app.include_router(comments.router)
+app.include_router(duplicate_check.router)
 
 # Configuration
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "csrd-copilot") # Default for local dev

@@ -159,7 +159,9 @@ class LineageService:
         
         try:
             results = self.bq_client.query(query)
-            return [dict(row) for row in results]
+            sources_list = [dict(row) for row in results]
+            print(f"[LINEAGE] Retrieved {len(sources_list)} unique source documents")
+            return sources_list
         except Exception as e:
             print(f"Error querying sources: {e}")
             return []
