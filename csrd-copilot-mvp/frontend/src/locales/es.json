@@ -16,6 +16,7 @@
         "connectors": "Conectores",
         "finalReport": "Informe final",
         "lineage": "Trazabilidad",
+        "dataSources": "Fuentes de datos",
         "discussions": "Discusiones",
         "ecovadis": "Auditoría EcoVadis",
         "emissionFactors": "Factores de Emisión",
@@ -498,17 +499,17 @@
         "statusNonCompliant": "No Conforme"
     },
     "discussions": {
-        "title": "Discusiones y Comentarios",
-        "subtitle": "Colabore en los KPIs con su equipo",
-        "totalComments": "Comentarios Totales",
-        "unresolved": "Sin Resolver",
-        "kpisDiscussed": "KPIs Discutidos",
+        "title": "Discusiones",
+        "subtitle": "Intercambia con tu equipo sobre los KPIs",
+        "totalComments": "Total de comentarios",
+        "unresolved": "No resueltos",
+        "kpisDiscussed": "KPIs discutidos",
         "filterAll": "Todos los KPIs",
-        "filterUnresolved": "Sin Resolver",
-        "kpisListTitle": "KPIs",
-        "emptyAll": "No hay KPIs disponibles. Comience importando datos.",
-        "emptyUnresolved": "¡No hay preguntas o alertas pendientes!",
-        "unresolvedBadge": "Sin Resolver"
+        "filterUnresolved": "No resueltos",
+        "kpisListTitle": "Lista de KPIs",
+        "emptyUnresolved": "Ningún KPI con comentarios no resueltos",
+        "emptyAll": "Ningún KPI encontrado",
+        "unresolvedBadge": "No resueltos"
     },
     "emissionFactors": {
         "title": "Factores de Emisión",
@@ -579,5 +580,28 @@
             "prod_plastic": "Plástico (Promedio)",
             "prod_paper": "Papel/Cartón"
         }
+    },
+    "dataSources": {
+        "title": "Fuentes de Datos",
+        "subtitle": "Documentos importados a través de Smart Import y sus datos extraídos",
+        "totalDocuments": "Documentos Importados",
+        "totalKpis": "KPIs extraídos",
+        "searchPlaceholder": "Buscar un documento...",
+        "documentsTitle": "Documentos",
+        "noDocuments": "Ningún documento importado",
+        "importHint": "Usa Smart Import para agregar documentos",
+        "kpisExtracted": "KPIs extraídos de este documento",
+        "hideHistory": "Ocultar",
+        "showHistory": "Mostrar",
+        "extractions": "extracciones",
+        "extraction": "extracción",
+        "fullHistory": "Historial completo",
+        "entries": "entradas",
+        "entry": "entrada",
+        "current": "ACTUAL",
+        "smartImportExtractions": "Extracciones de Smart Import:",
+        "date": "Fecha",
+        "page": "Página",
+        "confidence": "Confianza"
     }
 }

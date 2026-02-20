@@ -16,6 +16,7 @@
         "connectors": "Konnektoren",
         "finalReport": "Abschlussbericht",
         "lineage": "Rückverfolgbarkeit",
+        "dataSources": "Datenquellen",
         "discussions": "Diskussionen",
         "ecovadis": "EcoVadis-Audit",
         "emissionFactors": "Emissionsfaktoren",
@@ -498,16 +499,16 @@
         "statusNonCompliant": "Nicht Konform"
     },
     "discussions": {
-        "title": "Diskussionen & Kommentare",
-        "subtitle": "Arbeiten Sie mit Ihrem Team an KPIs zusammen",
+        "title": "Diskussionen",
+        "subtitle": "Tauschen Sie sich mit Ihrem Team über KPIs aus",
         "totalComments": "Kommentare Gesamt",
         "unresolved": "Ungelöst",
         "kpisDiscussed": "Diskutierte KPIs",
         "filterAll": "Alle KPIs",
         "filterUnresolved": "Ungelöst",
-        "kpisListTitle": "KPIs",
-        "emptyAll": "Keine KPIs verfügbar. Beginnen Sie mit dem Datenimport.",
-        "emptyUnresolved": "Keine offenen Fragen oder Warnungen!",
+        "kpisListTitle": "KPI-Liste",
+        "emptyUnresolved": "Kein KPI mit ungelösten Kommentaren",
+        "emptyAll": "Kein KPI gefunden",
         "unresolvedBadge": "Ungelöst"
     },
     "emissionFactors": {
@@ -579,5 +580,28 @@
             "prod_plastic": "Kunststoff (Durchschnitt)",
             "prod_paper": "Papier/Karton"
         }
+    },
+    "dataSources": {
+        "title": "Datenquellen",
+        "subtitle": "Über Smart Import importierte Dokumente und ihre extrahierten Daten",
+        "totalDocuments": "Importierte Dokumente",
+        "totalKpis": "Extrahierte KPIs",
+        "searchPlaceholder": "Dokument suchen...",
+        "documentsTitle": "Dokumente",
+        "noDocuments": "Keine importierten Dokumente",
+        "importHint": "Verwenden Sie Smart Import, um Dokumente hinzuzufügen",
+        "kpisExtracted": "Aus diesem Dokument extrahierte KPIs",
+        "hideHistory": "Ausblenden",
+        "showHistory": "Anzeigen",
+        "extractions": "Extraktionen",
+        "extraction": "Extraktion",
+        "fullHistory": "Vollständiger Verlauf",
+        "entries": "Einträge",
+        "entry": "Eintrag",
+        "current": "AKTUELL",
+        "smartImportExtractions": "Smart Import Extraktionen:",
+        "date": "Datum",
+        "page": "Seite",
+        "confidence": "Vertrauen"
     }
 }

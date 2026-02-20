@@ -159,9 +159,9 @@ const LineagePage = () => {
                                     onClick={() => handleSourceClick(source.source_filename)}
                                     style={{
                                         padding: '1rem',
-                                        backgroundColor: selectedSource === source.source_filename ? 'rgba(59, 130, 246, 0.1)' : 'var(--bg-color)',
+                                        backgroundColor: selectedSource === source.source_filename ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-color)',
                                         borderRadius: '8px',
-                                        border: `1px solid ${selectedSource === source.source_filename ? '#3b82f6' : 'var(--border-color)'}`,
+                                        border: `1px solid ${selectedSource === source.source_filename ? '#10b981' : 'var(--border-color)'}`,
                                         cursor: 'pointer',
                                         transition: 'all 0.2s'
                                     }}
@@ -214,7 +214,7 @@ const LineagePage = () => {
                                     alignItems: 'center',
                                     gap: '0.5rem',
                                     padding: '0.5rem 1rem',
-                                    backgroundColor: '#3b82f6',
+                                    backgroundColor: '#10b981',
                                     color: 'white',
                                     borderRadius: '8px',
                                     border: 'none',

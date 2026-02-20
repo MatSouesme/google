@@ -110,21 +110,21 @@ const DiscussionsPage = () => {
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <MessageCircle size={32} color="#10b981" />
-                    {t('discussions.title')}
+                    {t('discussions.title', 'Discussions')}
                 </h1>
                 <p style={{ margin: '0.5rem 0 0 0', fontSize: '1rem', color: 'var(--text-secondary)' }}>
-                    {t('discussions.subtitle')}
+                    {t('discussions.subtitle', 'Échangez avec votre équipe sur les KPIs')}
                 </p>
             </div>
 
             {/* Stats */}
             <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', marginBottom: '2rem' }}>
                 <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#3b82f6' }}>
+                    <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#10b981' }}>
                         {getTotalComments()}
                     </div>
                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        {t('discussions.totalComments')}
+                        {t('discussions.totalComments', 'Total des commentaires')}
                     </div>
                 </div>
                 <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
@@ -132,7 +132,7 @@ const DiscussionsPage = () => {
                         {getTotalUnresolved()}
                     </div>
                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        {t('discussions.unresolved')}
+                        {t('discussions.unresolved', 'Non résolus')}
                     </div>
                 </div>
                 <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
@@ -140,7 +140,7 @@ const DiscussionsPage = () => {
                         {kpis.filter(k => k.commentSummary?.total_comments > 0).length}
                     </div>
                     <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        {t('discussions.kpisDiscussed')}
+                        {t('discussions.kpisDiscussed', 'KPIs discutés')}
                     </div>
                 </div>
             </div>
@@ -152,14 +152,14 @@ const DiscussionsPage = () => {
                     className={filter === 'all' ? 'btn btn-primary' : 'btn btn-secondary'}
                     style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
                 >
-                    {t('discussions.filterAll')}
+                    {t('discussions.filterAll', 'Tous les KPIs')}
                 </button>
                 <button
                     onClick={() => setFilter('unresolved')}
                     className={filter === 'unresolved' ? 'btn btn-primary' : 'btn btn-secondary'}
                     style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
                 >
-                    ⚠️ {t('discussions.filterUnresolved')} ({getTotalUnresolved()})
+                    ⚠️ {t('discussions.filterUnresolved', 'Non résolus')} ({getTotalUnresolved()})
                 </button>
             </div>
 
@@ -168,14 +168,14 @@ const DiscussionsPage = () => {
                 {/* KPI List */}
                 <div>
                     <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem', fontWeight: 'bold' }}>
-                        {t('discussions.kpisListTitle')} ({kpis.length})
+                        {t('discussions.kpisListTitle', 'Liste des KPIs')} ({kpis.length})
                     </h2>
 
                     {kpis.length === 0 ? (
                         <div className="card" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                             {filter === 'unresolved'
-                                ? t('discussions.emptyUnresolved')
-                                : t('discussions.emptyAll')}
+                                ? t('discussions.emptyUnresolved', 'Aucun KPI avec des commentaires non résolus')
+                                : t('discussions.emptyAll', 'Aucun KPI trouvé')}
                         </div>
                     ) : (
                         <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -187,8 +187,8 @@ const DiscussionsPage = () => {
                                     style={{
                                         padding: '1rem',
                                         cursor: 'pointer',
-                                        border: selectedKpi?.id === kpi.id ? '2px solid #3b82f6' : '1px solid var(--border-color)',
-                                        backgroundColor: selectedKpi?.id === kpi.id ? 'rgba(59, 130, 246, 0.05)' : 'var(--bg-primary)',
+                                        border: selectedKpi?.id === kpi.id ? '2px solid #10b981' : '1px solid var(--border-color)',
+                                        backgroundColor: selectedKpi?.id === kpi.id ? 'rgba(16, 185, 129, 0.05)' : 'var(--bg-primary)',
                                         transition: 'all 0.2s'
                                     }}
                                 >
@@ -218,7 +218,7 @@ const DiscussionsPage = () => {
                                                 {kpi.commentSummary.total_comments > 0 && (
                                                     <span style={{
                                                         fontSize: '0.75rem',
-                                                        backgroundColor: '#3b82f6',
+                                                        backgroundColor: '#10b981',
                                                         color: 'white',
                                                         padding: '0.15rem 0.5rem',
                                                         borderRadius: '12px'

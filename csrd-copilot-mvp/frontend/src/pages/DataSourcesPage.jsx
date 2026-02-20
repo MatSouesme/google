@@ -60,12 +60,12 @@ const DataSourcesPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 setSourceDetails(data);
-                
+
                 // Charger automatiquement l'historique pour tous les KPIs
                 const kpiIds = Object.keys(data.kpis || {});
                 const allExpanded = new Set(kpiIds);
                 setExpandedKpis(allExpanded);
-                
+
                 // Charger l'historique de tous les KPIs en parallèle
                 kpiIds.forEach(kpiId => {
                     handleLoadHistory(kpiId);
@@ -85,7 +85,7 @@ const DataSourcesPage = () => {
 
     const handleLoadHistory = async (kpiId) => {
         setLoadingHistory(prev => ({ ...prev, [kpiId]: true }));
-        
+
         try {
             const user = auth.currentUser;
             const token = await user.getIdToken();
@@ -99,7 +99,7 @@ const DataSourcesPage = () => {
             if (!response.ok) throw new Error("Failed to load history");
 
             const data = await response.json();
-            
+
             // Filter entries for this specific KPI and sort by timestamp
             const kpiEntries = data.entries.filter(e => e.kpi_id === kpiId);
             setKpiHistory(prev => ({ ...prev, [kpiId]: kpiEntries }));
@@ -183,8 +183,8 @@ const DataSourcesPage = () => {
         <div style={{ padding: '2rem', maxWidth: '1600px', margin: '0 auto' }}>
             {/* Header */}
             <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ 
-                    fontSize: '2rem', 
+                <h1 style={{
+                    fontSize: '2rem',
                     fontWeight: 'bold',
                     display: 'flex',
                     alignItems: 'center',
@@ -200,9 +200,9 @@ const DataSourcesPage = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                 gap: '1rem',
                 marginBottom: '2rem'
             }}>
@@ -231,12 +231,12 @@ const DataSourcesPage = () => {
                 <div className="card" style={{ padding: '1.5rem' }}>
                     {/* Search */}
                     <div style={{ marginBottom: '1.5rem', position: 'relative' }}>
-                        <Search size={18} style={{ 
-                            position: 'absolute', 
-                            left: '0.75rem', 
-                            top: '50%', 
-                            transform: 'translateY(-50%)', 
-                            color: 'var(--text-secondary)' 
+                        <Search size={18} style={{
+                            position: 'absolute',
+                            left: '0.75rem',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            color: 'var(--text-secondary)'
                         }} />
                         <input
                             type="text"
@@ -283,9 +283,9 @@ const DataSourcesPage = () => {
                                         onClick={() => handleSourceSelect(source)}
                                         style={{
                                             padding: '1rem',
-                                            backgroundColor: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'var(--bg-color)',
+                                            backgroundColor: isSelected ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-color)',
                                             borderRadius: '8px',
-                                            border: `1px solid ${isSelected ? '#3b82f6' : 'var(--border-color)'}`,
+                                            border: `1px solid ${isSelected ? '#10b981' : 'var(--border-color)'}`,
                                             cursor: 'pointer',
                                             transition: 'all 0.2s'
                                         }}
@@ -293,9 +293,9 @@ const DataSourcesPage = () => {
                                         <div style={{ display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
                                             <Icon size={20} color={color} style={{ flexShrink: 0, marginTop: '2px' }} />
                                             <div style={{ flex: 1, minWidth: 0 }}>
-                                                <div style={{ 
-                                                    fontWeight: '500', 
-                                                    color: 'var(--text-color)', 
+                                                <div style={{
+                                                    fontWeight: '500',
+                                                    color: 'var(--text-color)',
                                                     marginBottom: '0.5rem',
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
@@ -303,8 +303,8 @@ const DataSourcesPage = () => {
                                                 }}>
                                                     {source.source_filename}
                                                 </div>
-                                                <div style={{ 
-                                                    fontSize: '0.75rem', 
+                                                <div style={{
+                                                    fontSize: '0.75rem',
                                                     color: 'var(--text-secondary)',
                                                     display: 'flex',
                                                     flexWrap: 'wrap',
@@ -332,9 +332,9 @@ const DataSourcesPage = () => {
                 {selectedSource && sourceDetails && (
                     <div className="card" style={{ padding: '1.5rem' }}>
                         {/* Header */}
-                        <div style={{ 
-                            display: 'flex', 
-                            justifyContent: 'space-between', 
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
                             alignItems: 'start',
                             marginBottom: '2rem',
                             paddingBottom: '1rem',
@@ -355,7 +355,7 @@ const DataSourcesPage = () => {
                                     alignItems: 'center',
                                     gap: '0.5rem',
                                     padding: '0.6rem 1.2rem',
-                                    backgroundColor: '#3b82f6',
+                                    backgroundColor: '#10b981',
                                     color: 'white',
                                     borderRadius: '8px',
                                     border: 'none',
@@ -382,15 +382,15 @@ const DataSourcesPage = () => {
                                     }}
                                 >
                                     {/* KPI Header */}
-                                    <div style={{ 
+                                    <div style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
                                         marginBottom: '1rem'
                                     }}>
-                                        <div style={{ 
-                                            fontWeight: 'bold', 
-                                            color: 'var(--text-color)', 
+                                        <div style={{
+                                            fontWeight: 'bold',
+                                            color: 'var(--text-color)',
                                             fontSize: '1rem',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -407,9 +407,9 @@ const DataSourcesPage = () => {
                                                     alignItems: 'center',
                                                     gap: '0.5rem',
                                                     padding: '0.4rem 0.8rem',
-                                                    backgroundColor: expandedKpis.has(kpiId) ? '#3b82f6' : 'transparent',
-                                                    color: expandedKpis.has(kpiId) ? 'white' : '#3b82f6',
-                                                    border: '1px solid #3b82f6',
+                                                    backgroundColor: expandedKpis.has(kpiId) ? '#10b981' : 'transparent',
+                                                    color: expandedKpis.has(kpiId) ? 'white' : '#10b981',
+                                                    border: '1px solid #10b981',
                                                     borderRadius: '6px',
                                                     cursor: 'pointer',
                                                     fontSize: '0.8rem',
@@ -434,30 +434,30 @@ const DataSourcesPage = () => {
 
                                     {/* History Section */}
                                     {expandedKpis.has(kpiId) && kpiHistory[kpiId] && kpiHistory[kpiId].length > 0 && (
-                                        <div style={{ 
-                                            marginBottom: '1.5rem', 
-                                            padding: '1rem', 
-                                            backgroundColor: 'rgba(59, 130, 246, 0.05)', 
+                                        <div style={{
+                                            marginBottom: '1.5rem',
+                                            padding: '1rem',
+                                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
                                             borderRadius: '8px',
-                                            border: '1px solid rgba(59, 130, 246, 0.2)'
+                                            border: '1px solid rgba(16, 185, 129, 0.2)'
                                         }}>
-                                            <h5 style={{ 
-                                                fontSize: '0.9rem', 
+                                            <h5 style={{
+                                                fontSize: '0.9rem',
                                                 marginBottom: '0.75rem',
-                                                color: '#3b82f6',
+                                                color: '#10b981',
                                                 fontWeight: '600',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 gap: '0.5rem'
                                             }}>
                                                 <History size={16} />
-                                                Historique complet ({kpiHistory[kpiId].length} entrée{kpiHistory[kpiId].length > 1 ? 's' : ''})
+                                                {t('dataSources.fullHistory', 'Historique complet')} ({kpiHistory[kpiId].length} {kpiHistory[kpiId].length > 1 ? t('dataSources.entries', 'entrées') : t('dataSources.entry', 'entrée')})
                                             </h5>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                                 {kpiHistory[kpiId].map((histEntry, histIdx) => (
-                                                    <div key={histIdx} style={{ 
-                                                        padding: '0.75rem', 
-                                                        backgroundColor: histIdx === 0 ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-color)', 
+                                                    <div key={histIdx} style={{
+                                                        padding: '0.75rem',
+                                                        backgroundColor: histIdx === 0 ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-color)',
                                                         borderRadius: '6px',
                                                         border: histIdx === 0 ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid var(--border-color)',
                                                         display: 'grid',
@@ -468,15 +468,15 @@ const DataSourcesPage = () => {
                                                     }}>
                                                         <div>
                                                             {histIdx === 0 && (
-                                                                <span style={{ 
-                                                                    fontSize: '0.7rem', 
-                                                                    backgroundColor: '#10b981', 
-                                                                    color: 'white', 
-                                                                    padding: '0.2rem 0.5rem', 
+                                                                <span style={{
+                                                                    fontSize: '0.7rem',
+                                                                    backgroundColor: '#10b981',
+                                                                    color: 'white',
+                                                                    padding: '0.2rem 0.5rem',
                                                                     borderRadius: '4px',
                                                                     fontWeight: 'bold'
                                                                 }}>
-                                                                    ACTUEL
+                                                                    {t('dataSources.current', 'ACTUEL')}
                                                                 </span>
                                                             )}
                                                         </div>
@@ -501,17 +501,17 @@ const DataSourcesPage = () => {
 
                                     {/* Extractions from Smart Import */}
                                     <div style={{ marginBottom: '0.5rem' }}>
-                                        <h5 style={{ 
-                                            fontSize: '0.85rem', 
-                                            color: 'var(--text-secondary)', 
+                                        <h5 style={{
+                                            fontSize: '0.85rem',
+                                            color: 'var(--text-secondary)',
                                             fontWeight: '500',
                                             marginBottom: '0.75rem'
                                         }}>
-                                            Extractions Smart Import:
+                                            {t('dataSources.smartImportExtractions', 'Extractions Smart Import :')}
                                         </h5>
                                     </div>
                                     {entries.map((entry, idx) => (
-                                        <div 
+                                        <div
                                             key={idx}
                                             style={{
                                                 marginTop: idx > 0 ? '1rem' : 0,
@@ -520,18 +520,18 @@ const DataSourcesPage = () => {
                                             }}
                                         >
                                             {/* Value */}
-                                            <div style={{ 
-                                                fontSize: '1.2rem', 
+                                            <div style={{
+                                                fontSize: '1.2rem',
                                                 fontWeight: 'bold',
-                                                color: '#3b82f6',
+                                                color: '#10b981',
                                                 marginBottom: '0.75rem'
                                             }}>
                                                 {entry.value} {entry.unit || ''}
                                             </div>
 
                                             {/* Metadata Grid */}
-                                            <div style={{ 
-                                                display: 'grid', 
+                                            <div style={{
+                                                display: 'grid',
                                                 gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
                                                 gap: '0.75rem',
                                                 fontSize: '0.85rem',
@@ -539,20 +539,20 @@ const DataSourcesPage = () => {
                                             }}>
                                                 {entry.date && (
                                                     <div>
-                                                        <span style={{ color: 'var(--text-secondary)' }}>Date: </span>
+                                                        <span style={{ color: 'var(--text-secondary)' }}>{t('dataSources.date', 'Date')} : </span>
                                                         <span style={{ color: 'var(--text-color)', fontWeight: '500' }}>{entry.date}</span>
                                                     </div>
                                                 )}
                                                 {entry.page_number && (
                                                     <div>
-                                                        <span style={{ color: 'var(--text-secondary)' }}>Page: </span>
+                                                        <span style={{ color: 'var(--text-secondary)' }}>{t('dataSources.page', 'Page')} : </span>
                                                         <span style={{ color: 'var(--text-color)', fontWeight: '500' }}>{entry.page_number}</span>
                                                     </div>
                                                 )}
                                                 {entry.confidence && (
                                                     <div>
-                                                        <span style={{ color: 'var(--text-secondary)' }}>Confiance: </span>
-                                                        <span style={{ 
+                                                        <span style={{ color: 'var(--text-secondary)' }}>{t('dataSources.confidence', 'Confiance')} : </span>
+                                                        <span style={{
                                                             color: entry.confidence > 0.8 ? '#10b981' : entry.confidence > 0.6 ? '#f59e0b' : '#ef4444',
                                                             fontWeight: '600'
                                                         }}>
@@ -566,13 +566,13 @@ const DataSourcesPage = () => {
                                             {entry.snippet && (
                                                 <div style={{
                                                     padding: '0.75rem',
-                                                    backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                                                    backgroundColor: 'rgba(16, 185, 129, 0.08)',
                                                     borderRadius: '6px',
                                                     fontSize: '0.85rem',
                                                     color: 'var(--text-secondary)',
                                                     fontStyle: 'italic',
                                                     lineHeight: '1.5',
-                                                    borderLeft: '3px solid #3b82f6'
+                                                    borderLeft: '3px solid #10b981'
                                                 }}>
                                                     "{entry.snippet}"
                                                 </div>

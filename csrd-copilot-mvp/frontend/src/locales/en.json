@@ -16,6 +16,8 @@
         "connectors": "Connectors",
         "finalReport": "Final Report",
         "lineage": "Lineage",
+        "dataSources": "Data Sources",
+        "emissionFactors": "Emission Factors",
         "discussions": "Discussions",
         "ecovadis": "EcoVadis Audit",
         "settings": "Settings"
@@ -502,16 +504,16 @@
         "statusNonCompliant": "Non Compliant"
     },
     "discussions": {
-        "title": "Discussions & Comments",
-        "subtitle": "Collaborate on KPIs with your team",
+        "title": "Discussions",
+        "subtitle": "Exchange with your team about KPIs",
         "totalComments": "Total Comments",
         "unresolved": "Unresolved",
         "kpisDiscussed": "KPIs Discussed",
         "filterAll": "All KPIs",
         "filterUnresolved": "Unresolved",
-        "kpisListTitle": "KPIs",
-        "emptyAll": "No KPIs available. Start by importing data.",
-        "emptyUnresolved": "No questions or alerts pending!",
+        "kpisListTitle": "KPIs List",
+        "emptyUnresolved": "No KPI with unresolved comments",
+        "emptyAll": "No KPI found",
         "unresolvedBadge": "Unresolved"
     },
     "emissionFactors": {
@@ -583,5 +585,28 @@
             "prod_plastic": "Plastic",
             "prod_paper": "Paper"
         }
+    },
+    "dataSources": {
+        "title": "Data Sources",
+        "subtitle": "Documents imported via Smart Import and their extracted data",
+        "totalDocuments": "Imported Documents",
+        "totalKpis": "Extracted KPIs",
+        "searchPlaceholder": "Search a document...",
+        "documentsTitle": "Documents",
+        "noDocuments": "No imported document",
+        "importHint": "Use Smart Import to add documents",
+        "kpisExtracted": "KPIs extracted from this document",
+        "hideHistory": "Hide",
+        "showHistory": "Show",
+        "extractions": "extractions",
+        "extraction": "extraction",
+        "fullHistory": "Full history",
+        "entries": "entries",
+        "entry": "entry",
+        "current": "CURRENT",
+        "smartImportExtractions": "Smart Import Extractions:",
+        "date": "Date",
+        "page": "Page",
+        "confidence": "Confidence"
     }
 }
