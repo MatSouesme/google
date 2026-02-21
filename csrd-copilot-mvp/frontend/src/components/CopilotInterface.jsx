@@ -82,6 +82,7 @@ const CopilotInterface = ({ enabledScopes }) => {
   const [lineagePanelOpen, setLineagePanelOpen] = useState(false);
   const [selectedKpiId, setSelectedKpiId] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
+  const [lineageValues, setLineageValues] = useState([]);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -140,6 +141,7 @@ const CopilotInterface = ({ enabledScopes }) => {
       setDraft(data.draft);
       setAuditReport(data.audit_report);
       setSourceData(data.source_data);
+      setLineageValues(data.lineage_values || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -614,10 +616,13 @@ const CopilotInterface = ({ enabledScopes }) => {
                   if (props.href && props.href.startsWith('#lineage:')) {
                     try {
                       const lineageInfo = decodeURIComponent(props.href.replace('#lineage:', ''));
-                      const [kpiId, value] = lineageInfo.split('|');
+                      const parts = lineageInfo.split('|');
+                      // Format: SEARCH|numericValue|standard
+                      const searchValue = parts[1] || '';
+                      const searchStandard = parts[2] || standard || 'E1';
                       return (
                         <span
-                          onClick={() => handleLineageClick(kpiId, value)}
+                          onClick={() => handleLineageClick('VALUE_LOOKUP', searchValue)}
                           style={{
                             color: '#3b82f6',
                             textDecoration: 'underline',
@@ -629,7 +634,7 @@ const CopilotInterface = ({ enabledScopes }) => {
                           }}
                           onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
                           onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                          title={`Voir la traçabilité de ${kpiId}`}
+                          title={`📋 Voir la source de cette donnée`}
                         >
                           {props.children}
                         </span>
@@ -650,22 +655,31 @@ const CopilotInterface = ({ enabledScopes }) => {
                 // Replace [[Source: ...]] with audit tooltip
                 processedDraft = processedDraft.replace(/\[\[\s*Source\s*:([\s\S]*?)\]\]/gi, (match, content) => ` [ℹ️](#audit:${encodeURIComponent(content.trim())})`);
 
-                // Detect and mark KPI values for lineage tracing
-                // Pattern: numbers with units followed by KPI indicators (e.g., "1,234 tCO2e", "45%", "€2.3M")
-                // We look for patterns that suggest data points: number + optional comma/space + unit
-                processedDraft = processedDraft.replace(
-                  /(\d[\d,\s]*(?:\.\d+)?\s*(?:tCO2e|MWh|GWh|kWh|m³|kg|tonnes?|%|€|\$|USD|EUR|GBP|hours?|days?|FTE|employees?))/gi,
-                  (match) => {
-                    // Try to find a KPI ID in the surrounding context (previous 200 chars)
-                    // This is a heuristic - in production, the backend should tag values with KPI IDs
-                    const kpiPattern = /([A-Z]\d+[-_][A-Z0-9_]+)/;
-                    const context = processedDraft.substring(Math.max(0, processedDraft.indexOf(match) - 200), processedDraft.indexOf(match));
-                    const kpiMatch = context.match(kpiPattern);
-                    const kpiId = kpiMatch ? kpiMatch[1] : `${standard.toUpperCase()}_UNKNOWN`;
-
-                    return `[${match}](#lineage:${encodeURIComponent(kpiId + '|' + match)})`;
-                  }
-                );
+                // Make all significant numbers in the draft clickable for lineage tracing.
+                // When clicked, LineagePanel does a proximity search to find the closest source.
+                {
+                  // Match numbers: "419.6" "18,114.39" "96%" "808.36 tCO2e" etc.
+                  const rx = /(?<!\w)(\d[\d,. ]*\d(?:\.\d+)?|\d+(?:\.\d+)?)\s*(tCO2eq?|CO2eq?|MWh|GWh|kWh|TWh|tonnes?|tons?|kg|m²|m³|km|%|€|\$|USD|EUR|GBP|FTE)?(?!\w)/gi;
+                  
+                  let matchCount = 0;
+                  processedDraft = processedDraft.replace(rx, (fullMatch, numPart, unitPart, offset) => {
+                    const digits = numPart.replace(/[^\d]/g, '');
+                    // Need ≥3 digits, OR ≥1 digit with a unit
+                    if (!unitPart && digits.length < 3) return fullMatch;
+                    if (digits.length < 1) return fullMatch;
+                    
+                    // Skip if inside a markdown link or audit tooltip
+                    const before = processedDraft.substring(Math.max(0, offset - 200), offset);
+                    if (before.lastIndexOf('[') > before.lastIndexOf(']')) return fullMatch;
+                    if (before.lastIndexOf('(') > before.lastIndexOf(')')) return fullMatch;
+                    
+                    matchCount++;
+                    const searchVal = numPart.replace(/[^\d.]/g, '');
+                    return `[${fullMatch}](#lineage:${encodeURIComponent('SEARCH|' + searchVal + '|' + (standard || 'E1'))})`;
+                  });
+                  
+                  console.log(`[LINEAGE] Made ${matchCount} numbers clickable`);
+                }
 
                 return processedDraft;
               })()}

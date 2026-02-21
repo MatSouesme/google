@@ -167,12 +167,14 @@ class LineageService:
             return []
 
     def search_by_value(self, value: str, standard: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Search for lineage entries by value (and optionally by standard prefix in KPI ID)."""
+        """Search for lineage entries by value (and optionally by standard prefix in KPI ID).
+        If no exact match is found, performs a proximity search to find the closest numeric value."""
         # Clean the value for search (remove commas, spaces)
         clean_value = value.replace(',', '').replace(' ', '').strip()
+        print(f"[LINEAGE] search_by_value called: value='{value}' clean='{clean_value}' standard='{standard}'", flush=True)
         
+        # --- Strategy 1: LIKE match (exact substring) ---
         if standard:
-            # Search with standard filter (E1, G1, etc.)
             query = f"""
                 SELECT *
                 FROM `{self.lineage_table}`
@@ -188,7 +190,6 @@ class LineageService:
                 ]
             )
         else:
-            # Search without standard filter
             query = f"""
                 SELECT *
                 FROM `{self.lineage_table}`
@@ -204,7 +205,87 @@ class LineageService:
         
         try:
             results = self.bq_client.query(query, job_config=job_config)
-            return [dict(row) for row in results]
+            rows = [dict(row) for row in results]
+            if rows:
+                print(f"[LINEAGE] Exact match found: {len(rows)} results", flush=True)
+                return rows
         except Exception as e:
             print(f"Error searching lineage by value: {e}")
+        
+        # --- Strategy 2: Proximity search — find closest numeric value ---
+        # Extract numeric part from the search value
+        import re
+        numeric_str = re.sub(r'[^\d.]', '', clean_value)
+        if not numeric_str:
+            print(f"[LINEAGE] No numeric part found in '{clean_value}', giving up", flush=True)
+            return []
+        
+        try:
+            search_num = float(numeric_str)
+        except ValueError:
+            print(f"[LINEAGE] Cannot parse '{numeric_str}' as number, giving up", flush=True)
+            return []
+        
+        print(f"[LINEAGE] No exact match, trying proximity search for {search_num} (standard={standard})", flush=True)
+        
+        # Fetch all numeric values for this standard and find closest
+        std_filter = ""
+        params = []
+        if standard:
+            std_filter = "AND UPPER(kpi_id) LIKE @standard_pattern"
+            params.append(bigquery.ScalarQueryParameter("standard_pattern", "STRING", f"{standard.upper()}%"))
+        
+        proximity_query = f"""
+            SELECT * FROM (
+                SELECT *,
+                       SAFE_CAST(REGEXP_REPLACE(REPLACE(REPLACE(value, ',', ''), ' ', ''), r'[^0-9.]', '') AS FLOAT64) AS numeric_val
+                FROM `{self.lineage_table}`
+                WHERE value IS NOT NULL
+                  {std_filter}
+            )
+            WHERE numeric_val IS NOT NULL
+            ORDER BY ABS(numeric_val - @search_num) ASC
+            LIMIT 10
+        """
+        params.append(bigquery.ScalarQueryParameter("search_num", "FLOAT64", search_num))
+        
+        try:
+            job_config = bigquery.QueryJobConfig(query_parameters=params)
+            results = self.bq_client.query(proximity_query, job_config=job_config)
+            rows = [dict(row) for row in results]
+            # Remove the temporary numeric_val column
+            for row in rows:
+                row.pop('numeric_val', None)
+            if rows:
+                closest_val = rows[0].get('value', '?')
+                print(f"[LINEAGE] Proximity match: searched {search_num}, closest BQ value = {closest_val} ({len(rows)} results)", flush=True)
+            else:
+                print(f"[LINEAGE] No proximity results found", flush=True)
+            return rows
+        except Exception as e:
+            print(f"[LINEAGE] Proximity search error: {e}", flush=True)
+            return []
+
+    def get_all_for_standard(self, standard: str) -> List[Dict[str, Any]]:
+        """Returns all distinct KPI values for a standard — used to build value→KPI mappings."""
+        query = f"""
+            SELECT DISTINCT kpi_id, value, unit, source_filename, page_number, confidence,
+                   snippet, ingestion_timestamp
+            FROM `{self.lineage_table}`
+            WHERE UPPER(kpi_id) LIKE @standard_pattern
+              AND value IS NOT NULL
+            ORDER BY kpi_id, ingestion_timestamp DESC
+        """
+        job_config = bigquery.QueryJobConfig(
+            query_parameters=[
+                bigquery.ScalarQueryParameter("standard_pattern", "STRING", f"{standard.upper()}%")
+            ]
+        )
+        try:
+            results = self.bq_client.query(query, job_config=job_config)
+            rows = [dict(row) for row in results]
+            print(f"[LINEAGE] get_all_for_standard({standard}): {len(rows)} entries", flush=True)
+            return rows
+        except Exception as e:
+            print(f"Error fetching lineage for standard: {e}")
             return []

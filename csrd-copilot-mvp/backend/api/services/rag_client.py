@@ -174,26 +174,70 @@ class RAGClient:
         return context
 
     def get_company_data(self, standard: str) -> str:
-        """Fetches the latest company data for the standard from BigQuery."""
-        table_id = f"{self.project_id}.csrd_mvp.{standard}_raw" # Using raw for MVP if validated is empty
+        """Fetches company data from data_lineage table (primary source of truth).
+        Falls back to {standard}_raw only if no lineage data exists."""
+        
+        # Primary: use data_lineage (same source as lineage panel)
+        lineage_table = f"{self.project_id}.csrd_mvp.data_lineage"
+        std_upper = standard.upper()
         
         query = f"""
-            SELECT * FROM `{table_id}`
-            ORDER BY ingestion_timestamp DESC
-            LIMIT 1
+            SELECT kpi_id, value, unit, source_filename, snippet, confidence
+            FROM `{lineage_table}`
+            WHERE UPPER(kpi_id) LIKE '{std_upper}%'
+            ORDER BY kpi_id, ingestion_timestamp DESC
         """
         try:
             query_job = self.bq_client.query(query)
             rows = [dict(row) for row in query_job]
+            
+            if rows:
+                # Deduplicate: keep latest entry per kpi_id+value
+                seen = set()
+                unique_rows = []
+                for row in rows:
+                    key = f"{row.get('kpi_id')}:{row.get('value')}"
+                    if key not in seen:
+                        seen.add(key)
+                        unique_rows.append(row)
+                
+                # Format as structured KPI data for the prompt
+                kpi_data = {}
+                for row in unique_rows:
+                    kpi_id = row.get('kpi_id', 'UNKNOWN')
+                    if kpi_id not in kpi_data:
+                        kpi_data[kpi_id] = []
+                    kpi_data[kpi_id].append({
+                        "value": row.get('value'),
+                        "unit": row.get('unit', ''),
+                        "source": row.get('source_filename', ''),
+                        "snippet": row.get('snippet', '')[:200] if row.get('snippet') else ''
+                    })
+                
+                def json_serial(obj):
+                    if hasattr(obj, 'isoformat'):
+                        return obj.isoformat()
+                    raise TypeError("Type not serializable")
+                
+                return json.dumps(kpi_data, default=json_serial, indent=2, ensure_ascii=False)
+            
+            # Fallback: use {standard}_raw if no lineage data
+            print(f"[RAG] No data_lineage entries for {std_upper}, falling back to {standard}_raw")
+            raw_table = f"{self.project_id}.csrd_mvp.{standard}_raw"
+            fallback_query = f"""
+                SELECT * FROM `{raw_table}`
+                ORDER BY ingestion_timestamp DESC
+                LIMIT 1
+            """
+            query_job = self.bq_client.query(fallback_query)
+            rows = [dict(row) for row in query_job]
             if not rows:
                 return "No data found."
             
-            # Convert to JSON string for the prompt
-            # Handle datetime objects
             def json_serial(obj):
                 if hasattr(obj, 'isoformat'):
                     return obj.isoformat()
-                raise TypeError ("Type not serializable")
+                raise TypeError("Type not serializable")
 
             return json.dumps(rows[0], default=json_serial, indent=2)
         except Exception as e:
@@ -216,6 +260,33 @@ class RAGClient:
 
         # 1c. Fetch Strategist Context (PDF/Extracts) - CORE 2 (STRATEGIST)
         strategist_context = self._get_strategist_context(standard)
+        
+        # 1d. Fetch Lineage Data for frontend traceability
+        lineage_values = []
+        try:
+            from services.lineage_service import LineageService
+            lineage_svc = LineageService()
+            lineage_entries = lineage_svc.get_all_for_standard(standard)
+            
+            seen_values = set()
+            for entry in lineage_entries:
+                val = entry.get('value', '')
+                kpi = entry.get('kpi_id', '')
+                unit = entry.get('unit', '') or ''
+                key = f"{kpi}:{val}"
+                if key not in seen_values:
+                    seen_values.add(key)
+                    lineage_values.append({
+                        "kpi_id": kpi,
+                        "value": val,
+                        "unit": unit,
+                        "source_filename": entry.get('source_filename', ''),
+                        "page_number": entry.get('page_number'),
+                        "confidence": entry.get('confidence'),
+                    })
+            print(f"[LINEAGE] {len(lineage_values)} values for frontend traceability ({standard})", flush=True)
+        except Exception as e:
+            print(f"[LINEAGE] Error loading lineage: {e}", flush=True)
         
         # 2. Load Prompts
         system_prompt = self._load_prompt("base_system_prompt.txt")
@@ -249,6 +320,8 @@ class RAGClient:
         
         COMPANY DATA (BigQuery):
         {company_data}
+        
+
         
         ---
         DUAL-CORE RAG CONTEXT:
@@ -334,6 +407,7 @@ class RAGClient:
                     "audit_report": response_audit.text,
                     "consistency_check": consistency_json,
                     "source_data": company_data,
+                    "lineage_values": lineage_values,
                     "model_used": model_name
                 }
             except Exception as e:

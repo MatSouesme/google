@@ -24,27 +24,63 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
             const token = await user.getIdToken();
 
             let response;
-            // Try to fetch by value first (more reliable)
+            
+            // Strategy 1: Search by numeric value + standard (most reliable)
             if (value && standard) {
-                // Extract numeric value from formatted string (e.g., "1,234 tCO2e" -> "1234")
                 const numericValue = value.replace(/[^\d.]/g, '');
+                console.log(`[Lineage] Searching by value: "${numericValue}" standard: "${standard}"`);
                 response = await fetch(
                     `${API_BASE_URL}/lineage/search?value=${encodeURIComponent(numericValue)}&standard=${encodeURIComponent(standard)}`,
                     { headers: { 'Authorization': `Bearer ${token}` } }
                 );
-            } else if (kpiId) {
-                // Fallback to KPI ID if provided
+                
+                // If no results with standard filter, retry without standard
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.sources && data.sources.length > 0) {
+                        console.log(`[Lineage] Found ${data.sources.length} sources by value+standard`);
+                        setLineageData(data);
+                        return;
+                    }
+                }
+                
+                // Retry without standard filter
+                console.log(`[Lineage] No results with standard filter, retrying without...`);
+                response = await fetch(
+                    `${API_BASE_URL}/lineage/search?value=${encodeURIComponent(numericValue)}`,
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.sources && data.sources.length > 0) {
+                        console.log(`[Lineage] Found ${data.sources.length} sources by value only`);
+                        setLineageData(data);
+                        return;
+                    }
+                }
+            }
+            
+            // Strategy 2: Search by KPI ID if we have a real one (not VALUE_LOOKUP)
+            if (kpiId && kpiId !== 'VALUE_LOOKUP') {
+                console.log(`[Lineage] Searching by KPI ID: "${kpiId}"`);
                 response = await fetch(`${API_BASE_URL}/lineage/kpi/${encodeURIComponent(kpiId)}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                if (response && response.ok) {
+                    const data = await response.json();
+                    if (data.sources && data.sources.length > 0) {
+                        console.log(`[Lineage] Found ${data.sources.length} sources by KPI ID`);
+                        setLineageData(data);
+                        return;
+                    }
+                }
             }
-
-            if (response && response.ok) {
-                const data = await response.json();
-                setLineageData(data);
-            }
+            
+            console.log('[Lineage] No lineage data found for this value');
+            setLineageData({ sources: [] });
         } catch (error) {
             console.error('Failed to fetch lineage:', error);
+            setLineageData({ sources: [] });
         } finally {
             setLoading(false);
         }
@@ -119,7 +155,7 @@ const LineagePanel = ({ kpiId, value, standard, onClose }) => {
                         {t('lineage.panelTitle')}
                     </h3>
                     <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        {kpiId}
+                        {kpiId === 'VALUE_LOOKUP' ? (value || 'Data Point') : kpiId}
                     </p>
                 </div>
                 <button
