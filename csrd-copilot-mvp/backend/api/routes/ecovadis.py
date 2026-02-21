@@ -34,9 +34,16 @@ except Exception as e:
     print(f">>> DEBUG: Failed to init Vertex AI: {e}", flush=True)
 
 # Data Paths
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "data")
+# In Docker/Cloud Run, DATA_DIR env var points to /app/data
+# Locally, fallback walks up to project root
+DATA_DIR = os.environ.get(
+    "DATA_DIR",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "data")
+)
 ECOVADIS_DIR = os.path.join(DATA_DIR, "ecovadis")
 COMPANY_DOCS_DIR = os.path.join(DATA_DIR, "company_docs")
+print(f">>> DEBUG ECOVADIS: DATA_DIR={DATA_DIR}, exists={os.path.exists(DATA_DIR)}", flush=True)
+print(f">>> DEBUG ECOVADIS: COMPANY_DOCS_DIR={COMPANY_DOCS_DIR}, exists={os.path.exists(COMPANY_DOCS_DIR)}", flush=True)
 
 # Models
 class AuditResult(BaseModel):
