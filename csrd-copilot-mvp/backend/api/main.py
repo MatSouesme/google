@@ -17,12 +17,15 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Fix import path for Docker environment
 try:
-    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check
+    from api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check, metrics
+    from api.middleware.metrics_middleware import MetricsMiddleware
 except ImportError:
     try:
-        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check
+        from backend.api.routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check, metrics
+        from backend.api.middleware.metrics_middleware import MetricsMiddleware
     except ImportError:
-        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check
+        from routes import generate_draft, workflow, connectors, get_data, chat, export, manual_entry, smart_extraction, dispatcher, analytics, ecovadis, admin, auth_routes, lineage, comments, duplicate_check, metrics
+        from middleware.metrics_middleware import MetricsMiddleware
 
 app = FastAPI(title="CSRD Copilot API")
 
@@ -34,6 +37,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add Metrics Middleware (logs API latency, status, etc.)
+app.add_middleware(MetricsMiddleware)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -72,6 +78,7 @@ app.include_router(analytics.router)
 app.include_router(ecovadis.router)
 app.include_router(admin.router)
 app.include_router(auth_routes.router)
+app.include_router(metrics.router)
 app.include_router(lineage.router)
 app.include_router(comments.router)
 app.include_router(duplicate_check.router)

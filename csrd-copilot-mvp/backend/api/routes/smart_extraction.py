@@ -12,16 +12,19 @@ from io import BytesIO, StringIO
 import csv
 import openpyxl
 import datetime
+import time
 
 # Fix import path for Docker environment
 try:
     from backend.api.utils.auth import get_current_user
     from backend.api.utils.rbac import UserProfile, Role
     from backend.api.services.lineage_service import LineageService
+    from backend.api.utils.metrics_helpers import log_extraction_event, log_user_action, log_vertex_ai_call
 except ImportError:
     from utils.auth import get_current_user
     from utils.rbac import UserProfile, Role
     from services.lineage_service import LineageService
+    from utils.metrics_helpers import log_extraction_event, log_user_action, log_vertex_ai_call
 
 router = APIRouter()
 lineage_service = LineageService()
@@ -51,6 +54,8 @@ async def smart_extract(file: UploadFile = File(...), user: UserProfile = Depend
     Analyzes an uploaded file (PDF/Excel/Images) using Gemini (Vertex AI) to extract likely CSRD data points.
     Supports multimodal inputs (images, scanned PDFs) via native Vertex AI capabilities.
     """
+    start_time = time.time()  # Start timer for metrics
+    
     if user.role not in [Role.ADMIN, Role.EDITOR]:
          raise HTTPException(status_code=403, detail="Insufficient permissions. Only Editors and Admins can perform smart extraction.")
 
@@ -256,6 +261,23 @@ async def smart_extract(file: UploadFile = File(...), user: UserProfile = Depend
              # Limit prompt context for speed/cost in MVP
              response = model.generate_content(prompt)
         
+        # Log Vertex AI usage metrics
+        try:
+            usage = response.usage_metadata
+            input_tokens = getattr(usage, 'prompt_token_count', 0) or 0
+            output_tokens = getattr(usage, 'candidates_token_count', 0) or 0
+            # Gemini 2.0 Flash Lite pricing: ~$0.075/1M input, ~$0.30/1M output
+            cost_usd = (input_tokens * 0.075 / 1_000_000) + (output_tokens * 0.30 / 1_000_000)
+            log_vertex_ai_call(
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                cost_usd=cost_usd,
+                user_email=user.email,
+                operation="extraction"
+            )
+        except Exception as ai_log_error:
+            print(f"Warning: Could not log Vertex AI usage: {ai_log_error}")
+        
         # Clean response (remove markdown code blocks if any)
         text_response = response.text.replace('```json', '').replace('```', '').strip()
         try:
@@ -378,11 +400,60 @@ async def smart_extract(file: UploadFile = File(...), user: UserProfile = Depend
                 print(f"BQ Insert Errors: {errors}")
                 
         except Exception as e:
-            print(f"Failed to save document content: {e}")
+            print(f"Failed to save document content for RAG: {e}")
+        
+        # Log metrics for successful extraction
+        duration_ms = (time.time() - start_time) * 1000
+        doc_type = "pdf" if filename.endswith('.pdf') else "excel" if filename.endswith(('.xlsx', '.xls', '.csv')) else "image"
+        file_size_mb = len(contents) / (1024 * 1024)
+        confidence_scores = [c.get("confidence", 0.0) for c in candidates_json if "confidence" in c]
+        
+        try:
+            print(f"🎯 CALLING log_extraction_event: kpi_count={len(candidates_json)}, user={user.email}")
+            log_extraction_event(
+                duration_ms=duration_ms,
+                document_type=doc_type,
+                file_size_mb=file_size_mb,
+                page_count=None,  # TODO: extract from PDF if needed
+                kpi_count=len(candidates_json),
+                confidence_scores=confidence_scores,
+                user_email=user.email,
+                status="success"
+            )
+            print(f"🎯 log_extraction_event completed successfully")
+            log_user_action(feature="smart_import", user_email=user.email)
+        except Exception as metrics_error:
+            import traceback
+            print(f"❌ METRICS ERROR: {metrics_error}")
+            print(f"❌ TRACEBACK: {traceback.format_exc()}")
 
         return {"candidates": candidates_json, "upload_id": upload_id}
 
     except Exception as e:
-        print(f"Smart Extract Error: {e}")
+        # Log error metrics
+        duration_ms = (time.time() - start_time) * 1000
+        doc_type = "pdf" if filename.endswith('.pdf') else "excel" if filename.endswith(('.xlsx', '.xls', '.csv')) else "image"
+        file_size_mb = len(contents) / (1024 * 1024)
+        
+        try:
+            print(f"🎯 CALLING log_extraction_event (ERROR case): user={user.email}")
+            log_extraction_event(
+                duration_ms=duration_ms,
+                document_type=doc_type,
+                file_size_mb=file_size_mb,
+                page_count=None,
+                kpi_count=0,
+                confidence_scores=[],
+                user_email=user.email,
+                status="error",
+                error_type="extraction_failed",
+                error_message=str(e)[:500]
+            )
+            print(f"🎯 log_extraction_event (ERROR) completed successfully")
+        except Exception as metrics_error:
+            import traceback
+            print(f"❌ ERROR METRICS FAILURE: {metrics_error}")
+            print(f"❌ TRACEBACK: {traceback.format_exc()}")
+        
         # Return empty list instead of 500 to avoid CORS issues on frontend if AI fails
         return {"candidates": [], "upload_id": upload_id, "error": str(e)}

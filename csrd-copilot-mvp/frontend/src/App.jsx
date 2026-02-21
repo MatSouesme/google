@@ -26,6 +26,7 @@ import CommentsDemo from './pages/CommentsDemo';
 import Discussions from './pages/Discussions';
 import EmissionFactors from './pages/EmissionFactors';
 import DataSourcesPage from './pages/DataSourcesPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 
 function App() {
     const [user, setUser] = useState(null);
@@ -108,6 +109,7 @@ function App() {
                     <Route path="discussions" element={<Discussions />} />
                     <Route path="emission-factors" element={<EmissionFactors />} />
                     <Route path="comments-demo" element={<CommentsDemo />} />
+                    <Route path="analytics" element={<AnalyticsPage />} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />

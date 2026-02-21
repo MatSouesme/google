@@ -15,9 +15,11 @@ logger = logging.getLogger(__name__)
 try:
     from backend.api.utils.auth import get_current_user
     from backend.api.utils.rbac import UserProfile
+    from backend.api.utils.metrics_helpers import log_duplicate_check, log_duplicate_resolutions, log_datapoint_action
 except ImportError:
     from utils.auth import get_current_user
     from utils.rbac import UserProfile
+    from utils.metrics_helpers import log_duplicate_check, log_duplicate_resolutions, log_datapoint_action
 
 router = APIRouter()
 
@@ -160,6 +162,16 @@ async def check_duplicates(
             # En cas d'erreur, on considère qu'il n'y a pas de conflit (pour ne pas bloquer)
             no_conflicts.append(datapoint)
     
+    # Log metrics pour duplicate detection
+    try:
+        log_duplicate_check(
+            conflicts_found=len(conflicts),
+            datapoints_checked=len(request.datapoints),
+            user_email=user.email
+        )
+    except Exception as metrics_error:
+        logger.error(f"Failed to log duplicate check metrics: {metrics_error}")
+    
     return CheckDuplicatesResponse(
         conflicts=conflicts,
         no_conflicts=no_conflicts,
@@ -275,6 +287,18 @@ async def upsert_entries(
                 "error_type": type(e).__name__
             })
             results["errors"].append(f"{decision.kpi_id} ({decision.date}): {type(e).__name__}")
+    
+    # Log resolution metrics
+    try:
+        resolutions = [{"action": d.action, "kpi_id": d.kpi_id} for d in request.decisions]
+        log_duplicate_resolutions(resolutions=resolutions, user_email=user.email)
+        
+        # Log individual datapoint actions
+        for decision in request.decisions:
+            if decision.action == "add":
+                log_datapoint_action(action="added", user_email=user.email, kpi_id=decision.kpi_id)
+    except Exception as metrics_error:
+        logger.error(f"Failed to log resolution metrics: {metrics_error}")
     
     # Return flattened structure for frontend
     return {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe, Calculator, Database } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Link as LinkIcon, LogOut, Sun, Moon, Home, MessageSquare, FileText, ClipboardList, UploadCloud, ShieldCheck, Settings, TrendingUp, MessageCircle, ChevronDown, Globe, Calculator, Database, BarChart3 } from 'lucide-react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { useTranslation } from 'react-i18next';
@@ -116,6 +116,11 @@ const Layout = ({ user }) => {
                     <Link to="/emission-factors" className={`nav-item ${isActive('/emission-factors') ? 'active' : ''}`}>
                         <Calculator size={20} />
                         <span>{t('nav.emissionFactors', 'Facteurs d\'émissions')}</span>
+                    </Link>
+
+                    <Link to="/analytics" className={`nav-item ${isActive('/analytics') ? 'active' : ''}`}>
+                        <BarChart3 size={20} />
+                        <span>{t('nav.analytics', 'Analytics')}</span>
                     </Link>
 
                     <Link to="/settings" className={`nav-item ${isActive('/settings') ? 'active' : ''}`}>

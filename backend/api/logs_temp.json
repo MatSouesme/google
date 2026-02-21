@@ -1,0 +1,2214 @@
+﻿[
+  {
+    "insertId": "6995f7460002a5fc683fc7e7",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:46.233061466Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:62028 - \"GET /metrics/features/adoption?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:46.173564Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.721704405s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1725",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/features/adoption?days=30",
+      "responseSize": "179",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Mobile Safari/537.36"
+    },
+    "insertId": "6995f7460002a9a7ccfb9f85",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:46.292731111Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "9b4bfdf4d8310597",
+    "timestamp": "2026-02-18T17:30:45.451507Z",
+    "trace": "projects/csrd-copilot/traces/57d36b4cf58378171b7ade5f518140bc"
+  },
+  {
+    "insertId": "6995f74500061e6b3a65a7cf",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:45.568746841Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:62026 - \"GET /metrics/confidence/distribution?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:45.401003Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.946076643s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1730",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/confidence/distribution?days=30",
+      "responseSize": "204",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Mobile Safari/537.36"
+    },
+    "insertId": "6995f7450006242b27ddfb0f",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:45.624019443Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "a69c1ed952bb3f3b",
+    "timestamp": "2026-02-18T17:30:44.454803Z",
+    "trace": "projects/csrd-copilot/traces/a0d22813ff0e4776653dd248421e1a24"
+  },
+  {
+    "insertId": "6995f744000653a3be5ea216",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:44.571733514Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:62024 - \"GET /metrics/extraction/timeseries?days=30&granularity=day HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:44.414627Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.558730586s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1744",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/extraction/timeseries?days=30&granularity=day",
+      "responseSize": "175",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Mobile Safari/537.36"
+    },
+    "insertId": "6995f7440006579df4c7ef8a",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:44.629260566Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "6c73085ae96d54b3",
+    "timestamp": "2026-02-18T17:30:43.855409Z",
+    "trace": "projects/csrd-copilot/traces/83a7f8550ceb9ced653dd248421e136b",
+    "traceSampled": true
+  },
+  {
+    "insertId": "6995f7430009aa7120154fb0",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:43.900322584Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:62016 - \"GET /metrics/analytics?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:43.633457Z"
+  },
+  {
+    "insertId": "6995f7430009a52e5a275324",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:43.867460041Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:routes.metrics:Admin analytics accessed",
+    "timestamp": "2026-02-18T17:30:43.632110Z"
+  },
+  {
+    "insertId": "6995f7410006c412ec2df5b3",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.533329104Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "ERROR:services.metrics_service:Error fetching user engagement: '>' not supported between instances of 'NoneType' and 'int'",
+    "timestamp": "2026-02-18T17:30:41.443410Z"
+  },
+  {
+    "insertId": "6995f740000f187d0ae56c7a",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Job ID: 42d4d9c5-5c76-4691-93e6-5dcb04dccbbf",
+    "timestamp": "2026-02-18T17:30:40.989309Z"
+  },
+  {
+    "insertId": "6995f740000f1878c1227cd2",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Location: EU",
+    "timestamp": "2026-02-18T17:30:40.989304Z"
+  },
+  {
+    "insertId": "6995f740000f18726e0af5be",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INTERVAL at [9:13]",
+    "timestamp": "2026-02-18T17:30:40.989298Z"
+  },
+  {
+    "insertId": "6995f740000f186eae5a6707",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INTERVAL)",
+    "timestamp": "2026-02-18T17:30:40.989294Z"
+  },
+  {
+    "insertId": "6995f740000f186b7e142cea",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type BIGNUMERIC",
+    "timestamp": "2026-02-18T17:30:40.989291Z"
+  },
+  {
+    "insertId": "6995f740000f1866fe05024b",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(BIGNUMERIC)",
+    "timestamp": "2026-02-18T17:30:40.989286Z"
+  },
+  {
+    "insertId": "6995f740000f186318c0670e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type NUMERIC",
+    "timestamp": "2026-02-18T17:30:40.989283Z"
+  },
+  {
+    "insertId": "6995f740000f186084a2b2d7",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(NUMERIC)",
+    "timestamp": "2026-02-18T17:30:40.989280Z"
+  },
+  {
+    "insertId": "6995f740000f185cec6fde88",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type FLOAT64",
+    "timestamp": "2026-02-18T17:30:40.989276Z"
+  },
+  {
+    "insertId": "6995f740000f1857571de51a",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(FLOAT64)",
+    "timestamp": "2026-02-18T17:30:40.989271Z"
+  },
+  {
+    "insertId": "6995f740000f185322e4255e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INT64",
+    "timestamp": "2026-02-18T17:30:40.989267Z"
+  },
+  {
+    "insertId": "6995f740000f184f5d058c29",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INT64)",
+    "timestamp": "2026-02-18T17:30:40.989263Z"
+  },
+  {
+    "insertId": "6995f740000f184a8d5cb15e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Argument types: STRING",
+    "timestamp": "2026-02-18T17:30:40.989258Z"
+  },
+  {
+    "insertId": "6995f740000f184670bcf379",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INTERVAL at [9:13]; reason: invalidQuery, location: query, message: No matching signature for aggregate function AVG",
+    "timestamp": "2026-02-18T17:30:40.989254Z"
+  },
+  {
+    "insertId": "6995f740000f1841054be9de",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INTERVAL)",
+    "timestamp": "2026-02-18T17:30:40.989249Z"
+  },
+  {
+    "insertId": "6995f740000f183d024a3b99",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type BIGNUMERIC",
+    "timestamp": "2026-02-18T17:30:40.989245Z"
+  },
+  {
+    "insertId": "6995f740000f1839d0312a7c",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(BIGNUMERIC)",
+    "timestamp": "2026-02-18T17:30:40.989241Z"
+  },
+  {
+    "insertId": "6995f740000f1835e7ac7439",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type NUMERIC",
+    "timestamp": "2026-02-18T17:30:40.989237Z"
+  },
+  {
+    "insertId": "6995f740000f183037df72d5",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(NUMERIC)",
+    "timestamp": "2026-02-18T17:30:40.989232Z"
+  },
+  {
+    "insertId": "6995f740000f182dd76a0a57",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type FLOAT64",
+    "timestamp": "2026-02-18T17:30:40.989229Z"
+  },
+  {
+    "insertId": "6995f740000f18294f4179f9",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(FLOAT64)",
+    "timestamp": "2026-02-18T17:30:40.989225Z"
+  },
+  {
+    "insertId": "6995f740000f182422fc0740",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INT64",
+    "timestamp": "2026-02-18T17:30:40.989220Z"
+  },
+  {
+    "insertId": "6995f740000f181f3cb251c6",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INT64)",
+    "timestamp": "2026-02-18T17:30:40.989215Z"
+  },
+  {
+    "insertId": "6995f740000f181a768cd1de",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Argument types: STRING",
+    "timestamp": "2026-02-18T17:30:40.989210Z"
+  },
+  {
+    "insertId": "6995f740000f1801755f1397",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:41.203916518Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "ERROR:services.metrics_service:Error fetching endpoint performance: 400 No matching signature for aggregate function AVG",
+    "timestamp": "2026-02-18T17:30:40.989185Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "3.630996941s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1697",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/analytics?days=30",
+      "responseSize": "944",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f7430009ae7780843fed",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:43.963198438Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "3d5e54317a29d75d",
+    "timestamp": "2026-02-18T17:30:40.001864Z",
+    "trace": "projects/csrd-copilot/traces/911e1661234c761f653dd248421e194e"
+  },
+  {
+    "insertId": "6995f73e000a5c19e59922ab",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:38.908246954Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53592 - \"GET /metrics/features/adoption?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:38.678937Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.750930279s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1704",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/features/adoption?days=30",
+      "responseSize": "179",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73e000a607f8ea2bcc5",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:38.966893291Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "625be55ce264f8ce",
+    "timestamp": "2026-02-18T17:30:37.927162Z",
+    "trace": "projects/csrd-copilot/traces/92bcb00307a49dfa653dd248421e1e77"
+  },
+  {
+    "insertId": "6995f73d000d72e49975e052",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:37.907748324Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53588 - \"GET /metrics/confidence/distribution?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:37.881380Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.952840031s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1710",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/confidence/distribution?days=30",
+      "responseSize": "204",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73d000d7672d9b82229",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:37.964274267Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "69cf8bca821d3707",
+    "timestamp": "2026-02-18T17:30:36.928264Z",
+    "trace": "projects/csrd-copilot/traces/a4b47a07098f0514b18ac5634a7864c4"
+  },
+  {
+    "insertId": "6995f73c000d94b40cbcb30e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:36.908575817Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53582 - \"GET /metrics/extraction/timeseries?days=30&granularity=day HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:36.890036Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.542642781s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1723",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/extraction/timeseries?days=30&granularity=day",
+      "responseSize": "175",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73c000d985532d1d378",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:36.968244620Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "f7c283d573315694",
+    "timestamp": "2026-02-18T17:30:36.346506Z",
+    "trace": "projects/csrd-copilot/traces/a988bc5cc08b0667b18ac5634a786c8c"
+  },
+  {
+    "insertId": "6995f73c0004a040455f6c21",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:36.573366915Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53536 - \"GET /metrics/analytics?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:36.303168Z"
+  },
+  {
+    "insertId": "6995f73c00049c40d4154748",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:36.538823311Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:routes.metrics:Admin analytics accessed",
+    "timestamp": "2026-02-18T17:30:36.302144Z"
+  },
+  {
+    "insertId": "6995f73c00029f0d11075884",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:36.245425236Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53578 - \"GET /metrics/features/adoption?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:36.171789Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.799475678s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1705",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/features/adoption?days=30",
+      "responseSize": "179",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73c0002a2efe5eda81e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:36.302956100Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "e33c445b378ce1a6",
+    "timestamp": "2026-02-18T17:30:35.372098Z",
+    "trace": "projects/csrd-copilot/traces/c98e9532b9e35d93b18ac5634a786780"
+  },
+  {
+    "insertId": "6995f73b00050fd8284169fe",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:35.578304843Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53570 - \"OPTIONS /metrics/features/adoption?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:35.331736Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.004297669s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "OPTIONS",
+      "requestSize": "723",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/features/adoption?days=30",
+      "responseSize": "342",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73b0005128889d42232",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:35.634634250Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "3fc3c2a6c58d1056",
+    "timestamp": "2026-02-18T17:30:35.326250Z",
+    "trace": "projects/csrd-copilot/traces/8ac6aebad0385545b18ac5634a7860ad"
+  },
+  {
+    "insertId": "6995f73b00044d9545a1ebd7",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:35.578304843Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53562 - \"GET /metrics/confidence/distribution?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:35.282005Z"
+  },
+  {
+    "insertId": "6995f73a0005b7b9ce1ceaaf",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:34.539956920Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "ERROR:services.metrics_service:Error fetching user engagement: '>' not supported between instances of 'NoneType' and 'int'",
+    "timestamp": "2026-02-18T17:30:34.374713Z"
+  },
+  {
+    "insertId": "6995f739000b49d2d22fb638",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Job ID: 35208c8a-5eef-43ed-8f36-0f6a4ed56dd2",
+    "timestamp": "2026-02-18T17:30:33.739794Z"
+  },
+  {
+    "insertId": "6995f739000b49cf06659ae7",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Location: EU",
+    "timestamp": "2026-02-18T17:30:33.739791Z"
+  },
+  {
+    "insertId": "6995f739000b49ca06465792",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INTERVAL at [9:13]",
+    "timestamp": "2026-02-18T17:30:33.739786Z"
+  },
+  {
+    "insertId": "6995f739000b49c5a73edac9",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INTERVAL)",
+    "timestamp": "2026-02-18T17:30:33.739781Z"
+  },
+  {
+    "insertId": "6995f739000b49c0bb695673",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type BIGNUMERIC",
+    "timestamp": "2026-02-18T17:30:33.739776Z"
+  },
+  {
+    "insertId": "6995f739000b49bce4d34679",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(BIGNUMERIC)",
+    "timestamp": "2026-02-18T17:30:33.739772Z"
+  },
+  {
+    "insertId": "6995f739000b49b935277e38",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type NUMERIC",
+    "timestamp": "2026-02-18T17:30:33.739769Z"
+  },
+  {
+    "insertId": "6995f739000b49b4d57a195c",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(NUMERIC)",
+    "timestamp": "2026-02-18T17:30:33.739764Z"
+  },
+  {
+    "insertId": "6995f739000b49b0a38bd1e5",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type FLOAT64",
+    "timestamp": "2026-02-18T17:30:33.739760Z"
+  },
+  {
+    "insertId": "6995f739000b49acbb4b3063",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(FLOAT64)",
+    "timestamp": "2026-02-18T17:30:33.739756Z"
+  },
+  {
+    "insertId": "6995f739000b49a817f724f4",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INT64",
+    "timestamp": "2026-02-18T17:30:33.739752Z"
+  },
+  {
+    "insertId": "6995f739000b49a384bb4008",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INT64)",
+    "timestamp": "2026-02-18T17:30:33.739747Z"
+  },
+  {
+    "insertId": "6995f739000b499f2690b773",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Argument types: STRING",
+    "timestamp": "2026-02-18T17:30:33.739743Z"
+  },
+  {
+    "insertId": "6995f739000b499c1cd65745",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INTERVAL at [9:13]; reason: invalidQuery, location: query, message: No matching signature for aggregate function AVG",
+    "timestamp": "2026-02-18T17:30:33.739740Z"
+  },
+  {
+    "insertId": "6995f739000b499761dbaaa0",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INTERVAL)",
+    "timestamp": "2026-02-18T17:30:33.739735Z"
+  },
+  {
+    "insertId": "6995f739000b4993c55d2843",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type BIGNUMERIC",
+    "timestamp": "2026-02-18T17:30:33.739731Z"
+  },
+  {
+    "insertId": "6995f739000b4990d49d0761",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(BIGNUMERIC)",
+    "timestamp": "2026-02-18T17:30:33.739728Z"
+  },
+  {
+    "insertId": "6995f739000b498c594841fd",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type NUMERIC",
+    "timestamp": "2026-02-18T17:30:33.739724Z"
+  },
+  {
+    "insertId": "6995f739000b4988becba5cd",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(NUMERIC)",
+    "timestamp": "2026-02-18T17:30:33.739720Z"
+  },
+  {
+    "insertId": "6995f739000b4985874d0e20",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type FLOAT64",
+    "timestamp": "2026-02-18T17:30:33.739717Z"
+  },
+  {
+    "insertId": "6995f739000b49812ec458f8",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(FLOAT64)",
+    "timestamp": "2026-02-18T17:30:33.739713Z"
+  },
+  {
+    "insertId": "6995f739000b497cb42c1dd2",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INT64",
+    "timestamp": "2026-02-18T17:30:33.739708Z"
+  },
+  {
+    "insertId": "6995f739000b497694c8f618",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INT64)",
+    "timestamp": "2026-02-18T17:30:33.739702Z"
+  },
+  {
+    "insertId": "6995f739000b4972c082b11d",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Argument types: STRING",
+    "timestamp": "2026-02-18T17:30:33.739698Z"
+  },
+  {
+    "insertId": "6995f739000b4964f4403c82",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.872669383Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "ERROR:services.metrics_service:Error fetching endpoint performance: 400 No matching signature for aggregate function AVG",
+    "timestamp": "2026-02-18T17:30:33.739684Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "1.560883212s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1711",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/confidence/distribution?days=30",
+      "responseSize": "204",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73b000451d79df29a07",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:35.304190809Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "0d84f99d810dbdf4",
+    "timestamp": "2026-02-18T17:30:33.720292Z",
+    "trace": "projects/csrd-copilot/traces/da5897c35a7a5038b18ac5634a78648a"
+  },
+  {
+    "insertId": "6995f739000a39e18580e9a1",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:33.912119380Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53556 - \"OPTIONS /metrics/confidence/distribution?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:33.670177Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003003060s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "OPTIONS",
+      "requestSize": "730",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/confidence/distribution?days=30",
+      "responseSize": "342",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f739000a3cc9fd84841e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:33.970763726Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "f8dd4f9d4ee2358b",
+    "timestamp": "2026-02-18T17:30:33.666418Z",
+    "trace": "projects/csrd-copilot/traces/ad81dc9d3a7297a2b18ac5634a786cc4"
+  },
+  {
+    "insertId": "6995f73900096751d7f2bd65",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:33.912119380Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53542 - \"GET /metrics/extraction/timeseries?days=30&granularity=day HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:33.616273Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.618740979s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1725",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/extraction/timeseries?days=30&granularity=day",
+      "responseSize": "175",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73900096c3f434289c3",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:33.636981534Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "141b91050d9df2dd",
+    "timestamp": "2026-02-18T17:30:32.996815Z",
+    "trace": "projects/csrd-copilot/traces/f873a5cfd46417ddb18ac5634a7864f5"
+  },
+  {
+    "httpRequest": {
+      "latency": "3.352141306s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "GET",
+      "requestSize": "1697",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/analytics?days=30",
+      "responseSize": "944",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f73c0004a4169bfbf9b8",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:36.635205454Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "9b861730d3b47a25",
+    "timestamp": "2026-02-18T17:30:32.950855Z",
+    "trace": "projects/csrd-copilot/traces/c0d3d5523b59e110b18ac5634a786a28"
+  },
+  {
+    "insertId": "6995f738000e6310183fb085",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:33.246485427Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:53524 - \"OPTIONS /metrics/extraction/timeseries?days=30&granularity=day HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:32.942864Z"
+  },
+  {
+    "httpRequest": {
+      "latency": "0.003679980s",
+      "protocol": "HTTP/1.1",
+      "referer": "http://localhost:5173/",
+      "remoteIp": "2001:861:8bb1:9a10:4c2c:4415:23c6:874",
+      "requestMethod": "OPTIONS",
+      "requestSize": "744",
+      "requestUrl": "https://csrd-api-71795126030.europe-west1.run.app/metrics/extraction/timeseries?days=30&granularity=day",
+      "responseSize": "342",
+      "serverIp": "2600:1900:4244:200::",
+      "status": 200,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+    },
+    "insertId": "6995f738000e660be2ccfdfc",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Frequests",
+    "receiveTimestamp": "2026-02-18T17:30:32.969697200Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "severity": "INFO",
+    "spanId": "792bc3283df28c3a",
+    "timestamp": "2026-02-18T17:30:32.938258Z",
+    "trace": "projects/csrd-copilot/traces/70798b6ec3f1b93cb18ac5634a7869d7",
+    "traceSampled": true
+  },
+  {
+    "insertId": "6995f738000db094d4de367e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstdout",
+    "receiveTimestamp": "2026-02-18T17:30:32.919687463Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:     169.254.169.126:54710 - \"GET /metrics/analytics?days=30 HTTP/1.1\" 200 OK",
+    "timestamp": "2026-02-18T17:30:32.897172Z"
+  },
+  {
+    "insertId": "6995f738000dac4a61a0a6e6",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:33.208022795Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "INFO:routes.metrics:Admin analytics accessed",
+    "timestamp": "2026-02-18T17:30:32.896074Z"
+  },
+  {
+    "insertId": "6995f736000b4b9757d4e83b",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.879337811Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "ERROR:services.metrics_service:Error fetching user engagement: '>' not supported between instances of 'NoneType' and 'int'",
+    "timestamp": "2026-02-18T17:30:30.740247Z"
+  },
+  {
+    "insertId": "6995f7360001c4d9ea9d7366",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Job ID: bc7738a1-6a4a-4a10-a938-b67d1cb2d4fe",
+    "timestamp": "2026-02-18T17:30:30.115929Z"
+  },
+  {
+    "insertId": "6995f7360001c4d653663726",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "Location: EU",
+    "timestamp": "2026-02-18T17:30:30.115926Z"
+  },
+  {
+    "insertId": "6995f7360001c4d20527438f",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INTERVAL at [9:13]",
+    "timestamp": "2026-02-18T17:30:30.115922Z"
+  },
+  {
+    "insertId": "6995f7360001c4cf94e3c574",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INTERVAL)",
+    "timestamp": "2026-02-18T17:30:30.115919Z"
+  },
+  {
+    "insertId": "6995f7360001c4cc38b1bb70",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type BIGNUMERIC",
+    "timestamp": "2026-02-18T17:30:30.115916Z"
+  },
+  {
+    "insertId": "6995f7360001c4ca0f32cce0",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(BIGNUMERIC)",
+    "timestamp": "2026-02-18T17:30:30.115914Z"
+  },
+  {
+    "insertId": "6995f7360001c4c7a8183925",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type NUMERIC",
+    "timestamp": "2026-02-18T17:30:30.115911Z"
+  },
+  {
+    "insertId": "6995f7360001c4c5749a1c3b",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(NUMERIC)",
+    "timestamp": "2026-02-18T17:30:30.115909Z"
+  },
+  {
+    "insertId": "6995f7360001c4c2ee9d305f",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type FLOAT64",
+    "timestamp": "2026-02-18T17:30:30.115906Z"
+  },
+  {
+    "insertId": "6995f7360001c4c0bd8c8c8e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(FLOAT64)",
+    "timestamp": "2026-02-18T17:30:30.115904Z"
+  },
+  {
+    "insertId": "6995f7360001c4bda5405cfd",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INT64",
+    "timestamp": "2026-02-18T17:30:30.115901Z"
+  },
+  {
+    "insertId": "6995f7360001c4bbc988d142",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INT64)",
+    "timestamp": "2026-02-18T17:30:30.115899Z"
+  },
+  {
+    "insertId": "6995f7360001c4b8e1eb1f93",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Argument types: STRING",
+    "timestamp": "2026-02-18T17:30:30.115896Z"
+  },
+  {
+    "insertId": "6995f7360001c4b5384ac73e",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "    Argument 1: Unable to coerce type STRING to expected type INTERVAL at [9:13]; reason: invalidQuery, location: query, message: No matching signature for aggregate function AVG",
+    "timestamp": "2026-02-18T17:30:30.115893Z"
+  },
+  {
+    "insertId": "6995f7360001c4b2f60d747f",
+    "labels": {
+      "instanceId": "00da6cd2c4309be35cc4303b726a9c91888629fe3b1bb33efb5bb4b786ca3d1f74780448e8a598097b56536aeab9d3177adec71e3c3627330a188d2f1a58c40033c745b6601b410120434e58ab6964"
+    },
+    "logName": "projects/csrd-copilot/logs/run.googleapis.com%2Fstderr",
+    "receiveTimestamp": "2026-02-18T17:30:30.211115469Z",
+    "resource": {
+      "labels": {
+        "configuration_name": "csrd-api",
+        "location": "europe-west1",
+        "project_id": "csrd-copilot",
+        "revision_name": "csrd-api-00135-prf",
+        "service_name": "csrd-api"
+      },
+      "type": "cloud_run_revision"
+    },
+    "textPayload": "  Signature: AVG(INTERVAL)",
+    "timestamp": "2026-02-18T17:30:30.115890Z"
+  }
+]
