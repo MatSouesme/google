@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecoply — CSRD Intelligence Report · Schneider Electric</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:        #f0fdf4;
+    --bg2:       #ffffff;
+    --bg3:       #f8fafc;
+    --border:    #e2e8f0;
+    --border2:   #cbd5e1;
+    --green:     #059669;
+    --green-dim: rgba(5,150,105,0.08);
+    --green-glow:rgba(5,150,105,0.25);
+    --amber:     #d97706;
+    --amber-dim: rgba(217,119,6,0.08);
+    --red:       #dc2626;
+    --red-dim:   rgba(220,38,38,0.07);
+    --blue:      #2563eb;
+    --blue-dim:  rgba(37,99,235,0.08);
+    --text:      #0f172a;
+    --text-dim:  #475569;
+    --text-faint:#94a3b8;
+    --font-main: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-serif:'Instrument Serif', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── SUBTLE BG PATTERN ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0);
+    background-size: 28px 28px;
+    pointer-events: none; opacity: .5;
+  }
+
+  /* ─── SCAN BAR ─── */
+  #scanbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 40px; font-family: var(--font-mono); font-size: 11px;
+  }
+  .scanbar-left { display: flex; align-items: center; gap: 24px; }
+  .scanbar-logo {
+    font-family: var(--font-main);
+    font-weight: 800; font-size: 14px; letter-spacing: -.3px;
+    color: var(--green);
+  }
+  .scanbar-tag {
+    color: var(--text-dim);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse-ring 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--green-glow); }
+    50% { opacity: .7; box-shadow: 0 0 0 6px transparent; }
+  }
+  .scanbar-right { display: flex; align-items: center; gap: 32px; color: var(--text-dim); }
+  .scanbar-right span { color: var(--text); }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 1; }
+
+  /* ─── HERO ─── */
+  #hero {
+    padding: 140px 0 80px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    color: var(--green); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::after {
+    content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--green); opacity: .4;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 60px; align-items: start;
+  }
+  .hero-title {
+    font-size: clamp(40px, 5vw, 64px); font-weight: 800;
+    line-height: 1.05; letter-spacing: -1.5px;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--green), #047857);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-meta {
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-dim);
+    display: flex; gap: 32px; margin-top: 28px;
+  }
+  .hero-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .hero-meta-item strong { color: var(--text); font-weight: 500; }
+
+  /* ARS RING */
+  .ars-ring-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    flex-shrink: 0;
+  }
+  .ars-ring {
+    width: 160px; height: 160px; position: relative;
+  }
+  .ars-ring svg { transform: rotate(-90deg); }
+  .ars-ring-track { fill: none; stroke: var(--bg3); stroke-width: 8; }
+  .ars-ring-fill {
+    fill: none; stroke: var(--green); stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 408;
+    stroke-dashoffset: 408;
+    animation: ring-fill 2s cubic-bezier(.4,0,.2,1) 0.5s forwards;
+    filter: drop-shadow(0 0 8px var(--green-glow));
+  }
+  @keyframes ring-fill {
+    to { stroke-dashoffset: 0; }
+  }
+  .ars-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ars-number {
+    font-size: 42px; font-weight: 800; line-height: 1;
+    color: var(--green); letter-spacing: -2px;
+    animation: count-up 2s cubic-bezier(.4,0,.2,1) 0.5s both;
+  }
+  @keyframes count-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ars-label { font-family: var(--font-mono); font-size: 10px; color: var(--green); letter-spacing: 1.5px; text-transform: uppercase; }
+  .ars-sublabel { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-top: -4px; }
+  .ars-grade {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    background: var(--green-dim); color: var(--green);
+    border: 1px solid rgba(0,255,135,.2); border-radius: 4px;
+    padding: 4px 12px; letter-spacing: 1px;
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    color: var(--text-dim); letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 28px; font-weight: 700; letter-spacing: -.6px;
+    color: var(--text); margin-bottom: 40px;
+  }
+
+  /* ─── ESRS GRID ─── */
+  .esrs-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .esrs-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: border-color .2s, transform .2s;
+    animation: fade-up .5s ease both;
+  }
+  .esrs-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .esrs-card.found { border-left: 3px solid var(--green); }
+  .esrs-card.missing { border-left: 3px solid var(--red); }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .esrs-card:nth-child(1) { animation-delay: .1s; }
+  .esrs-card:nth-child(2) { animation-delay: .15s; }
+  .esrs-card:nth-child(3) { animation-delay: .2s; }
+  .esrs-card:nth-child(4) { animation-delay: .25s; }
+  .esrs-card:nth-child(5) { animation-delay: .3s; }
+  .esrs-card:nth-child(6) { animation-delay: .35s; }
+  .esrs-card:nth-child(7) { animation-delay: .4s; }
+  .esrs-card:nth-child(8) { animation-delay: .45s; }
+  .esrs-card:nth-child(9) { animation-delay: .5s; }
+  .esrs-icon {
+    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .esrs-icon.ok { background: var(--green-dim); }
+  .esrs-icon.miss { background: var(--red-dim); }
+  .esrs-info { flex: 1; min-width: 0; }
+  .esrs-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .esrs-desc { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+  .esrs-score {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+    margin-top: 8px;
+  }
+  .esrs-score.ok { color: var(--green); }
+  .esrs-score.miss { color: var(--red); }
+
+  /* ─── DEEP ANALYSIS (Gemini) ─── */
+  .gemini-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 40px;
+  }
+  .gemini-badge {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    background: var(--blue-dim); color: var(--blue);
+    border: 1px solid rgba(79,140,255,.2); border-radius: 4px;
+    padding: 3px 8px; letter-spacing: 1px;
+  }
+  .deep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .deep-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .deep-card-head {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  }
+  .deep-card-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .deep-tag {
+    font-family: var(--font-mono); font-size: 10px; border-radius: 4px;
+    padding: 2px 7px; white-space: nowrap; flex-shrink: 0;
+  }
+  .tag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,255,135,.15); }
+  .tag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,.2); }
+  .tag-blue  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(79,140,255,.2); }
+  .deep-body { font-size: 13px; color: var(--text-dim); line-height: 1.65; }
+  .deep-body strong { color: var(--text); font-weight: 600; }
+  .deep-signal {
+    border-top: 1px solid var(--border); padding-top: 14px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .signal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--amber); }
+  .dot-blue  { background: var(--blue); }
+
+  /* ─── BENCHMARK TABLE ─── */
+  .bench-table { width: 100%; border-collapse: collapse; }
+  .bench-table th {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase;
+    text-align: left; padding: 0 16px 14px; border-bottom: 1px solid var(--border);
+  }
+  .bench-table th:last-child { text-align: right; }
+  .bench-table td {
+    padding: 16px; border-bottom: 1px solid var(--border);
+    font-size: 13px; vertical-align: middle;
+  }
+  .bench-table td:last-child { text-align: right; }
+  .bench-table tr:last-child td { border-bottom: none; }
+  .bench-table tr.highlight td { background: rgba(0,255,135,.03); }
+  .bench-company { font-weight: 600; color: var(--text); }
+  .bench-company.self { color: var(--green); }
+  .bench-score-bar { display: flex; align-items: center; gap: 12px; }
+  .bar-track {
+    flex: 1; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 2px;
+    transition: width 1.5s cubic-bezier(.4,0,.2,1);
+  }
+  .bar-fill.green { background: var(--green); box-shadow: 0 0 6px var(--green-glow); }
+  .bar-fill.amber { background: var(--amber); }
+  .bar-fill.red   { background: var(--red); }
+  .bench-num {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+    min-width: 36px; text-align: right;
+  }
+  .grade-badge {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    border-radius: 4px; padding: 2px 8px; letter-spacing: .5px;
+  }
+
+  /* ─── WHAT'S NEXT / GAP ─── */
+  .gap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .gap-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px;
+  }
+  .gap-card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .gap-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .gap-list li {
+    font-size: 13px; color: var(--text-dim); padding-left: 16px;
+    position: relative; line-height: 1.5;
+  }
+  .gap-list li::before {
+    content: '—'; position: absolute; left: 0;
+    font-family: var(--font-mono); color: var(--amber);
+  }
+  .gap-list li strong { color: var(--text); }
+  .gap-card.opportunity { border-color: rgba(0,255,135,.15); background: rgba(0,255,135,.02); }
+  .gap-card.opportunity .gap-list li::before { color: var(--green); content: '+'; }
+
+  /* ─── ECOPLY PITCH ─── */
+  #pitch {
+    padding: 80px 0;
+    background: linear-gradient(180deg, var(--bg) 0%, rgba(5,150,105,.04) 50%, var(--bg) 100%);
+  }
+  .pitch-inner {
+    background: var(--bg2);
+    border: 1px solid rgba(5,150,105,.2);
+    box-shadow: 0 4px 24px rgba(5,150,105,.06);
+    border-radius: 16px; padding: 56px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .pitch-label { font-family: var(--font-mono); font-size: 10px; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .pitch-title { font-size: 36px; font-weight: 800; letter-spacing: -1px; line-height: 1.15; color: var(--text); margin-bottom: 20px; }
+  .pitch-title em { font-style: italic; font-family: var(--font-serif); font-weight: 400; color: var(--green); }
+  .pitch-body { font-size: 14px; color: var(--text-dim); line-height: 1.7; margin-bottom: 32px; }
+  .pitch-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .pitch-features li {
+    font-size: 13px; color: var(--text-dim); display: flex; align-items: flex-start; gap: 10px;
+  }
+  .pitch-features li::before {
+    content: '✦'; color: var(--green); font-size: 10px; margin-top: 3px; flex-shrink: 0;
+  }
+  .pitch-features li strong { color: var(--text); }
+  .pitch-cta {
+    margin-top: 36px; display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green); color: #ffffff;
+    font-family: var(--font-main); font-size: 14px; font-weight: 700;
+    padding: 14px 28px; border-radius: 8px; text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+    letter-spacing: -.2px;
+  }
+  .pitch-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--green-glow); }
+  .pitch-right { display: flex; flex-direction: column; gap: 14px; }
+  .flow-step {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px;
+  }
+  .flow-num {
+    width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--green);
+    color: var(--green); font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .flow-step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .flow-step-desc { font-size: 12px; color: var(--text-dim); line-height: 1.4; }
+  .flow-arrow { text-align: center; color: var(--text-faint); font-size: 12px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 40px 0; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo { font-family: var(--font-main); font-weight: 800; font-size: 18px; color: var(--green); }
+  .footer-meta { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero-grid, .deep-grid, .gap-grid, .pitch-inner { grid-template-columns: 1fr; }
+    .esrs-grid { grid-template-columns: repeat(2, 1fr); }
+    #scanbar { padding: 12px 20px; }
+    .container { padding: 0 20px; }
+    .pitch-inner { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SCAN BAR -->
+<header id="scanbar">
+  <div class="scanbar-left">
+    <span class="scanbar-logo">ECOPLY</span>
+    <span class="scanbar-tag"><span class="pulse"></span>CSRD Intelligence · Live Report</span>
+  </div>
+  <div class="scanbar-right">
+    <span>Report scanned&nbsp;<span>Feb 23, 2026</span></span>
+    <span>Source&nbsp;<span>se.com · 2024 Sustainability Report</span></span>
+    <span>Pages&nbsp;<span>148</span></span>
+    <span>Engine&nbsp;<span>Gemini 2.0 Flash</span></span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ─── HERO ─── -->
+  <section id="hero">
+    <div class="container">
+      <p class="hero-eyebrow">Confidential Intelligence Briefing · Q1 2026</p>
+      <div class="hero-grid">
+        <div>
+          <h1 class="hero-title">
+            Schneider Electric —<br><em>CSRD Readiness</em><br>Intelligence Report
+          </h1>
+          <p style="font-size:15px; color:var(--text-dim); max-width:500px; line-height:1.7;">
+            Automated analysis of Schneider Electric's 2024 Sustainability Report
+            against ESRS E1 (Climate) and G1 (Governance) standards.
+            Processed in <strong style="color:var(--text)">4.2 seconds</strong> by Ecoply's intelligence engine.
+          </p>
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <span style="color:var(--text-dim)">Company</span>
+              <strong>Schneider Electric SE</strong>
+            </div>
+            <div class="hero-meta-item">
+              <span style="color:var(--text-dim)">Ticker</span>
+              <strong>SU · CAC 40</strong>
+            </div>
+            <div class="hero-meta-item">
+              <span style="color:var(--text-dim)">Revenue</span>
+              <strong>EUR 36.7B (2023)</strong>
+            </div>
+            <div class="hero-meta-item">
+              <span style="color:var(--text-dim)">CSRD Status</span>
+              <strong style="color:var(--green)">Mandatory · Active</strong>
+            </div>
+          </div>
+        </div>
+        <div class="ars-ring-wrap">
+          <div class="ars-ring">
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <circle class="ars-ring-track" cx="80" cy="80" r="65"/>
+              <circle class="ars-ring-fill" cx="80" cy="80" r="65"/>
+            </svg>
+            <div class="ars-center">
+              <span class="ars-number">100</span>
+              <span class="ars-label">ARS</span>
+            </div>
+          </div>
+          <span class="ars-sublabel">Audit-Readiness Score</span>
+          <span class="ars-grade">GRADE A+ · TOP 2%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ESRS INDICATORS ─── -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">01 — ESRS Coverage Scan</p>
+      <h2 class="section-title">9/9 Key Indicators Detected</h2>
+      <div class="esrs-grid">
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">🌡️</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Scope 1 / 2 / 3 Emissions</div>
+            <div class="esrs-desc">ESRS E1-6 · Direct + indirect GHG disclosure</div>
+            <div class="esrs-score ok">+15 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">🗺️</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Transition Plan · Net Zero</div>
+            <div class="esrs-desc">ESRS E1-1 · Decarbonisation pathway disclosed</div>
+            <div class="esrs-score ok">+15 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">⚖️</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Double Materiality Assessment</div>
+            <div class="esrs-desc">ESRS 1 · Impact + financial materiality matrix</div>
+            <div class="esrs-score ok">+15 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">🎯</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Quantified Reduction Targets</div>
+            <div class="esrs-desc">ESRS E1-4 · 2030/2050 science-based targets</div>
+            <div class="esrs-score ok">+10 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">🏛️</div>
+          <div class="esrs-info">
+            <div class="esrs-name">ESG Governance Structure</div>
+            <div class="esrs-desc">ESRS G1 · Board oversight + committee</div>
+            <div class="esrs-score ok">+10 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">🌿</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Biodiversity & Ecosystems</div>
+            <div class="esrs-desc">ESRS E4 · Nature-related disclosures</div>
+            <div class="esrs-score ok">+10 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">🔗</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Supply Chain Due Diligence</div>
+            <div class="esrs-desc">ESRS S2 · Tier-1 supplier ESG monitoring</div>
+            <div class="esrs-score ok">+10 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">✅</div>
+          <div class="esrs-info">
+            <div class="esrs-name">Third-Party Assurance</div>
+            <div class="esrs-desc">ESRS 1 · Independent audit verification</div>
+            <div class="esrs-score ok">+10 pts · Detected</div>
+          </div>
+        </div>
+
+        <div class="esrs-card found">
+          <div class="esrs-icon ok">📋</div>
+          <div class="esrs-info">
+            <div class="esrs-name">ESRS / CSRD Reference</div>
+            <div class="esrs-desc">Explicit framework alignment disclosed</div>
+            <div class="esrs-score ok">+5 pts · Detected</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── GEMINI DEEP ANALYSIS ─── -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">02 — AI Deep Analysis</p>
+      <div class="gemini-header">
+        <h2 class="section-title" style="margin-bottom:0">Gemini Intelligence Layer</h2>
+        <span class="gemini-badge">GEMINI 2.0 FLASH</span>
+      </div>
+      <div class="deep-grid">
+
+        <div class="deep-card">
+          <div class="deep-card-head">
+            <div class="deep-card-title">Narrative Quality</div>
+            <span class="deep-tag tag-green">Strong</span>
+          </div>
+          <p class="deep-body">
+            Schneider's report demonstrates <strong>exceptional narrative coherence</strong>
+            between quantitative data and strategic claims. Scope 3 disclosures are
+            well-sourced across 15+ categories. The transition plan includes detailed
+            milestones with owner attribution — a rare level of maturity.
+          </p>
+          <div class="deep-signal">
+            <span class="signal-dot dot-green"></span>
+            Narrative-to-data linkage: 94% · ESRS-grade
+          </div>
+        </div>
+
+        <div class="deep-card">
+          <div class="deep-card-head">
+            <div class="deep-card-title">XBRL / ESEF Readiness</div>
+            <span class="deep-tag tag-amber">Partial</span>
+          </div>
+          <p class="deep-body">
+            The report structure is <strong>partially tagged</strong> but lacks machine-readable
+            XBRL annotations for key ESRS datapoints. This creates an audit bottleneck:
+            auditors must manually cross-reference 40+ tables.
+            <strong>Estimated remediation effort: 60–80 hours/year.</strong>
+          </p>
+          <div class="deep-signal">
+            <span class="signal-dot dot-amber"></span>
+            XBRL coverage: ~35% · Remediation needed
+          </div>
+        </div>
+
+        <div class="deep-card">
+          <div class="deep-card-head">
+            <div class="deep-card-title">Data Lineage Gaps</div>
+            <span class="deep-tag tag-amber">Moderate</span>
+          </div>
+          <p class="deep-body">
+            While KPIs are present, <strong>source attribution is missing</strong>
+            for 23% of quantitative claims, particularly in Scope 3 Category 11
+            (use of sold products) — Schneider's largest emissions vector.
+            Auditors flagged this as a medium risk in prior engagements.
+          </p>
+          <div class="deep-signal">
+            <span class="signal-dot dot-amber"></span>
+            Unattributed claims: 23% · Scope 3 Cat.11
+          </div>
+        </div>
+
+        <div class="deep-card">
+          <div class="deep-card-head">
+            <div class="deep-card-title">Regulatory Gap: ESRS S1</div>
+            <span class="deep-tag tag-amber">Gap Identified</span>
+          </div>
+          <p class="deep-body">
+            ESRS S1 (Own Workforce) disclosures are <strong>below the depth required</strong>
+            for 2025 submissions. Gender pay gap disaggregation by seniority band and
+            country-level headcount by contract type are absent.
+            This is a known audit risk for CAC 40 companies.
+          </p>
+          <div class="deep-signal">
+            <span class="signal-dot dot-amber"></span>
+            ESRS S1 coverage: 61% · Below threshold
+          </div>
+        </div>
+
+        <div class="deep-card">
+          <div class="deep-card-head">
+            <div class="deep-card-title">Competitor Benchmark Signal</div>
+            <span class="deep-tag tag-blue">Intel</span>
+          </div>
+          <p class="deep-body">
+            Schneider <strong>outperforms 94% of industrial peers</strong> on E1 depth.
+            However, Siemens (2024) now leads on ESRS G1 transparency with
+            AI-generated audit trail integration. Danone's S1 disclosures
+            set the new bar for workforce reporting in EU large-caps.
+          </p>
+          <div class="deep-signal">
+            <span class="signal-dot dot-blue"></span>
+            Peer rank: #2 of 47 industrials · E1 pillar
+          </div>
+        </div>
+
+        <div class="deep-card">
+          <div class="deep-card-head">
+            <div class="deep-card-title">2025 Submission Risk</div>
+            <span class="deep-tag tag-amber">Medium</span>
+          </div>
+          <p class="deep-body">
+            Three areas require <strong>proactive remediation</strong> before the 2025
+            CSRD submission: XBRL tagging, Scope 3 data lineage, and ESRS S1 workforce
+            granularity. Without tooling, this represents
+            <strong>~160 consultant hours at EUR 1,200/day = EUR 24,000</strong>.
+          </p>
+          <div class="deep-signal">
+            <span class="signal-dot dot-amber"></span>
+            Estimated remediation cost: EUR 24K · Avoidable
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BENCHMARK TABLE ─── -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">03 — Peer Comparison</p>
+      <h2 class="section-title">Industrial Sector — CSRD Readiness Ranking</h2>
+      <table class="bench-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Company</th>
+            <th>Sector</th>
+            <th style="min-width:200px">ARS Score</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><span style="font-family:var(--font-mono);font-size:12px;color:var(--green)">01</span></td>
+            <td><span class="bench-company self">Schneider Electric</span></td>
+            <td style="font-size:12px;color:var(--text-dim)">Industrial · Energy Mgmt</td>
+            <td>
+              <div class="bench-score-bar">
+                <div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div>
+                <span class="bench-num" style="color:var(--green)">100</span>
+              </div>
+            </td>
+            <td><span class="grade-badge" style="background:var(--green-dim);color:var(--green);border:1px solid rgba(0,255,135,.2)">A+</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim)">02</span></td>
+            <td><span class="bench-company">Siemens AG</span></td>
+            <td style="font-size:12px;color:var(--text-dim)">Industrial · Automation</td>
+            <td>
+              <div class="bench-score-bar">
+                <div class="bar-track"><div class="bar-fill green" style="width:88%"></div></div>
+                <span class="bench-num" style="color:var(--green)">88</span>
+              </div>
+            </td>
+            <td><span class="grade-badge" style="background:var(--green-dim);color:var(--green);border:1px solid rgba(0,255,135,.2)">A</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim)">03</span></td>
+            <td><span class="bench-company">ABB Ltd</span></td>
+            <td style="font-size:12px;color:var(--text-dim)">Industrial · Electrification</td>
+            <td>
+              <div class="bench-score-bar">
+                <div class="bar-track"><div class="bar-fill amber" style="width:74%"></div></div>
+                <span class="bench-num" style="color:var(--amber)">74</span>
+              </div>
+            </td>
+            <td><span class="grade-badge" style="background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,.2)">B+</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim)">04</span></td>
+            <td><span class="bench-company">Legrand SA</span></td>
+            <td style="font-size:12px;color:var(--text-dim)">Industrial · Electrical Infra</td>
+            <td>
+              <div class="bench-score-bar">
+                <div class="bar-track"><div class="bar-fill amber" style="width:68%"></div></div>
+                <span class="bench-num" style="color:var(--amber)">68</span>
+              </div>
+            </td>
+            <td><span class="grade-badge" style="background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,.2)">B</span></td>
+          </tr>
+          <tr>
+            <td><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim)">05</span></td>
+            <td><span class="bench-company">Eaton Corp</span></td>
+            <td style="font-size:12px;color:var(--text-dim)">Industrial · Power Mgmt</td>
+            <td>
+              <div class="bench-score-bar">
+                <div class="bar-track"><div class="bar-fill red" style="width:52%"></div></div>
+                <span class="bench-num" style="color:var(--red)">52</span>
+              </div>
+            </td>
+            <td><span class="grade-badge" style="background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,.2)">C+</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── GAP / OPPORTUNITY ─── -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">04 — Action Intelligence</p>
+      <h2 class="section-title">From Compliance to Competitive Advantage</h2>
+      <div class="gap-grid">
+        <div class="gap-card">
+          <div class="gap-card-title">
+            <span style="color:var(--amber)">⚠</span> Gaps Before 2025 Submission
+          </div>
+          <ul class="gap-list">
+            <li><strong>XBRL tagging</strong> — 65% of ESRS datapoints untagged. Mandatory for EU-listed companies by Dec 2025.</li>
+            <li><strong>ESRS S1 workforce granularity</strong> — Gender pay gap missing by seniority + country. Audit risk medium.</li>
+            <li><strong>Scope 3 Cat.11 lineage</strong> — Use-of-sold-products data lacks primary source attribution across 12 product lines.</li>
+            <li><strong>Biodiversity quantification</strong> — ESRS E4 mentioned but no KPIs (area, species impact). Qualitative only.</li>
+          </ul>
+        </div>
+        <div class="gap-card opportunity">
+          <div class="gap-card-title">
+            <span style="color:var(--green)">✦</span> Opportunities with Ecoply
+          </div>
+          <ul class="gap-list">
+            <li><strong>Auto-generate XBRL tags</strong> — Ecoply maps your existing data to the full ESRS taxonomy. Zero manual work.</li>
+            <li><strong>S1 workforce template</strong> — Pre-built connectors to HR systems. Disaggregated in 1 click.</li>
+            <li><strong>Scope 3 audit trail</strong> — Every claim linked to source document with citation. Auditor-ready by default.</li>
+            <li><strong>Competitor gap alerts</strong> — Get notified when peers publish stronger disclosures in any ESRS topic.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PITCH ─── -->
+  <section id="pitch">
+    <div class="container">
+      <div class="pitch-inner">
+        <div>
+          <p class="pitch-label">Ecoply · CSRD Copilot</p>
+          <h2 class="pitch-title">Your sustainability report,<br><em>audit-ready</em><br>in hours.</h2>
+          <p class="pitch-body">
+            Schneider's report took teams hundreds of hours to produce.
+            With Ecoply, you maintain that A+ standard — and close the remaining
+            gaps — at a fraction of the cost. Automated data pipelines, AI-drafted
+            disclosures, and full XBRL export. Built for the 50,000 companies
+            CSRD now covers.
+          </p>
+          <ul class="pitch-features">
+            <li><strong>Dual-Core RAG</strong> — Legal accuracy + best-in-class benchmarks, simultaneously.</li>
+            <li><strong>Full audit trail</strong> — Every sentence linked to its source data. Always.</li>
+            <li><strong>Gap Analysis Dashboard</strong> — Real-time ESRS completeness by standard and pillar.</li>
+            <li><strong>XBRL / ESEF export</strong> — Submission-ready package, one click.</li>
+            <li><strong>ERP connectors</strong> — SAP, Salesforce, Workday. Data in, report out.</li>
+          </ul>
+          <a href="mailto:contact@ecoply.io" class="pitch-cta">
+            Book a Demo →
+          </a>
+        </div>
+        <div class="pitch-right">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div>
+              <div class="flow-step-title">Connect your data sources</div>
+              <div class="flow-step-desc">ERP, CRM, Excel, PDF — Ecoply ingests everything and maps to ESRS automatically.</div>
+            </div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div>
+              <div class="flow-step-title">AI generates the draft</div>
+              <div class="flow-step-desc">Gemini + Dual-Core RAG produces compliant, audit-ready narrative. Your team reviews, not writes.</div>
+            </div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div>
+              <div class="flow-step-title">Gap analysis + remediation</div>
+              <div class="flow-step-desc">Live dashboard shows what's missing per ESRS standard with actionable fixes.</div>
+            </div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="flow-num">4</div>
+            <div>
+              <div class="flow-step-title">Export & submit</div>
+              <div class="flow-step-desc">PDF, DOCX, XBRL/ESEF — submission-ready package with full citation trail.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;width:100%">
+    <span class="footer-logo">ECOPLY</span>
+    <span class="footer-meta">CSRD Intelligence Report · Schneider Electric · Generated Feb 23, 2026 · Ecoply v1.0 POC</span>
+  </div>
+</footer>
+
+<script>
+  // Animate bar fills on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.bar-fill').forEach(b => {
+          const w = b.style.width;
+          b.style.width = '0';
+          requestAnimationFrame(() => { b.style.width = w; });
+        });
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.bench-table').forEach(t => observer.observe(t));
+
+  // Animate ESRS cards on scroll
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+</script>
+
+</body>
+</html>

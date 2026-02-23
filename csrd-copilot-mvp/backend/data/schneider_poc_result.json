@@ -1,0 +1,63 @@
+{
+  "company": "Schneider Electric",
+  "report_url": "https://www.se.com/ww/en/assets/564/document/513141/2024-sustainability-report.pdf?p_enDocType=EDMS&p_File_Name=2024%20Sustainable%20Development%20Report",
+  "ars_score": 100,
+  "confidence_interval": 1.0,
+  "details": {
+    "scope_1": {
+      "found": true,
+      "score": 15,
+      "max": 15,
+      "description": "Scope 1/2/3 mentionnés"
+    },
+    "transition_plan": {
+      "found": true,
+      "score": 15,
+      "max": 15,
+      "description": "Plan de transition / Net Zero"
+    },
+    "materiality": {
+      "found": true,
+      "score": 15,
+      "max": 15,
+      "description": "Matrice de matérialité"
+    },
+    "targets": {
+      "found": true,
+      "score": 10,
+      "max": 10,
+      "description": "Objectifs chiffrés"
+    },
+    "governance": {
+      "found": true,
+      "score": 10,
+      "max": 10,
+      "description": "Gouvernance ESG"
+    },
+    "biodiversity": {
+      "found": true,
+      "score": 10,
+      "max": 10,
+      "description": "Biodiversité"
+    },
+    "supply_chain": {
+      "found": true,
+      "score": 10,
+      "max": 10,
+      "description": "Chaîne d'approvisionnement"
+    },
+    "verified_data": {
+      "found": true,
+      "score": 10,
+      "max": 10,
+      "description": "Données vérifiées par tiers"
+    },
+    "esrs_reference": {
+      "found": true,
+      "score": 5,
+      "max": 5,
+      "description": "Référence explicite ESRS/CSRD"
+    }
+  },
+  "missing_critical_datapoints": []
+}
