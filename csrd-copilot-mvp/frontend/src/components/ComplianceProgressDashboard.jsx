@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
 
 const ComplianceProgressDashboard = () => {
+    const { t } = useTranslation();
     const [progressData, setProgressData] = useState(null);
     const [timeline, setTimeline] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -82,10 +84,10 @@ const ComplianceProgressDashboard = () => {
 
     const getTimelineStatusLabel = (status) => {
         switch (status) {
-            case 'critical': return 'CRITIQUE';
-            case 'warning': return 'ATTENTION';
-            case 'upcoming': return 'À VENIR';
-            case 'passed': return 'PASSÉ';
+            case 'critical': return t('compliance.statusCritical');
+            case 'warning': return t('compliance.statusWarning');
+            case 'upcoming': return t('compliance.statusUpcoming');
+            case 'passed': return t('compliance.statusPassed');
             default: return status.toUpperCase();
         }
     };
@@ -94,7 +96,7 @@ const ComplianceProgressDashboard = () => {
         return (
             <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
                 <div style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>
-                    Chargement de la progression...
+                    {t('compliance.loadingProgress')}
                 </div>
             </div>
         );
@@ -117,10 +119,10 @@ const ComplianceProgressDashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                     <div>
                         <h2 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 'bold' }}>
-                            Progression CSRD
+                            {t('compliance.csrdProgress')}
                         </h2>
                         <p style={{ margin: '0.5rem 0 0 0', opacity: 0.9, fontSize: '0.95rem' }}>
-                            Vue d'ensemble de votre compliance
+                            {t('compliance.complianceOverview')}
                         </p>
                     </div>
                     <div style={{ textAlign: 'right' }}>
@@ -162,7 +164,7 @@ const ComplianceProgressDashboard = () => {
                                     ESRS {standard.standard}
                                 </h3>
                                 <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                                    {standard.standard === 'E1' ? 'Climat' : standard.standard === 'G1' ? 'Gouvernance' : 'Social'}
+                                    {standard.standard === 'E1' ? t('compliance.climate') : standard.standard === 'G1' ? t('compliance.governance') : t('compliance.social')}
                                 </p>
                             </div>
                             <div style={{ 
@@ -192,7 +194,7 @@ const ComplianceProgressDashboard = () => {
                         </div>
 
                         <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                            {standard.covered_count}/{standard.total_mandatory} KPIs obligatoires
+                            {standard.covered_count}/{standard.total_mandatory} {t('compliance.mandatoryKpis')}
                         </div>
                     </div>
                 ))}
@@ -211,12 +213,12 @@ const ComplianceProgressDashboard = () => {
                             animation: 'pulse 2s infinite'
                         }} />
                         <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 'bold' }}>
-                            KPIs Manquants Prioritaires
+                            {t('compliance.criticalMissing')}
                         </h3>
                     </div>
                     
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                        Ces KPIs obligatoires doivent être renseignés en priorité
+                        {t('compliance.criticalMissingDesc')}
                     </p>
 
                     <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -261,7 +263,7 @@ const ComplianceProgressDashboard = () => {
                                     whiteSpace: 'nowrap',
                                     marginLeft: '1rem'
                                 }}>
-                                    {kpi.type === 'quantitative' ? 'QUANTITATIF' : 'NARRATIF'}
+                                    {kpi.type === 'quantitative' ? t('compliance.quantitative') : t('compliance.narrative')}
                                 </span>
                             </div>
                         ))}
@@ -273,7 +275,7 @@ const ComplianceProgressDashboard = () => {
             {timeline.length > 0 && (
                 <div className="card" style={{ padding: '1.5rem' }}>
                     <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                        📅 Timeline de Soumission Réglementaire
+                        📅 {t('compliance.regulatoryTimeline')}
                     </h3>
 
                     <div style={{ display: 'grid', gap: '1rem' }}>
@@ -324,11 +326,11 @@ const ComplianceProgressDashboard = () => {
                                     </div>
                                     {item.days_remaining >= 0 ? (
                                         <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                                            dans {item.days_remaining} jours
+                                            {t('compliance.inDays', { count: item.days_remaining })}
                                         </div>
                                     ) : (
                                         <div style={{ fontSize: '0.85rem', color: '#9ca3af', marginTop: '0.25rem' }}>
-                                            passé
+                                            {t('compliance.passed')}
                                         </div>
                                     )}
                                 </div>
@@ -340,7 +342,7 @@ const ComplianceProgressDashboard = () => {
 
             {/* Footer avec dernière mise à jour */}
             <div style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                Dernière mise à jour: {new Date(progressData.last_updated).toLocaleString('fr-FR')}
+                {t('compliance.lastUpdated', { date: new Date(progressData.last_updated).toLocaleString() })}
             </div>
 
             <style>{`

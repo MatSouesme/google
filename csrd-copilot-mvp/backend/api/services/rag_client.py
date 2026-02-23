@@ -371,6 +371,10 @@ class RAGClient:
 
         # 4. Call Gemini with Fallback
         models_to_try = ["gemini-2.0-flash-lite-001", "gemini-1.5-flash", "gemini-1.0-pro", "gemini-pro"]
+        generation_config = {
+            "temperature": 0.3,
+            "max_output_tokens": 8192,
+        }
         last_error = None
 
         for model_name in models_to_try:
@@ -379,13 +383,13 @@ class RAGClient:
                 model = GenerativeModel(model_name)
                 
                 # Generate Draft (Strategist)
-                response_draft = model.generate_content(full_prompt)
+                response_draft = model.generate_content(full_prompt, generation_config=generation_config)
                 draft_text = response_draft.text
                 
                 # Generate Audit (Auditor) - Sequential call
                 # We use the same model instance for consistency
                 print("Generating Audit Report...")
-                response_audit = model.generate_content(full_auditor_prompt)
+                response_audit = model.generate_content(full_auditor_prompt, generation_config=generation_config)
 
                 # Generate Consistency Check (Critic)
                 print("Running Consistency Check...")
@@ -399,7 +403,7 @@ class RAGClient:
                 GENERATED DRAFT:
                 {draft_text}
                 """
-                response_consistency = model.generate_content(full_consistency_prompt)
+                response_consistency = model.generate_content(full_consistency_prompt, generation_config=generation_config)
                 consistency_json = response_consistency.text.replace("```json", "").replace("```", "").strip()
 
                 return {

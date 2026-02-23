@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CommentThread from '../components/CommentThread';
 
 /**
@@ -13,6 +14,7 @@ const KPIWithComments = ({
     showThreadByDefault = false,
     style = {}
 }) => {
+    const { t } = useTranslation();
     const [showThread, setShowThread] = useState(showThreadByDefault);
 
     return (
@@ -39,9 +41,9 @@ const KPIWithComments = ({
                         gap: '0.25rem',
                         whiteSpace: 'nowrap'
                     }}
-                    title="Afficher/Masquer les commentaires"
+                    title={t('comments.toggleComments')}
                 >
-                    💬 {showThread ? 'Masquer' : 'Commentaires'}
+                    💬 {showThread ? t('comments.hide') : t('comments.showComments')}
                 </button>
             </div>
 

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BarChart3, TrendingUp, Users, Database, Zap, AlertCircle, Clock, CheckCircle, FileText } from 'lucide-react';
 import { API_BASE_URL } from '../api/apiClient';
 import { auth } from '../firebase-config';
 
 export default function AnalyticsPage() {
+  const { t } = useTranslation();
   const [analytics, setAnalytics] = useState(null);
   const [timeseries, setTimeseries] = useState([]);
   const [confidenceDistribution, setConfidenceDistribution] = useState(null);
@@ -24,7 +26,7 @@ export default function AnalyticsPage() {
 
       const user = auth.currentUser;
       if (!user) {
-        throw new Error('Vous devez être connecté pour accéder à cette page');
+        throw new Error(t('analytics.loginRequired'));
       }
       const token = await user.getIdToken();
       
@@ -35,7 +37,7 @@ export default function AnalyticsPage() {
 
       if (!analyticsRes.ok) {
         if (analyticsRes.status === 403) {
-          throw new Error('Accès refusé: Vous devez être administrateur pour accéder à cette page');
+          throw new Error(t('analytics.accessDenied'));
         }
         throw new Error(`HTTP ${analyticsRes.status}`);
       }
@@ -94,7 +96,7 @@ export default function AnalyticsPage() {
     return (
       <div style={{ padding: '30px', textAlign: 'center' }}>
         <div className="spinner" />
-        <p>Chargement des analytics...</p>
+        <p>{t('analytics.loadingAnalytics')}</p>
       </div>
     );
   }
@@ -105,12 +107,12 @@ export default function AnalyticsPage() {
         <div style={{ background: '#fee', border: '1px solid #fcc', borderRadius: '8px', padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
           <AlertCircle size={24} color="#c33" />
           <p style={{ marginTop: '10px', fontWeight: 'bold' }}>{error}</p>
-          {error.includes('administrateur') ? (
+          {error.includes(t('analytics.accessDenied').split(':')[0]) ? (
             <p style={{ marginTop: '10px', fontSize: '14px' }}>
-              Cette page est réservée aux administrateurs. Contactez votre responsable si vous pensez que c'est une erreur.
+              {t('analytics.adminOnly')}
             </p>
           ) : (
-            <button onClick={fetchAllAnalytics} style={{ marginTop: '15px' }}>Réessayer</button>
+            <button onClick={fetchAllAnalytics} style={{ marginTop: '15px' }}>{t('analytics.retry')}</button>
           )}
         </div>
       </div>
@@ -129,23 +131,23 @@ export default function AnalyticsPage() {
         </h1>
 
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <label>Période:</label>
+          <label>{t('analytics.period')}</label>
           <select 
             value={timeRange} 
             onChange={(e) => setTimeRange(Number(e.target.value))}
             style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ddd' }}
           >
-            <option value={7}>7 jours</option>
-            <option value={30}>30 jours</option>
-            <option value={90}>90 jours</option>
-            <option value={180}>6 mois</option>
+            <option value={7}>{t('analytics.days7')}</option>
+            <option value={30}>{t('analytics.days30')}</option>
+            <option value={90}>{t('analytics.days90')}</option>
+            <option value={180}>{t('analytics.months6')}</option>
           </select>
           
           <button 
             onClick={fetchAllAnalytics}
             style={{ padding: '8px 16px', borderRadius: '6px', background: '#3182ce', color: 'white', border: 'none', cursor: 'pointer' }}
           >
-            Actualiser
+            {t('analytics.refresh')}
           </button>
         </div>
       </div>
@@ -153,11 +155,11 @@ export default function AnalyticsPage() {
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '30px', borderBottom: '2px solid #e2e8f0' }}>
         {[
-          { id: 'overview', label: 'Vue d\'ensemble', icon: <BarChart3 size={18} /> },
-          { id: 'extraction', label: 'Extraction', icon: <FileText size={18} /> },
-          { id: 'api', label: 'Performance API', icon: <Zap size={18} /> },
-          { id: 'users', label: 'Utilisateurs', icon: <Users size={18} /> },
-          { id: 'ai', label: 'IA & Coûts', icon: <Database size={18} /> }
+          { id: 'overview', label: t('analytics.tabs.overview'), icon: <BarChart3 size={18} /> },
+          { id: 'extraction', label: t('analytics.tabs.extraction'), icon: <FileText size={18} /> },
+          { id: 'api', label: t('analytics.tabs.api'), icon: <Zap size={18} /> },
+          { id: 'users', label: t('analytics.tabs.users'), icon: <Users size={18} /> },
+          { id: 'ai', label: t('analytics.tabs.ai'), icon: <Database size={18} /> }
         ].map(tab => (
           <button
             key={tab.id}
@@ -189,6 +191,7 @@ export default function AnalyticsPage() {
           users={user_engagement}
           quality={data_quality}
           duplicates={duplicate_detection}
+          t={t}
         />
       )}
 
@@ -197,22 +200,24 @@ export default function AnalyticsPage() {
           stats={extraction_stats}
           timeseries={timeseries}
           confidence={confidenceDistribution}
+          t={t}
         />
       )}
 
       {activeTab === 'api' && (
-        <ApiTab performance={api_performance} />
+        <ApiTab performance={api_performance} t={t} />
       )}
 
       {activeTab === 'users' && (
         <UsersTab 
           engagement={user_engagement}
           features={featureAdoption}
+          t={t}
         />
       )}
 
       {activeTab === 'ai' && (
-        <AiTab vertexStats={vertex_ai_stats} />
+        <AiTab vertexStats={vertex_ai_stats} t={t} />
       )}
     </div>
   );
@@ -220,22 +225,22 @@ export default function AnalyticsPage() {
 
 // ========== TABS COMPONENTS ==========
 
-function OverviewTab({ extraction, users, quality, duplicates }) {
+function OverviewTab({ extraction, users, quality, duplicates, t }) {
   return (
     <div>
-      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>Vue d'ensemble</h2>
+      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>{t('analytics.overview.title')}</h2>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
         <StatCard
-          title="Taux de Succès Extraction"
+          title={t('analytics.overview.extractionSuccessRate')}
           value={`${extraction?.success_rate || 0}%`}
-          subtitle={`${extraction?.successful_extractions || 0} / ${extraction?.total_extractions || 0} documents`}
+          subtitle={`${extraction?.successful_extractions || 0} / ${extraction?.total_extractions || 0} ${t('analytics.overview.documents')}`}
           icon={<CheckCircle size={24} color="#38a169" />}
           color="#f0fff4"
         />
         
         <StatCard
-          title="Temps Médian (P50)"
+          title={t('analytics.overview.medianTime')}
           value={`${Math.round(extraction?.p50_ms / 1000) || 0}s`}
           subtitle={`P95: ${Math.round(extraction?.p95_ms / 1000) || 0}s, P99: ${Math.round(extraction?.p99_ms / 1000) || 0}s`}
           icon={<Clock size={24} color="#3182ce" />}
@@ -243,31 +248,31 @@ function OverviewTab({ extraction, users, quality, duplicates }) {
         />
         
         <StatCard
-          title="Utilisateurs Actifs"
+          title={t('analytics.overview.activeUsers')}
           value={users?.total_active_users || 0}
-          subtitle={`DAU moyen: ${Math.round(users?.avg_dau) || 0}, Stickiness: ${users?.stickiness || 0}%`}
+          subtitle={t('analytics.overview.dauAvg', { dau: Math.round(users?.avg_dau) || 0, stickiness: users?.stickiness || 0 })}
           icon={<Users size={24} color="#805ad5" />}
           color="#faf5ff"
         />
         
         <StatCard
-          title="KPIs Extraits (Moyenne)"
+          title={t('analytics.overview.avgKpis')}
           value={extraction?.avg_kpis_per_doc?.toFixed(1) || '0.0'}
-          subtitle={`Médiane: ${extraction?.median_kpis || 0} KPIs/doc`}
+          subtitle={t('analytics.overview.medianKpis', { count: extraction?.median_kpis || 0 })}
           icon={<TrendingUp size={24} color="#dd6b20" />}
           color="#fffaf0"
         />
         
         <StatCard
-          title="Taux de Doublons"
+          title={t('analytics.overview.duplicateRate')}
           value={`${duplicates?.detection_rate || 0}%`}
-          subtitle={`${duplicates?.total_conflicts || 0} conflits détectés`}
+          subtitle={t('analytics.overview.conflictsDetected', { count: duplicates?.total_conflicts || 0 })}
           icon={<AlertCircle size={24} color="#d69e2e" />}
           color="#fefcbf"
         />
         
         <StatCard
-          title="Qualité Données E1"
+          title={t('analytics.overview.dataQualityE1')}
           value={`${quality?.e1_completeness?.toFixed(0) || 0}%`}
           subtitle={`S1: ${quality?.s1_completeness?.toFixed(0) || 0}%, G1: ${quality?.g1_completeness?.toFixed(0) || 0}%`}
           icon={<Database size={24} color="#38a169" />}
@@ -278,38 +283,38 @@ function OverviewTab({ extraction, users, quality, duplicates }) {
   );
 }
 
-function ExtractionTab({ stats, timeseries, confidence }) {
+function ExtractionTab({ stats, timeseries, confidence, t }) {
   return (
     <div>
-      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>Extraction de Documents</h2>
+      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>{t('analytics.extraction.title')}</h2>
       
       {/* KPIs principaux */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '30px' }}>
         <StatCard
-          title="Total Extractions"
+          title={t('analytics.extraction.totalExtractions')}
           value={stats?.total_extractions || 0}
-          subtitle={`${stats?.successful_extractions || 0} réussies`}
+          subtitle={t('analytics.extraction.successful', { count: stats?.successful_extractions || 0 })}
           icon={<FileText size={24} color="#3182ce" />}
           color="#ebf8ff"
         />
         <StatCard
-          title="Taux de Succès"
+          title={t('analytics.extraction.successRate')}
           value={`${(stats?.success_rate || 0).toFixed(0)}%`}
-          subtitle="Documents traités avec succès"
+          subtitle={t('analytics.extraction.processedSuccessfully')}
           icon={<CheckCircle size={24} color="#38a169" />}
           color="#f0fff4"
         />
         <StatCard
-          title="Temps Médian"
+          title={t('analytics.extraction.medianTime')}
           value={`${((stats?.p50_ms || 0) / 1000).toFixed(1)}s`}
           subtitle={`P95: ${((stats?.p95_ms || 0) / 1000).toFixed(1)}s`}
           icon={<Clock size={24} color="#dd6b20" />}
           color="#fffaf0"
         />
         <StatCard
-          title="KPIs / Document"
+          title={t('analytics.extraction.kpisPerDoc')}
           value={(stats?.avg_kpis_per_doc || 0).toFixed(1)}
-          subtitle={`Médiane: ${stats?.median_kpis || 0}`}
+          subtitle={t('analytics.extraction.median', { count: stats?.median_kpis || 0 })}
           icon={<TrendingUp size={24} color="#805ad5" />}
           color="#faf5ff"
         />
@@ -318,13 +323,13 @@ function ExtractionTab({ stats, timeseries, confidence }) {
       {/* Types et Tailles côte à côte */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '30px' }}>
         <div style={{ background: 'white', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-          <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '12px' }}>Par Type</h3>
+          <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '12px' }}>{t('analytics.extraction.byType')}</h3>
           <ProgressBar label="PDF" value={stats?.pdf_count || 0} total={stats?.total_extractions || 1} color="#3182ce" />
           <ProgressBar label="Excel/CSV" value={stats?.excel_count || 0} total={stats?.total_extractions || 1} color="#38a169" />
           <ProgressBar label="Image" value={stats?.image_count || 0} total={stats?.total_extractions || 1} color="#805ad5" />
         </div>
         <div style={{ background: 'white', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-          <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '12px' }}>Par Taille</h3>
+          <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '12px' }}>{t('analytics.extraction.bySize')}</h3>
           <ProgressBar label="< 1 MB" value={stats?.small_files || 0} total={stats?.total_extractions || 1} color="#38a169" />
           <ProgressBar label="1-10 MB" value={stats?.medium_files || 0} total={stats?.total_extractions || 1} color="#dd6b20" />
           <ProgressBar label="> 10 MB" value={stats?.large_files || 0} total={stats?.total_extractions || 1} color="#e53e3e" />
@@ -334,16 +339,16 @@ function ExtractionTab({ stats, timeseries, confidence }) {
       {/* Timeseries */}
       {timeseries && timeseries.length > 0 && (
         <div style={{ background: 'white', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '30px' }}>
-          <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '15px' }}>Évolution Temporelle</h3>
+          <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '15px' }}>{t('analytics.extraction.timeseries')}</h3>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                  <th style={{ padding: '10px', textAlign: 'left', fontSize: '13px', color: '#718096' }}>Période</th>
-                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Documents</th>
-                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Durée Moy.</th>
-                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>KPIs Moy.</th>
-                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Succès</th>
+                  <th style={{ padding: '10px', textAlign: 'left', fontSize: '13px', color: '#718096' }}>{t('analytics.extraction.periodCol')}</th>
+                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.extraction.documentsCol')}</th>
+                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.extraction.avgDuration')}</th>
+                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.extraction.avgKpis')}</th>
+                  <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.extraction.success')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -379,9 +384,9 @@ function ExtractionTab({ stats, timeseries, confidence }) {
       {confidence && confidence.distribution && confidence.distribution.length > 0 && (
         <div style={{ background: 'white', padding: '20px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
           <h3 style={{ fontSize: '15px', color: '#4a5568', marginBottom: '10px' }}>
-            Scores de Confiance 
+            {t('analytics.extraction.confidenceScores')}
             <span style={{ fontWeight: 'normal', color: '#a0aec0', marginLeft: '10px' }}>
-              Moyenne: {(confidence.avg_confidence || 0).toFixed(2)}
+              {t('analytics.extraction.average', { value: (confidence.avg_confidence || 0).toFixed(2) })}
             </span>
           </h3>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -403,26 +408,26 @@ function ExtractionTab({ stats, timeseries, confidence }) {
   );
 }
 
-function ApiTab({ performance }) {
+function ApiTab({ performance, t }) {
   if (!performance || performance.length === 0) {
-    return <div style={{ padding: '20px' }}>Aucune donnée de performance API disponible</div>;
+    return <div style={{ padding: '20px' }}>{t('analytics.api.noData')}</div>;
   }
 
   return (
     <div>
-      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>Performance API (7 derniers jours)</h2>
+      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>{t('analytics.api.title')}</h2>
       
       <div style={{ background: 'white', padding: '20px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-              <th style={{ padding: '10px', textAlign: 'left', fontSize: '13px', color: '#718096' }}>Endpoint</th>
-              <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Requêtes</th>
+              <th style={{ padding: '10px', textAlign: 'left', fontSize: '13px', color: '#718096' }}>{t('analytics.api.endpoint')}</th>
+              <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.api.requests')}</th>
               <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>P50 (ms)</th>
               <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>P95 (ms)</th>
               <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>P99 (ms)</th>
-              <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Taux Erreur</th>
-              <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Payload (KB)</th>
+              <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.api.errorRate')}</th>
+              <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.api.payload')}</th>
             </tr>
           </thead>
           <tbody>
@@ -458,48 +463,48 @@ function ApiTab({ performance }) {
   );
 }
 
-function UsersTab({ engagement, features }) {
+function UsersTab({ engagement, features, t }) {
   return (
     <div>
-      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>Engagement Utilisateurs</h2>
+      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>{t('analytics.users.title')}</h2>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '40px' }}>
         <StatCard
-          title="Utilisateurs Actifs"
+          title={t('analytics.users.activeUsers')}
           value={engagement?.total_active_users || 0}
-          subtitle="Sur la période"
+          subtitle={t('analytics.users.onPeriod')}
           icon={<Users size={24} color="#805ad5" />}
           color="#faf5ff"
         />
         
         <StatCard
-          title="DAU Moyen"
+          title={t('analytics.users.avgDau')}
           value={Math.round(engagement?.avg_dau) || 0}
-          subtitle="Daily Active Users"
+          subtitle={t('analytics.users.dailyActiveUsers')}
           icon={<TrendingUp size={24} color="#3182ce" />}
           color="#ebf8ff"
         />
         
         <StatCard
-          title="WAU Max"
+          title={t('analytics.users.maxWau')}
           value={engagement?.max_wau || 0}
-          subtitle="Weekly Active Users"
+          subtitle={t('analytics.users.weeklyActiveUsers')}
           icon={<Users size={24} color="#38a169" />}
           color="#f0fff4"
         />
         
         <StatCard
-          title="Stickiness"
+          title={t('analytics.users.stickiness')}
           value={`${engagement?.stickiness || 0}%`}
-          subtitle="DAU/WAU ratio"
+          subtitle={t('analytics.users.dauWauRatio')}
           icon={<BarChart3 size={24} color="#dd6b20" />}
           color="#fffaf0"
         />
         
         <StatCard
-          title="Actions par Session"
+          title={t('analytics.users.actionsPerSession')}
           value={engagement?.avg_actions_per_session?.toFixed(1) || '0.0'}
-          subtitle="Moyenne"
+          subtitle={t('analytics.users.average')}
           icon={<Zap size={24} color="#d69e2e" />}
           color="#fefcbf"
         />
@@ -508,14 +513,14 @@ function UsersTab({ engagement, features }) {
       {/* Feature Adoption */}
       {features && features.length > 0 && (
         <div style={{ background: 'white', padding: '20px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-          <h3 style={{ fontSize: '16px', marginBottom: '15px' }}>Adoption des Features</h3>
+          <h3 style={{ fontSize: '16px', marginBottom: '15px' }}>{t('analytics.users.featureAdoption')}</h3>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                <th style={{ padding: '10px', textAlign: 'left', fontSize: '13px', color: '#718096' }}>Feature</th>
-                <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Utilisateurs Uniques</th>
-                <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Utilisations</th>
-                <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>Moy./User</th>
+                <th style={{ padding: '10px', textAlign: 'left', fontSize: '13px', color: '#718096' }}>{t('analytics.users.feature')}</th>
+                <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.users.uniqueUsers')}</th>
+                <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.users.usageCount')}</th>
+                <th style={{ padding: '10px', textAlign: 'right', fontSize: '13px', color: '#718096' }}>{t('analytics.users.avgPerUser')}</th>
               </tr>
             </thead>
             <tbody>
@@ -537,7 +542,7 @@ function UsersTab({ engagement, features }) {
   );
 }
 
-function AiTab({ vertexStats }) {
+function AiTab({ vertexStats, t }) {
   const inputTokens = vertexStats?.total_input_tokens || 0;
   const outputTokens = vertexStats?.total_output_tokens || 0;
   const totalTokens = inputTokens + outputTokens;
@@ -547,19 +552,19 @@ function AiTab({ vertexStats }) {
 
   return (
     <div>
-      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>Vertex AI & Coûts</h2>
+      <h2 style={{ fontSize: '20px', marginBottom: '20px', color: '#2c5282' }}>{t('analytics.ai.title')}</h2>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '40px' }}>
         <StatCard
-          title="Appels Vertex AI"
+          title={t('analytics.ai.vertexCalls')}
           value={totalCalls}
-          subtitle="Requêtes totales"
+          subtitle={t('analytics.ai.totalRequests')}
           icon={<Zap size={24} color="#3182ce" />}
           color="#ebf8ff"
         />
         
         <StatCard
-          title="Tokens Totaux"
+          title={t('analytics.ai.totalTokens')}
           value={totalTokens.toLocaleString()}
           subtitle={`Input: ${inputTokens.toLocaleString()}, Output: ${outputTokens.toLocaleString()}`}
           icon={<Database size={24} color="#805ad5" />}
@@ -567,29 +572,29 @@ function AiTab({ vertexStats }) {
         />
         
         <StatCard
-          title="Coût Total"
+          title={t('analytics.ai.totalCost')}
           value={`$${totalCost.toFixed(2)}`}
-          subtitle={`Moyenne: $${avgCost.toFixed(4)}/appel`}
+          subtitle={t('analytics.ai.avgPerCall', { avg: avgCost.toFixed(4) })}
           icon={<TrendingUp size={24} color="#38a169" />}
           color="#f0fff4"
         />
         
         <StatCard
-          title="Coût Estimé Mensuel"
+          title={t('analytics.ai.estimatedMonthlyCost')}
           value={`$${(totalCost * 30 / 30).toFixed(2)}`}
-          subtitle="Projection basée sur période"
+          subtitle={t('analytics.ai.projectionBased')}
           icon={<AlertCircle size={24} color="#dd6b20" />}
           color="#fffaf0"
         />
       </div>
 
       <div style={{ background: '#fffaf0', border: '1px solid #fbd38d', borderRadius: '8px', padding: '20px' }}>
-        <h3 style={{ fontSize: '16px', marginBottom: '10px', color: '#744210' }}>Optimisations Possibles</h3>
+        <h3 style={{ fontSize: '16px', marginBottom: '10px', color: '#744210' }}>{t('analytics.ai.optimizations')}</h3>
         <ul style={{ marginLeft: '20px', color: '#744210', fontSize: '14px', lineHeight: '1.8' }}>
-          <li>Ratio Input/Output: {outputTokens > 0 ? (inputTokens / outputTokens).toFixed(2) : 'N/A'}</li>
-          <li>Cacher les prompts système pour réduire les input tokens</li>
-          <li>Utiliser des modèles plus petits pour les tâches simples</li>
-          <li>Implémenter du rate limiting pour contrôler les coûts</li>
+          <li>{t('analytics.ai.ioRatio', { ratio: outputTokens > 0 ? (inputTokens / outputTokens).toFixed(2) : 'N/A' })}</li>
+          <li>{t('analytics.ai.cachePrompts')}</li>
+          <li>{t('analytics.ai.useSmallerModels')}</li>
+          <li>{t('analytics.ai.implementRateLimit')}</li>
         </ul>
       </div>
     </div>

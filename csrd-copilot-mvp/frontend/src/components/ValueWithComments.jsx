@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MessageCircle, AlertCircle } from 'lucide-react';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
@@ -15,6 +16,7 @@ const ValueWithComments = ({
     className = '',
     style = {}
 }) => {
+    const { t } = useTranslation();
     const [comments, setComments] = useState([]);
     const [showTooltip, setShowTooltip] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -114,7 +116,7 @@ const ValueWithComments = ({
                 }}>
                     <div style={{ marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-color)' }}>
                         <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-color)' }}>
-                            Commentaires sur cette valeur
+                            {t('comments.commentsOnValue')}
                         </div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                             KPI: {kpiId} • Valeur: {value} {unit}
@@ -123,11 +125,11 @@ const ValueWithComments = ({
 
                     {loading ? (
                         <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '1rem' }}>
-                            Chargement...
+                            {t('common.loading')}
                         </div>
                     ) : comments.length === 0 ? (
                         <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '1rem', fontSize: '0.85rem' }}>
-                            Aucun commentaire sur ce datapoint
+                            {t('comments.noCommentsDatapoint')}
                         </div>
                     ) : (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -163,7 +165,7 @@ const ValueWithComments = ({
                                             color: '#10b981',
                                             fontWeight: '500'
                                         }}>
-                                            ✓ Résolu par {comment.resolved_by}
+                                            ✓ {t('comments.resolvedBy', { name: comment.resolved_by })}
                                         </div>
                                     )}
                                 </div>

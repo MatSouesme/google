@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import KPIWithComments from '../components/KPIWithComments';
 import CommentThread from '../components/CommentThread';
 
@@ -7,6 +8,7 @@ import CommentThread from '../components/CommentThread';
  * Montre différents cas d'usage
  */
 const CommentsDemoPage = () => {
+    const { t } = useTranslation();
     const [selectedExample, setSelectedExample] = useState('wrapper');
 
     const demoKpis = [
@@ -38,10 +40,10 @@ const CommentsDemoPage = () => {
             {/* Header */}
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>
-                    🧪 Démo - Système de Commentaires
+                    🧪 {t('commentsDemo.title')}
                 </h1>
                 <p style={{ margin: '0.5rem 0 0 0', fontSize: '1rem', color: 'var(--text-secondary)' }}>
-                    Testez les différentes façons d'intégrer les commentaires
+                    {t('commentsDemo.subtitle')}
                 </p>
             </div>
 
@@ -51,34 +53,34 @@ const CommentsDemoPage = () => {
                     onClick={() => setSelectedExample('wrapper')}
                     className={selectedExample === 'wrapper' ? 'btn btn-primary' : 'btn btn-secondary'}
                 >
-                    📦 Exemple 1 : Wrapper KPI
+                    📦 {t('commentsDemo.example1')}
                 </button>
                 <button
                     onClick={() => setSelectedExample('direct')}
                     className={selectedExample === 'direct' ? 'btn btn-primary' : 'btn btn-secondary'}
                 >
-                    💬 Exemple 2 : Thread Direct
+                    💬 {t('commentsDemo.example2')}
                 </button>
                 <button
                     onClick={() => setSelectedExample('list')}
                     className={selectedExample === 'list' ? 'btn btn-primary' : 'btn btn-secondary'}
                 >
-                    📋 Exemple 3 : Liste de KPIs
+                    📋 {t('commentsDemo.example3')}
                 </button>
                 <button
                     onClick={() => setSelectedExample('split')}
                     className={selectedExample === 'split' ? 'btn btn-primary' : 'btn btn-secondary'}
                 >
-                    ↔️ Exemple 4 : Vue Split
+                    ↔️ {t('commentsDemo.example4')}
                 </button>
             </div>
 
             {/* Exemple 1 : Wrapper autour d'un KPI */}
             {selectedExample === 'wrapper' && (
                 <div>
-                    <h2 style={{ marginBottom: '1rem' }}>📦 Wrapper autour d'un KPI</h2>
+                    <h2 style={{ marginBottom: '1rem' }}>📦 {t('commentsDemo.wrapperTitle')}</h2>
                     <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
-                        Le composant <code>KPIWithComments</code> ajoute automatiquement un bouton "💬 Commentaires"
+                        {t('commentsDemo.wrapperDesc')}
                     </p>
 
                     <div className="card" style={{ padding: '1.5rem', backgroundColor: '#f8f9fa' }}>
@@ -106,7 +108,7 @@ const CommentsDemoPage = () => {
 
                         {/* Exemple live */}
                         <div style={{ borderTop: '2px dashed #ccc', paddingTop: '1.5rem' }}>
-                            <h4 style={{ marginBottom: '1rem', color: '#3b82f6' }}>↓ Résultat live ↓</h4>
+                            <h4 style={{ marginBottom: '1rem', color: '#3b82f6' }}>↓ {t('commentsDemo.liveResult')} ↓</h4>
                             <KPIWithComments 
                                 kpiId="E1-6"
                                 dataSource="demo_page"
@@ -159,9 +161,9 @@ const CommentsDemoPage = () => {
             {/* Exemple 2 : Thread direct */}
             {selectedExample === 'direct' && (
                 <div>
-                    <h2 style={{ marginBottom: '1rem' }}>💬 Thread de commentaires direct</h2>
+                    <h2 style={{ marginBottom: '1rem' }}>💬 {t('commentsDemo.directTitle')}</h2>
                     <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
-                        Le composant <code>CommentThread</code> affiche directement le thread sans wrapper
+                        {t('commentsDemo.directDesc')}
                     </p>
 
                     <div className="card" style={{ padding: '1.5rem', backgroundColor: '#f8f9fa' }}>
@@ -181,7 +183,7 @@ const CommentsDemoPage = () => {
                         </pre>
 
                         <div style={{ borderTop: '2px dashed #ccc', paddingTop: '1.5rem' }}>
-                            <h4 style={{ marginBottom: '1rem', color: '#3b82f6' }}>↓ Résultat live ↓</h4>
+                            <h4 style={{ marginBottom: '1rem', color: '#3b82f6' }}>↓ {t('commentsDemo.liveResult')} ↓</h4>
                             <div className="card" style={{ padding: '1rem', marginBottom: '1rem' }}>
                                 <h3>E1-1 - Plan de transition pour l'atténuation du changement climatique</h3>
                                 <p style={{ color: 'var(--text-secondary)' }}>
@@ -200,9 +202,9 @@ const CommentsDemoPage = () => {
             {/* Exemple 3 : Liste de KPIs */}
             {selectedExample === 'list' && (
                 <div>
-                    <h2 style={{ marginBottom: '1rem' }}>📋 Liste de KPIs avec commentaires</h2>
+                    <h2 style={{ marginBottom: '1rem' }}>📋 {t('commentsDemo.listTitle')}</h2>
                     <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
-                        Parfait pour un dashboard ou une vue d'ensemble
+                        {t('commentsDemo.listDesc')}
                     </p>
 
                     <div className="card" style={{ padding: '1.5rem', backgroundColor: '#f8f9fa' }}>
@@ -227,7 +229,7 @@ const CommentsDemoPage = () => {
                         </pre>
 
                         <div style={{ borderTop: '2px dashed #ccc', paddingTop: '1.5rem' }}>
-                            <h4 style={{ marginBottom: '1rem', color: '#3b82f6' }}>↓ Résultat live ↓</h4>
+                            <h4 style={{ marginBottom: '1rem', color: '#3b82f6' }}>↓ {t('commentsDemo.liveResult')} ↓</h4>
                             <div style={{ display: 'grid', gap: '1rem' }}>
                                 {demoKpis.map((kpi) => (
                                     <KPIWithComments
@@ -257,7 +259,7 @@ const CommentsDemoPage = () => {
                                                             padding: '0.15rem 0.5rem',
                                                             borderRadius: '4px'
                                                         }}>
-                                                            {kpi.type === 'quantitative' ? 'Quantitatif' : 'Narratif'}
+                                                            {kpi.type === 'quantitative' ? t('commentsDemo.quantitative') : t('commentsDemo.narrative')}
                                                         </span>
                                                     </div>
                                                     <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
@@ -278,7 +280,7 @@ const CommentsDemoPage = () => {
                                                             display: 'inline-block',
                                                             marginTop: '0.5rem'
                                                         }}>
-                                                            ⚠️ Manquant
+                                                            ⚠️ {t('commentsDemo.missing')}
                                                         </span>
                                                     )}
                                                 </div>
@@ -295,9 +297,9 @@ const CommentsDemoPage = () => {
             {/* Exemple 4 : Vue split */}
             {selectedExample === 'split' && (
                 <div>
-                    <h2 style={{ marginBottom: '1rem' }}>↔️ Vue Split : Liste + Thread</h2>
+                    <h2 style={{ marginBottom: '1rem' }}>↔️ {t('commentsDemo.splitTitle')}</h2>
                     <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
-                        Idéal pour une page dédiée aux discussions
+                        {t('commentsDemo.splitDesc')}
                     </p>
 
                     <SplitViewDemo kpis={demoKpis} />
@@ -306,13 +308,13 @@ const CommentsDemoPage = () => {
 
             {/* Tips section */}
             <div className="card" style={{ padding: '1.5rem', marginTop: '2rem', backgroundColor: '#fffbeb', border: '2px solid #f59e0b' }}>
-                <h3 style={{ marginTop: 0, color: '#f59e0b' }}>💡 Tips d'utilisation</h3>
+                <h3 style={{ marginTop: 0, color: '#f59e0b' }}>💡 {t('commentsDemo.tips')}</h3>
                 <ul style={{ marginBottom: 0 }}>
-                    <li><strong>Wrapper flexible</strong> : <code>KPIWithComments</code> peut entourer n'importe quel contenu</li>
-                    <li><strong>3 types de messages</strong> : Commentaire 💬, Question ❓, Alerte ⚠️</li>
-                    <li><strong>Mentions</strong> : Utilisez <code>@email</code> pour notifier quelqu'un</li>
-                    <li><strong>Résolution</strong> : Marquez les questions/alertes comme résolues quand c'est fait</li>
-                    <li><strong>Threads illimités</strong> : Répondez aux réponses aux réponses... 🔁</li>
+                    <li><strong>{t('commentsDemo.tip1')}</strong></li>
+                    <li><strong>{t('commentsDemo.tip2')}</strong></li>
+                    <li><strong>{t('commentsDemo.tip3')}</strong></li>
+                    <li><strong>{t('commentsDemo.tip4')}</strong></li>
+                    <li><strong>{t('commentsDemo.tip5')}</strong></li>
                 </ul>
             </div>
         </div>
@@ -321,13 +323,14 @@ const CommentsDemoPage = () => {
 
 // Composant pour la vue split
 const SplitViewDemo = ({ kpis }) => {
+    const { t } = useTranslation();
     const [selectedKpi, setSelectedKpi] = useState(null);
 
     return (
         <div style={{ display: 'grid', gridTemplateColumns: selectedKpi ? '400px 1fr' : '1fr', gap: '1.5rem' }}>
             {/* Liste des KPIs */}
             <div>
-                <h3 style={{ marginBottom: '1rem' }}>KPIs disponibles</h3>
+                <h3 style={{ marginBottom: '1rem' }}>{t('commentsDemo.availableKpis')}</h3>
                 <div style={{ display: 'grid', gap: '0.75rem' }}>
                     {kpis.map((kpi) => (
                         <div
@@ -374,7 +377,7 @@ const SplitViewDemo = ({ kpis }) => {
             {selectedKpi && (
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3 style={{ margin: 0 }}>Discussion - {selectedKpi.id}</h3>
+                        <h3 style={{ margin: 0 }}>{t('commentsDemo.discussion')} - {selectedKpi.id}</h3>
                         <button
                             onClick={() => setSelectedKpi(null)}
                             style={{
@@ -407,7 +410,7 @@ const SplitViewDemo = ({ kpis }) => {
                 }}>
                     <div>
                         <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>👈</div>
-                        <p>Sélectionnez un KPI pour voir les commentaires</p>
+                        <p>{t('commentsDemo.selectKpi')}</p>
                     </div>
                 </div>
             )}

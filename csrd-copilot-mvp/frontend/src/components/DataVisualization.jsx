@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
 
 const DataVisualization = () => {
+    const { t } = useTranslation();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -32,7 +34,7 @@ const DataVisualization = () => {
                 setData(result);
             } catch (err) {
                 console.error(err);
-                setError("Could not load dashboard data. Have you synced any data yet?");
+                setError(t('dataVisualization.noDataDesc'));
             } finally {
                 setLoading(false);
             }
@@ -41,13 +43,13 @@ const DataVisualization = () => {
         fetchData();
     }, []);
 
-    if (loading) return <div style={{ color: 'var(--text-secondary)' }}>Loading visualization...</div>;
+    if (loading) return <div style={{ color: 'var(--text-secondary)' }}>{t('dataVisualization.loadingVisualization')}</div>;
     if (error) return <div style={{ color: 'var(--error-color)' }}>{error}</div>;
     if (!data || (data.emissions_by_year.length === 0 && data.top_facilities.length === 0)) {
         return (
             <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-                <h3 style={{ color: 'var(--text-color)' }}>No Data Available</h3>
-                <p>Please use the "Connectors" tab to sync Salesforce data or upload a CSV.</p>
+                <h3 style={{ color: 'var(--text-color)' }}>{t('dataVisualization.noDataTitle')}</h3>
+                <p>{t('dataVisualization.noDataDesc')}</p>
             </div>
         );
     }
@@ -56,16 +58,16 @@ const DataVisualization = () => {
 
     return (
         <div className="dashboard-container">
-            <h2 style={{ color: 'var(--primary-color)', marginTop: 0 }}>Data Visualization</h2>
+            <h2 style={{ color: 'var(--primary-color)', marginTop: 0 }}>{t('dataVisualization.title')}</h2>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-                Real-time insights from your CSRD data warehouse (BigQuery).
+                {t('dataVisualization.subtitle')}
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                 
                 {/* Chart 1: Emissions by Year */}
                 <div style={{ backgroundColor: 'var(--surface-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--text-color)' }}>CO2 Emissions by Year (Scopes 1, 2, 3)</h3>
+                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--text-color)' }}>{t('dataVisualization.emissionsByYear')}</h3>
                     <div style={{ height: '300px', width: '100%' }}>
                         <ResponsiveContainer>
                             <BarChart data={data.emissions_by_year}>
@@ -87,7 +89,7 @@ const DataVisualization = () => {
 
                 {/* Chart 2: Top Facilities */}
                 <div style={{ backgroundColor: 'var(--surface-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--text-color)' }}>Top 5 Facilities (Total Emissions)</h3>
+                    <h3 style={{ marginTop: 0, fontSize: '1rem', color: 'var(--text-color)' }}>{t('dataVisualization.topFacilities')}</h3>
                     <div style={{ height: '300px', width: '100%' }}>
                         <ResponsiveContainer>
                             <PieChart>

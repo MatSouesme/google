@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { auth } from '../firebase-config';
 import { API_BASE_URL } from '../api/apiClient';
 
 const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointValue }) => {
+    const { t } = useTranslation();
     const [comments, setComments] = useState([]);
     const [summary, setSummary] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -134,7 +136,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
     };
 
     const deleteComment = async (commentId) => {
-        if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) return;
+        if (!window.confirm(t('comments.deleteConfirm'))) return;
 
         try {
             const user = auth.currentUser;
@@ -181,10 +183,10 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 1) return 'À l\'instant';
-        if (diffMins < 60) return `Il y a ${diffMins} min`;
-        if (diffHours < 24) return `Il y a ${diffHours}h`;
-        if (diffDays < 7) return `Il y a ${diffDays}j`;
+        if (diffMins < 1) return t('comments.justNow');
+        if (diffMins < 60) return t('comments.minutesAgo', { count: diffMins });
+        if (diffHours < 24) return t('comments.hoursAgo', { count: diffHours });
+        if (diffDays < 7) return t('comments.daysAgo', { count: diffDays });
         return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
     };
 
@@ -228,7 +230,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                                     {formatDate(comment.created_at)}
                                     {isResolved && (
                                         <span style={{ marginLeft: '0.5rem', color: '#10b981' }}>
-                                            ✓ Résolu par {comment.resolved_by}
+                                            ✓ {t('comments.resolvedBy', { name: comment.resolved_by })}
                                         </span>
                                     )}
                                 </div>
@@ -251,7 +253,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                                     cursor: 'pointer'
                                 }}
                             >
-                                Répondre
+                                {t('comments.reply')}
                             </button>
                             {!isResolved && comment.comment_type !== 'comment' && (
                                 <button
@@ -266,7 +268,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    Résoudre
+                                    {t('comments.resolve')}
                                 </button>
                             )}
                             {isAuthor && (
@@ -282,7 +284,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    Supprimer
+                                    {t('comments.delete')}
                                 </button>
                             )}
                         </div>
@@ -326,7 +328,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
     };
 
     if (loading) {
-        return <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-secondary)' }}>Chargement des commentaires...</div>;
+        return <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-secondary)' }}>{t('comments.loadingComments')}</div>;
     }
 
     return (
@@ -342,10 +344,10 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                     borderRadius: '6px'
                 }}>
                     <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem' }}>
-                        <span>💬 {summary.total_comments} commentaire{summary.total_comments > 1 ? 's' : ''}</span>
+                        <span>💬 {summary.total_comments > 1 ? t('comments.commentsCountPlural', { count: summary.total_comments }) : t('comments.commentsCount', { count: summary.total_comments })}</span>
                         {summary.unresolved_count > 0 && (
                             <span style={{ color: '#ef4444' }}>
-                                ⚠️ {summary.unresolved_count} non résolu{summary.unresolved_count > 1 ? 's' : ''}
+                                ⚠️ {t('comments.unresolved', { count: summary.unresolved_count })}
                             </span>
                         )}
                     </div>
@@ -355,7 +357,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                             checked={showResolved}
                             onChange={(e) => setShowResolved(e.target.checked)}
                         />
-                        Afficher résolus
+                        {t('comments.showResolved')}
                     </label>
                 </div>
             )}
@@ -373,7 +375,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                         justifyContent: 'space-between',
                         alignItems: 'center'
                     }}>
-                        <span>↪️ Réponse à <strong>{replyTo.author_name}</strong></span>
+                        <span>↪️ {t('comments.replyTo')} <strong>{replyTo.author_name}</strong></span>
                         <button
                             onClick={() => setReplyTo(null)}
                             style={{ 
@@ -403,7 +405,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                                 cursor: 'pointer'
                             }}
                         >
-                            {getCommentTypeIcon(type)} {type === 'comment' ? 'Commentaire' : type === 'question' ? 'Question' : 'Alerte'}
+                            {getCommentTypeIcon(type)} {type === 'comment' ? t('comments.commentType') : type === 'question' ? t('comments.questionType') : t('comments.alertType')}
                         </button>
                     ))}
                 </div>
@@ -413,9 +415,9 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder={
-                        commentType === 'question' ? 'Posez une question sur ce KPI...' :
-                        commentType === 'alert' ? 'Signalez un problème...' :
-                        'Ajoutez un commentaire... (Utilisez @email pour mentionner)'
+                        commentType === 'question' ? t('comments.placeholderQuestion') :
+                        commentType === 'alert' ? t('comments.placeholderAlert') :
+                        t('comments.placeholderComment')
                     }
                     style={{
                         width: '100%',
@@ -440,7 +442,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                             className="btn btn-secondary"
                             style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                         >
-                            Annuler
+                            {t('comments.cancel')}
                         </button>
                     )}
                     <button
@@ -449,7 +451,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                         className="btn btn-primary"
                         style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }}
                     >
-                        {replyTo ? 'Répondre' : 'Publier'}
+                        {replyTo ? t('comments.reply') : t('comments.post')}
                     </button>
                 </div>
             </div>
@@ -469,7 +471,7 @@ const CommentThread = ({ kpiId, dataSource, referenceId, datapointId, datapointV
                     backgroundColor: 'var(--bg-secondary)',
                     borderRadius: '8px'
                 }}>
-                    💬 Aucun commentaire pour le moment. Soyez le premier à commenter !
+                    💬 {t('comments.noComments')}
                 </div>
             ) : (
                 <div>
