@@ -1,0 +1,42 @@
+[
+  {
+    "company_name": "LVMH",
+    "domain": "lvmh.com",
+    "country": "FR",
+    "pdf_links": [],
+    "discovered_at": "2026-01-21T11:19:25.459231",
+    "total_pdfs_found": 0
+  },
+  {
+    "company_name": "SAP",
+    "domain": "sap.com",
+    "country": "DE",
+    "pdf_links": [],
+    "discovered_at": "2026-01-21T11:19:28.204428",
+    "total_pdfs_found": 0
+  },
+  {
+    "company_name": "ASML",
+    "domain": "asml.com",
+    "country": "NL",
+    "pdf_links": [],
+    "discovered_at": "2026-01-21T11:19:35.665966",
+    "total_pdfs_found": 0
+  },
+  {
+    "company_name": "Enel",
+    "domain": "enel.com",
+    "country": "IT",
+    "pdf_links": [],
+    "discovered_at": "2026-01-21T11:20:05.812522",
+    "total_pdfs_found": 0
+  },
+  {
+    "company_name": "Volkswagen",
+    "domain": "volkswagen.com",
+    "country": "DE",
+    "pdf_links": [],
+    "discovered_at": "2026-01-21T11:20:12.990089",
+    "total_pdfs_found": 0
+  }
+]

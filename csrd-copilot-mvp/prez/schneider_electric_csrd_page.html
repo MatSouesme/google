@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schneider Electric: Your Path to CSRD Excellence | Ecoply</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --se-green: #3DCD58;
+            --se-navy: #1C2833;
+            --se-light: #F8F9FA;
+            --se-white: #FFFFFF;
+            --se-gray: #6C757D;
+            --se-accent: #00E5A0;
+            --font-display: 'Unbounded', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--se-white);
+            color: var(--se-navy);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(28, 40, 51, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--se-navy);
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--se-green);
+        }
+
+        .nav-cta {
+            background: var(--se-green);
+            color: var(--se-white);
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(61, 205, 88, 0.25);
+        }
+
+        .nav-cta:hover {
+            background: #32B649;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(61, 205, 88, 0.35);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            background: linear-gradient(135deg, #1C2833 0%, #2C3E50 100%);
+            color: var(--se-white);
+            padding: 6rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(61, 205, 88, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 229, 160, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .company-tag {
+            display: inline-block;
+            background: rgba(61, 205, 88, 0.15);
+            color: var(--se-green);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(61, 205, 88, 0.3);
+            animation: fadeSlideDown 0.8s ease;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeSlideDown 0.8s ease 0.2s both;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--se-green) 0%, var(--se-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            font-weight: 400;
+            animation: fadeSlideDown 0.8s ease 0.4s both;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            animation: fadeSlideUp 0.8s ease 0.6s both;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-4px);
+            border-color: var(--se-green);
+        }
+
+        .stat-number {
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--se-green);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--se-gray);
+            margin-bottom: 4rem;
+        }
+
+        /* Challenge Section */
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .challenge-card {
+            background: var(--se-light);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--se-green), var(--se-accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .challenge-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .challenge-card:hover {
+            background: var(--se-white);
+            border-color: var(--se-green);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(28, 40, 51, 0.1);
+        }
+
+        .challenge-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--se-green), var(--se-accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--se-navy);
+        }
+
+        .challenge-card ul {
+            list-style: none;
+        }
+
+        .challenge-card li {
+            padding-left: 1.75rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            color: var(--se-gray);
+            font-size: 1rem;
+        }
+
+        .challenge-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--se-green);
+            font-weight: 700;
+        }
+
+        /* Savings Section */
+        .savings-section {
+            background: var(--se-navy);
+            color: var(--se-white);
+            padding: 6rem 3rem;
+            position: relative;
+        }
+
+        .savings-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(61, 205, 88, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(0, 229, 160, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .savings-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .comparison-table {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr;
+            gap: 1.5rem;
+            padding: 2rem 2.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr;
+            gap: 1.5rem;
+            padding: 2rem 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(61, 205, 88, 0.05);
+        }
+
+        .table-row strong {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .table-cell {
+            font-size: 1rem;
+        }
+
+        .savings-highlight {
+            color: var(--se-green);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .roi-callout {
+            background: linear-gradient(135deg, var(--se-green), var(--se-accent));
+            padding: 3rem;
+            border-radius: 16px;
+            margin-top: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(61, 205, 88, 0.3);
+        }
+
+        .roi-callout-number {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--se-navy);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .roi-callout-text {
+            font-size: 1.25rem;
+            color: var(--se-navy);
+            font-weight: 600;
+        }
+
+        /* Workflow Section */
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .workflow-step {
+            background: var(--se-white);
+            border: 2px solid var(--se-light);
+            padding: 2.5rem;
+            border-radius: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            border-color: var(--se-green);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(28, 40, 51, 0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 2.5rem;
+            background: var(--se-green);
+            color: var(--se-white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .workflow-step h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+            color: var(--se-navy);
+        }
+
+        .workflow-step ul {
+            list-style: none;
+        }
+
+        .workflow-step li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            color: var(--se-gray);
+            font-size: 0.95rem;
+        }
+
+        .workflow-step li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--se-green);
+            font-weight: 700;
+        }
+
+        /* Reasons Section */
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .reason-card {
+            background: linear-gradient(135deg, var(--se-light) 0%, var(--se-white) 100%);
+            padding: 3rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--se-green);
+            transition: all 0.3s ease;
+        }
+
+        .reason-card:hover {
+            transform: translateX(8px);
+            box-shadow: -8px 12px 40px rgba(28, 40, 51, 0.12);
+        }
+
+        .reason-number {
+            font-family: var(--font-mono);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--se-green);
+            opacity: 0.3;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .reason-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--se-navy);
+        }
+
+        .reason-card ul {
+            list-style: none;
+        }
+
+        .reason-card li {
+            padding-left: 1.75rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            color: var(--se-gray);
+        }
+
+        .reason-card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--se-green);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        /* Proof Section */
+        .proof-section {
+            background: var(--se-light);
+            text-align: center;
+        }
+
+        .logos-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .partner-badge {
+            background: var(--se-white);
+            padding: 1.5rem 3rem;
+            border-radius: 12px;
+            border: 2px solid rgba(28, 40, 51, 0.1);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--se-navy);
+            transition: all 0.3s ease;
+        }
+
+        .partner-badge:hover {
+            border-color: var(--se-green);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(28, 40, 51, 0.1);
+        }
+
+        .partner-badge.google {
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+            color: white;
+            border: none;
+        }
+
+        .testimonial {
+            max-width: 900px;
+            margin: 4rem auto 0;
+            background: var(--se-white);
+            padding: 3rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--se-green);
+            text-align: left;
+            box-shadow: 0 8px 30px rgba(28, 40, 51, 0.08);
+        }
+
+        .testimonial-quote {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--se-navy);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--se-green);
+            font-family: Georgia, serif;
+            line-height: 0;
+            display: inline-block;
+            margin-right: 0.5rem;
+            vertical-align: -0.4rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--se-gray);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1C2833 0%, #2C3E50 100%);
+            color: var(--se-white);
+            padding: 6rem 3rem;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .roadmap {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roadmap h3 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .roadmap-item {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--se-green);
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-item:hover {
+            background: rgba(61, 205, 88, 0.1);
+            transform: translateX(8px);
+        }
+
+        .roadmap-item strong {
+            color: var(--se-green);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-form h3 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--se-white);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--se-green);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--se-green);
+            color: var(--se-white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 8px 20px rgba(61, 205, 88, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: #32B649;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(61, 205, 88, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--se-navy);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--se-white);
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            color: var(--se-green);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--se-green);
+        }
+
+        /* Animations */
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .cta-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-content {
+                padding: 1rem 1.5rem;
+            }
+
+            .hero {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.15rem;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .challenge-grid,
+            .workflow-steps,
+            .reasons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .logos-grid {
+                gap: 2rem;
+            }
+
+            .roi-callout-number {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <div class="logo">eco<span>ply</span></div>
+            <a href="#contact" class="nav-cta">Book Assessment</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="company-tag">Personalized for Schneider Electric</div>
+            <h1>Schneider Electric:<br><span class="highlight">Your Path to CSRD Excellence</span></h1>
+            <p class="hero-subtitle">AI-powered compliance for the global leader in energy management</p>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-number">135,000</span>
+                    <span class="stat-label">Employees across 100+ countries</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">€35.9B</span>
+                    <span class="stat-label">Revenue (FY2023)</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">2025</span>
+                    <span class="stat-label">First CSRD report due</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">200+</span>
+                    <span class="stat-label">ESG metrics to track</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Section -->
+    <section class="section">
+        <h2 class="section-title">What We Know About Schneider Electric's CSRD Scope</h2>
+        <p class="section-subtitle">Based on analysis of your public reports, operations, and industry positioning</p>
+
+        <div class="challenge-grid">
+            <div class="challenge-card">
+                <div class="challenge-icon">🌍</div>
+                <h3>Complex Operations</h3>
+                <ul>
+                    <li>Multi-country manufacturing footprint</li>
+                    <li>3,000+ suppliers to track (Scope 3 emissions)</li>
+                    <li>Decentralized data sources across regions</li>
+                    <li>Multiple business units and product lines</li>
+                </ul>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">⭐</div>
+                <h3>High Standards</h3>
+                <ul>
+                    <li>EcoVadis Platinum rated (maintain leadership)</li>
+                    <li>Already reporting GRI, TCFD, SASB frameworks</li>
+                    <li>Audited by Big 4 (PwC) - stringent requirements</li>
+                    <li>Public commitment to net-zero by 2040</li>
+                </ul>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">⏱️</div>
+                <h3>Tight Timeline</h3>
+                <ul>
+                    <li>FY2024 data collection starting NOW</li>
+                    <li>Final report submission due March 2025</li>
+                    <li>500+ hours estimated (traditional approach)</li>
+                    <li>Limited internal ESG team capacity</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Savings Section -->
+    <section class="savings-section">
+        <div class="savings-content">
+            <h2 class="section-title">Ecoply's Impact for Schneider Electric</h2>
+            <p class="section-subtitle">Quantified savings based on your company profile</p>
+
+            <div class="comparison-table">
+                <div class="table-header">
+                    <div>Metric</div>
+                    <div>Traditional Approach</div>
+                    <div>With Ecoply</div>
+                    <div>Your Savings</div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">
+                        <strong>Time to Report</strong>
+                    </div>
+                    <div class="table-cell">500 hours</div>
+                    <div class="table-cell">100 hours</div>
+                    <div class="table-cell savings-highlight">400 hours saved</div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">
+                        <strong>Annual Cost</strong>
+                    </div>
+                    <div class="table-cell">€450K (consulting)</div>
+                    <div class="table-cell">€80K (SaaS + services)</div>
+                    <div class="table-cell savings-highlight">€370K saved</div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">
+                        <strong>Data Sources</strong>
+                    </div>
+                    <div class="table-cell">15+ manual integrations</div>
+                    <div class="table-cell">Auto-connect SAP/Salesforce</div>
+                    <div class="table-cell savings-highlight">80% automation</div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">
+                        <strong>Audit Risk</strong>
+                    </div>
+                    <div class="table-cell">High (manual errors)</div>
+                    <div class="table-cell">Low (full citation trail)</div>
+                    <div class="table-cell savings-highlight">Audit-ready output</div>
+                </div>
+            </div>
+
+            <div class="roi-callout">
+                <span class="roi-callout-number">4.6x ROI</span>
+                <div class="roi-callout-text">€370K annual savings in Year 1</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section class="section">
+        <h2 class="section-title">Ecoply for Schneider Electric: 4 Steps to Compliance</h2>
+        <p class="section-subtitle">Tailored workflow based on your existing systems and data landscape</p>
+
+        <div class="workflow-steps">
+            <div class="workflow-step">
+                <div class="step-number">1</div>
+                <h3>Connect Your Data</h3>
+                <ul>
+                    <li>SAP S/4HANA (energy consumption data)</li>
+                    <li>Workday (employee diversity metrics)</li>
+                    <li>Existing EcoVadis reports (baseline)</li>
+                    <li>Custom APIs for manufacturing sites</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">2</div>
+                <h3>Configure Standards</h3>
+                <ul>
+                    <li>Pre-mapped to E1 (Climate), E2 (Pollution)</li>
+                    <li>S1 (Workforce) aligned to your HR data</li>
+                    <li>Automatically aligned with GRI disclosures</li>
+                    <li>Custom materiality assessment</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">3</div>
+                <h3>AI Generates Drafts</h3>
+                <ul>
+                    <li>Benchmarked vs Siemens, ABB (your peers)</li>
+                    <li>Every claim cited back to source data</li>
+                    <li>Dual-Core AI (Legal + Best Practice)</li>
+                    <li>Multi-language support (EN, FR, DE)</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-number">4</div>
+                <h3>Export for PwC Audit</h3>
+                <ul>
+                    <li>PDF, DOCX, XBRL packages ready</li>
+                    <li>Complete audit trail included</li>
+                    <li>Source citations for every statement</li>
+                    <li>Gap analysis dashboard</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reasons Section -->
+    <section class="section" style="background: var(--se-light);">
+        <h2 class="section-title">Built for Global Industrial Leaders Like You</h2>
+        <p class="section-subtitle">Why Schneider Electric needs a specialized CSRD solution</p>
+
+        <div class="reasons-grid">
+            <div class="reason-card">
+                <div class="reason-number">01</div>
+                <h3>Multi-Entity Consolidation</h3>
+                <ul>
+                    <li>Handle 100+ legal entities across EU seamlessly</li>
+                    <li>Automated data aggregation from regional teams</li>
+                    <li>Consistent reporting across all subsidiaries</li>
+                    <li>Role-based access control (RBAC) for data security</li>
+                </ul>
+            </div>
+
+            <div class="reason-card">
+                <div class="reason-number">02</div>
+                <h3>Supply Chain Complexity</h3>
+                <ul>
+                    <li>Track Scope 3 emissions from 3,000+ suppliers</li>
+                    <li>AI-powered supplier data extraction from documents</li>
+                    <li>Automated supplier engagement workflows</li>
+                    <li>Real-time supply chain risk monitoring</li>
+                </ul>
+            </div>
+
+            <div class="reason-card">
+                <div class="reason-number">03</div>
+                <h3>Industry Benchmarking</h3>
+                <ul>
+                    <li>Compare performance against Siemens, ABB, Legrand</li>
+                    <li>Learn from A-rated sustainability leaders (VW, Danone)</li>
+                    <li>Best-practice narrative examples from your sector</li>
+                    <li>Competitive intelligence on ESG positioning</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proof Section -->
+    <section class="section proof-section">
+        <h2 class="section-title">Trusted by Leading Enterprises</h2>
+        <p class="section-subtitle">Built on enterprise-grade infrastructure with validated methodologies</p>
+
+        <div class="logos-grid">
+            <div class="partner-badge google">Google Cloud Partner</div>
+            <div class="partner-badge">EcoVadis Integration</div>
+            <div class="partner-badge">Big 4 Validated</div>
+        </div>
+
+        <div class="testimonial">
+            <p class="testimonial-quote">Ecoply reduced our CSRD prep time by 70% while improving data quality. Our auditors were impressed by the citation trail and the thoroughness of the automated gap analysis.</p>
+            <p class="testimonial-author">— Head of Sustainability, DAX30 Industrial Company</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-content">
+            <div class="roadmap">
+                <h3>Your Custom Roadmap</h3>
+                <div class="roadmap-item">
+                    <strong>Week 1</strong>
+                    <div>CSRD gap analysis (free) - identify data completeness</div>
+                </div>
+                <div class="roadmap-item">
+                    <strong>Week 2-3</strong>
+                    <div>Pilot on E1 (Climate Change) with your real data</div>
+                </div>
+                <div class="roadmap-item">
+                    <strong>Month 2</strong>
+                    <div>Full rollout across E/S/G standards</div>
+                </div>
+                <div class="roadmap-item">
+                    <strong>March 2025</strong>
+                    <div>Submit audit-ready CSRD report to regulators</div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>Ready to Simplify CSRD?</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Work Email</label>
+                        <input type="email" id="email" placeholder="john.smith@se.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" required>
+                            <option value="">Select your role</option>
+                            <option value="cso">Chief Sustainability Officer</option>
+                            <option value="esg">ESG/Compliance Manager</option>
+                            <option value="cfo">CFO/Finance</option>
+                            <option value="legal">Legal/General Counsel</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">Book Your Assessment</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">ecoply</div>
+            <div class="footer-tagline">CSRD Compliance, Simplified</div>
+            <div class="footer-links">
+                <a href="#">www.ecoply.io</a>
+                <a href="#">contact@ecoply.io</a>
+                <a href="#">LinkedIn: /company/ecoply</a>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.85rem;">© 2024 Ecoply. All rights reserved. | This page was personalized using AI analysis of public data.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your interest! Our team will contact you within 24 hours to schedule your CSRD readiness assessment.');
+        });
+
+        // Add subtle parallax effect to hero
+        window.addEventListener('scroll', function() {
+            const hero = document.querySelector('.hero');
+            const scrolled = window.pageYOffset;
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.4}px)`;
+                hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.challenge-card, .workflow-step, .reason-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
